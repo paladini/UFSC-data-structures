@@ -9,13 +9,13 @@
 #define	ESTRUTURALINEARVAZIA_H
 
 class EstruturaLinearVazia {
-public:
+ public:
     EstruturaLinearVazia();
     virtual ~EstruturaLinearVazia();
-
-    const char *mostrarMensagem() const { return "A estrutura linear está vazia."; }
-private:
-
+    const char *mostrarMensagem() const {
+        return "A estrutura linear está vazia.";
+    }
+ private:
 };
 
 #endif	/* ESTRUTURALINEARVAZIA_H */

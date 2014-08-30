@@ -9,13 +9,13 @@
 #define	ESTRUTURALINEARCHEIA_H
 
 class EstruturaLinearCheia {
-public:
+ public:
     EstruturaLinearCheia();
     virtual ~EstruturaLinearCheia();
-    
-    const char *mostrarMensagem() const { return "A estrutura linear está cheia."; }
-private:
-
+    const char *mostrarMensagem() const {
+        return "A estrutura linear está cheia.";
+    }
+ private:
 };
 
 #endif	/* ESTRUTURALINEARCHEIA_H */

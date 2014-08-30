@@ -9,6 +9,7 @@
 #define	FILA_HPP
 #define MAXFILA 100
 #include "EstruturaLinear.hpp"
+// #include "EstruturaLinearVazia.hpp"
 template<typename T>
 class Fila : private EstruturaLinear<T> {
  public:
@@ -26,7 +27,7 @@ class Fila : private EstruturaLinear<T> {
              this->ponteiro = this->ponteiro - 1;
              return valorRetirado;
          } else {
-             throw EMPTYERROR;
+             throw EstruturaLinearVazia::EstruturaLinearVazia();
          }
      }
      T ultimo(){

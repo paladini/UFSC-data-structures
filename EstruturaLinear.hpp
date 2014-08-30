@@ -15,47 +15,49 @@ class EstruturaLinear {
  protected:
      T *m_dados;
      int ponteiro, tamanhoDaEstrutura;
+
  public:
-     EstruturaLinear(){
+     EstruturaLinear() {
          m_dados = new T[MAX];
          tamanhoDaEstrutura = MAX;
          limpar();
      }
-     EstruturaLinear<T>(int tamanho){
+     EstruturaLinear<T>(int tamanho) {
          m_dados = new T[tamanho];
          tamanhoDaEstrutura = tamanho;
          limpar();
      }
-     void insere(T dado){
-        if(!estaCheio()){
+     ~EstruturaLinear() {
+        delete[] m_dados;
+    }
+     void insere(T dado) {
+        if (!estaCheio()) {
                 this->m_dados[++ponteiro] = dado;
-            }
-            else{
+            } else {
                 throw FULLERROR;
             }
      }
-     void limpar(){
+     void limpar() {
          ponteiro = -1;
      }
-     T Ponteiro(){
-         if(!estaVazio()){
+     T Ponteiro() {
+         if (!estaVazio()) {
              return m_dados[ponteiro];
          } else {
              throw EMPTYERROR;
          }
      }
-     int getPosPonteiro(){
-         if(!estaVazio()){
+     int getPosPonteiro() {
+         if (!estaVazio()) {
              return ponteiro;
-         }
-         else{
+         } else {
              throw EMPTYERROR;
          }
      }
-     bool estaVazio(){
+     bool estaVazio() {
          return (ponteiro == -1);
      }
-     bool estaCheio(){
+     bool estaCheio() {
          return (ponteiro == tamanhoDaEstrutura - 1);
      }
 };

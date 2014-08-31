@@ -43,7 +43,7 @@ int main(){
     int z = myfila.retira();
     int ultimo = myfila.ultimo();
     int posicao = myfila.getPosUltimo();
-    std::cout << "O valor retirado foi: " << y << " e " << z <<  std::endl;
+    std::cout << "O valor retirado foi: " << y << "\n" << z <<  std::endl;
     std::cout << "O valor do ultimo é: " << ultimo << "\n E sua posição é: " << posicao <<std::endl;
 
 };

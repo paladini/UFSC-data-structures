@@ -1,8 +1,9 @@
 /* 
  * File:   EstruturaLinearCheia.h
- * Author: paladini
- *
- * Created on August 23, 2014, 9:05 PM
+ * @author: Emmanuel Podestá, Fernando Paladini.
+ * @since: Created on August 23, 2014, 9:05 PM
+ * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
+ * < Na verdade é Copyleft, MIT License \o/ >
  */
 
 #ifndef ESTRUTURALINEARCHEIA_H

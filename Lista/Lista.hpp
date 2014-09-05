@@ -57,7 +57,6 @@ class Lista {
 	* @param dado O dado que será inserido dentro da lista. Precisa ser do mesmo tipo de dados que a lista armazena.
 	* @see listaCheia()
 	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
-	* @return um inteiro que indica a posição do último elemento a ser adicionado na lista (no caso, o último).
 	*/
 	void adiciona(T dado) {
 	    if (!listaCheia()) {
@@ -71,7 +70,6 @@ class Lista {
 	* @param dado O dado que será inserido dentro da lista. Precisa ser do mesmo tipo de dados que a lista armazena.
 	* @see listaCheia()
 	* @exception ERROLISTACHEIA Exceção que indica que um novo addo não pode ser adicionado, pois a lista já está cheia.
-	* @return um inteiro que indica a posição do último elemento a ser adicionado na lista (no caso, zero).
 	*/
 	void adicionaNoInicio(T dado) {
 	    int posicao;
@@ -91,7 +89,6 @@ class Lista {
 	* @param dado O dado a ser inserido na Lista.
 	* @see listaCheia()
 	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
-	* @return um inteiro que indica a posição do último elemento a ser adicionado na lista (no caso, o "destino").
 	*/
 	void adicionaNaPosicao(T dado, int destino) {
 	    int posicao;
@@ -113,7 +110,6 @@ class Lista {
 	* @param dado O dado a ser inserido na Lista.
 	* @see listaCheia()
 	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
-	* @return um inteiro que indica a posição do último elemento a ser adicionado na lista (no caso, a posição encontrada que está de acordo com a ordenação da Lista).
 	*/
 	void adicionaEmOrdem(T dado) {
 	    int posicao = 0;
@@ -211,7 +207,7 @@ class Lista {
 	/** Verifica se um determinado elemento existe na Lista. Se sim, retorna a sua posição.
 	* @param dado O dado que será verificado a existência dentro da Lista.
 	* @exception ERROPOSICAO Exceção que indica que o elemento enviado via argumento não existe dentro dessa Lista.
-	* @return a posição do elemento que foi encontrado na Lista.
+	* @return um int que indica a posição do elemento que foi encontrado na Lista.
 	*/
 	int posicao(T dado) {
 	    int posicao = 0;

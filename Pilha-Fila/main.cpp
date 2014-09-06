@@ -25,23 +25,23 @@ int main() {
     int x = mypilha.desempilha();
 
     std::cout << "Valor DO elemento desempilhado: " << x << std::endl;
-    ;
+
     //////////////////////////////////////////////////////////////////////
     Fila<int> myfila = Fila<int>(10);
-    myfila.Inclui(0);
-    myfila.Inclui(1);
-    myfila.Inclui(2);
-    myfila.Inclui(3);
-    myfila.Inclui(4);
-    myfila.Inclui(5);
-    myfila.Inclui(6);
-    myfila.Inclui(7);
-    myfila.Inclui(8);
-    myfila.Inclui(9);
-    int y = myfila.Retira();
-    int z = myfila.Retira();
-    int ultimo = myfila.Ultimo();
-    int posicao = myfila.getPosUltimo();
+    myfila.inclui(0);
+    myfila.inclui(1);
+    myfila.inclui(2);
+    myfila.inclui(3);
+    myfila.inclui(4);
+    myfila.inclui(5);
+    myfila.inclui(6);
+    myfila.inclui(7);
+    myfila.inclui(8);
+    myfila.inclui(9);
+    int y = myfila.retira();
+    int z = myfila.retira();
+    int ultimo = myfila.ultimo();
+    int posicao = myfila.getUltimo();
     std::cout << "O valor retirado foi: " << y << z << std::endl;
     std::cout << "O valor do ultimo é: " << ultimo << "E sua posição é: " << posicao << std::endl;
 

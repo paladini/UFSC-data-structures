@@ -1,12 +1,11 @@
-/* Copyright [2014] <Jean Martina>
+/* Copyright [2014] <Jean Martina> 
+ * Copyleft [2014] <Fernando Paladini, Emmanuel Podestá Junior>
  * TestePilha.cpp
  */
 
 #include <stdio.h>
-#include "gtest/gtest.h"
-#include "Pilha.hpp"
-
-
+#include <gtest/gtest.h>
+#include "../Pilha.hpp"
 
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -97,13 +96,13 @@ TEST_F(TestePilha, LimpaPilha) {
 TEST_F(TestePilha, DesempilhaEComparaPonteiros){
 	Objeto *objeto1 = new Objeto();
 	Objeto *objeto2 = new Objeto();
-	Objeto *objeto3 = new Objeto();	
+	Objeto *objeto3 = new Objeto();
 	pobj.empilha(*objeto1);
 	pobj.empilha(*objeto2);
 	pobj.empilha(*objeto3);
 
 	// Testando se ponteiro confere com o endereço do objeto colocado na pilha
-	obj = pobj.desempilha();
+	Objeto obj = pobj.desempilha();
 	ASSERT_EQ(objeto3, &obj);
 
 	obj = pobj.desempilha();
@@ -119,34 +118,34 @@ TEST_F(TestePilha, PosicaoTopoEmPilhaVazia){
 
 TEST_F(TestePilha, PilhaCheiaObjetosComplexos){
 	for(int i = 0; i < 99; i++){
-		Objeto obj = new Objeto();
-		pobj.empilha(obj);
+		Objeto *obj = new Objeto();
+		pobj.empilha(*obj);
 	}
 	ASSERT_TRUE(pobj.PilhaCheia());
 }
 
 TEST_F(TestePilha, PosicaoTopoEmPilhaCheia){
 	for(int i = 0; i < 99; i++){
-		Objeto obj = new Objeto();
-		pobj.empilha(obj);
+		Objeto *obj = new Objeto();
+		pobj.empilha(*obj);
 	}
 	ASSERT_EQ(99, pobj.getPosTopo());
 }
 
 TEST_F(TestePilha, ExcecaoPilhaCheiaObjetosComplexos){
 	for(int i = 0; i < 100; i++){
-		Objeto obj = new Objeto();
-		pobj.empilha(obj);
+		Objeto *obj = new Objeto();
+		pobj.empilha(*obj);
 	}
 }
 
 TEST_F(TestePilha, ExcecaoPilhaVaziaObjetosComplexos){
-	Objeto objeto1 = new Objeto();
-	Objeto objeto2 = new Objeto();
-	Objeto objeto3 = new Objeto();	
-	pobj.empilha(objeto1);
-	pobj.empilha(objeto2);
-	pobj.empilha(objeto3);
+	Objeto *objeto1 = new Objeto();
+	Objeto *objeto2 = new Objeto();
+	Objeto *objeto3 = new Objeto();	
+	pobj.empilha(*objeto1);
+	pobj.empilha(*objeto2);
+	pobj.empilha(*objeto3);
 	
 	pobj.desempilha();
 	pobj.desempilha();

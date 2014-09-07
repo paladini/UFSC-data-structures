@@ -13,9 +13,9 @@
 #ifndef LISTA_HPP_
 #define LISTA_HPP_
 #define MAXLISTA 100
-#define ERROLISTACHEIA -1
-#define ERROLISTAVAZIA -2
-#define ERROPOSICAO -3
+#include "ExcecaoListaCheia.hpp"
+#include "ExcecaoListaVazia.hpp"
+#include "ExcecaoErroPosicao.hpp"
 template <typename T>
 class Lista {
  private:
@@ -56,20 +56,20 @@ class Lista {
 	* Este método recebe um dado do tipo T e adiciona este elemento no final da lista, ou seja, adiciona esse dado na última posição da lista.
 	* @param dado O dado que será inserido dentro da lista. Precisa ser do mesmo tipo de dados que a lista armazena.
 	* @see listaCheia()
-	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
+	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adiciona(T dado) {
 	    if (!listaCheia()) {
 			dados[++ultimo] = dado;
 		} else {
-			throw ERROLISTACHEIA;
+			throw ExcecaoListaCheia;
 		}
 	}
 	/** Adiciona um novo elemento no início da Lista.
 	* Este método recebe um dado do tipo T e adiciona este elemento no início da lista, ou seja, adiciona esse dado na posição zero.
 	* @param dado O dado que será inserido dentro da lista. Precisa ser do mesmo tipo de dados que a lista armazena.
 	* @see listaCheia()
-	* @exception ERROLISTACHEIA Exceção que indica que um novo addo não pode ser adicionado, pois a lista já está cheia.
+	* @exception ExcecaoListaCheia Exceção que indica que um novo addo não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaNoInicio(T dado) {
 	    int posicao;
@@ -80,7 +80,7 @@ class Lista {
 			}
 			dados[0] = dado;
 		} else {
-			throw ERROLISTACHEIA;
+			throw ExcecaoListaCheia;
 		}
 	}
 	/** Adiciona um novo elemento em uma posição específica da Lista.
@@ -88,15 +88,15 @@ class Lista {
 	* @param posicao A posição na lista em que o dado será adicionado.
 	* @param dado O dado a ser inserido na Lista.
 	* @see listaCheia()
-	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
+	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaNaPosicao(T dado, int destino) {
 	    int posicao;
 		if (listaCheia()) {
-			throw ERROLISTACHEIA;
+			throw ExcecaoListaCheia;
 		} else {
 			if(destino < 0 || destino > ultimo + 1)
-				throw ERROPOSICAO;
+				throw ExcecaoErroPosicao;
 			ultimo = ultimo + 1;
 			for(posicao = ultimo; posicao > destino; posicao--) {
 				dados[posicao] = dados[posicao - 1];
@@ -109,12 +109,12 @@ class Lista {
 	* Este método recebe um dado do tipo T e adiciona este elemento em determinada posição.
 	* @param dado O dado a ser inserido na Lista.
 	* @see listaCheia()
-	* @exception ERROLISTACHEIA Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
+	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaEmOrdem(T dado) {
 	    int posicao = 0;
 		if (listaCheia()) {
-			throw ERROLISTACHEIA;
+			throw ExcecaoListaCheia;
 		} else {
 			for(int i = 0; i <= ultimo; i++) {
 				if (maior(dado, dados[posicao])) {
@@ -129,7 +129,7 @@ class Lista {
 	/** Retira o último elemento da Lista.
 	* Este método retira o último elemento da Lista e decrementa o ponteiro da Lista.
 	* @see listaVazia()
-	* @exception ERROLISTAVAIZA Exceção que indica que um dado não pode ser retirado, pois a lista já está vazia.
+	* @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado, pois a lista já está vazia.
 	* @return o dado do tipo T que foi retirado do final da Lista.
 	*/
 	T retira() {
@@ -137,13 +137,13 @@ class Lista {
 			ultimo = ultimo - 1;
 			return dados[ultimo + 1];
 		} else {
-			throw ERROLISTAVAZIA;
+			throw ExcecaoListaVazia;
 		}
 	}
 	/** Retira o primeiro elemento da Lista.
 	* Este método retira o primeiro elemento da Lista e traz todos os dados uma posição para frente.
 	* @see listaVazia()
-	* @exception ERROLISTAVAZIA Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
+	* @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
 	* @return o dado do tipo T que foi retirado do início da Lista.
 	*/
 	T retiraDoInicio() {
@@ -156,14 +156,14 @@ class Lista {
 			}
 			return valor;
 		} else {
-			throw ERROLISTAVAZIA;
+			throw ExcecaoListaVazia;
 		}
 	}
 
 	/** Retira um elemento em uma posição específica da Lista.
 	* @see listaVazia()
 	* @param fonte A posição do dado a ser retirado.
-	* @exception ERROLISTAVAZIA Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
+	* @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
 	* @return o dado do tipo T que foi retirado da posição específica da Lista.
 	*/
 	T retiraDaPosicao(int posicao) {
@@ -177,18 +177,18 @@ class Lista {
 			    }
 			    return valor;
 			 } else {
-			    throw ERROPOSICAO;
+			    throw ExcecaoErroPosicao;
 			 }
 		} else {
-			throw ERROLISTAVAZIA;
+			throw ExcecaoListaVazia;
 		}
 	}
 
 	/** Retira um elemento da Lista, se este objeto existir dentro da Lista.
 	* @see listaVazia()
 	* @param dado A posição do dado a ser retirado.
-	* @exception ERROPOSICAO Exceção que indica que o dado enviado via argumento não existe dentro dessa Lista, logo não pode ser removido.
-	* @exception ERROLISTAVAZIA Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
+	* @exception ExcecaoErroPosicao Exceção que indica que o dado enviado via argumento não existe dentro dessa Lista, logo não pode ser removido.
+	* @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
 	* @return o dado do tipo T que foi retirado.
 	*/
 	T retiraEspecifico(T dado) {
@@ -196,17 +196,17 @@ class Lista {
 		if (!listaVazia()) {
 			posicao = this->posicao(dado);
 			if (posicao < 0) {
-				throw ERROPOSICAO;
+				throw ExcecaoErroPosicao;
 			} else {
 				return retiraDaPosicao(posicao);
 			}
 		} else {
-			throw ERROLISTAVAZIA;
+			throw ExcecaoListaVazia;
 		}
 	}
 	/** Verifica se um determinado elemento existe na Lista. Se sim, retorna a sua posição.
 	* @param dado O dado que será verificado a existência dentro da Lista.
-	* @exception ERROPOSICAO Exceção que indica que o elemento enviado via argumento não existe dentro dessa Lista.
+	* @exception ExcecaoErroPosicao Exceção que indica que o elemento enviado via argumento não existe dentro dessa Lista.
 	* @return um int que indica a posição do elemento que foi encontrado na Lista.
 	*/
 	int posicao(T dado) {
@@ -219,7 +219,7 @@ class Lista {
 			}
 		}
 		if (posicao > ultimo) {
-			throw ERROPOSICAO;
+			throw ExcecaoErroPosicao;
 		} else {
 			return posicao;
 		}

@@ -59,7 +59,11 @@ class Lista {
 	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adiciona(T dado) {
-	    adicionaNaPosicao(dado, ultimo + 1);
+	    if (!listaCheia()) {
+			dados[++ultimo] = dado;
+		} else {
+			throw ExcecaoListaCheia;
+		}
 	}
 	/** Adiciona um novo elemento no início da Lista.
 	* Este método recebe um dado do tipo T e adiciona este elemento no início da lista, ou seja, adiciona esse dado na posição zero.
@@ -68,7 +72,16 @@ class Lista {
 	* @exception ExcecaoListaCheia Exceção que indica que um novo addo não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaNoInicio(T dado) {
-	    adicionaNaPosicao(dado, 0);
+	    int posicao;
+		if (!listaCheia()) {
+			ultimo = ultimo + 1;
+			for(posicao = ultimo; posicao > 0; posicao--) {
+				dados[posicao] = dados[posicao -1];
+			}
+			dados[0] = dado;
+		} else {
+			throw ExcecaoListaCheia;
+		}
 	}
 	/** Adiciona um novo elemento em uma posição específica da Lista.
 	* Este método recebe um dado do tipo T e adiciona este elemento em determinada posição.
@@ -78,18 +91,17 @@ class Lista {
 	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaNaPosicao(T dado, int destino) {
-		if (!listaCheia()) {
-			if (destino >= 0 && destino <= ultimo + 1) {
-			    int posicao;
-				for(posicao = ++ultimo; posicao > destino; posicao--) {
-					dados[posicao] = dados[posicao - 1];
-				}
-				dados[destino] = dado;
-			} else {
-				throw ExcecaoErroPosicao;
-			}
-		} else {
+	    int posicao;
+		if (listaCheia()) {
 			throw ExcecaoListaCheia;
+		} else {
+			if(destino < 0 || destino > ultimo + 1)
+				throw ExcecaoErroPosicao;
+			ultimo = ultimo + 1;
+			for(posicao = ultimo; posicao > destino; posicao--) {
+				dados[posicao] = dados[posicao - 1];
+			}
+			dados[destino] = dado;
 		}
 	}
 
@@ -100,16 +112,18 @@ class Lista {
 	* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois a lista já está cheia.
 	*/
 	void adicionaEmOrdem(T dado) {
-		if (!listaCheia()) {
-			int i;
-			for(i = 0; i <= ultimo; i++) {
-				if (!maior(dado, dados[i])) {
+	    int posicao = 0;
+		if (listaCheia()) {
+			throw ExcecaoListaCheia;
+		} else {
+			for(int i = 0; i <= ultimo; i++) {
+				if (maior(dado, dados[posicao])) {
+					posicao++;
+				} else {
 					break;
 				}
 			}
-			adicionaNaPosicao(dado, i);
-		} else {
-			throw ExcecaoListaCheia;
+			adicionaNaPosicao(dado, posicao);
 		}
 	}
 	/** Retira o último elemento da Lista.
@@ -119,7 +133,12 @@ class Lista {
 	* @return o dado do tipo T que foi retirado do final da Lista.
 	*/
 	T retira() {
-	    return retiraDaPosicao(ultimo);
+	    if (!listaVazia()) {
+			ultimo = ultimo - 1;
+			return dados[ultimo + 1];
+		} else {
+			throw ExcecaoListaVazia;
+		}
 	}
 	/** Retira o primeiro elemento da Lista.
 	* Este método retira o primeiro elemento da Lista e traz todos os dados uma posição para frente.
@@ -128,22 +147,33 @@ class Lista {
 	* @return o dado do tipo T que foi retirado do início da Lista.
 	*/
 	T retiraDoInicio() {
-	    return retiraDaPosicao(0);
+	    int posicao;
+		if (!listaVazia()) {
+			ultimo = ultimo - 1;
+			int valor = dados[0];
+			for(posicao = 0; posicao <= ultimo; posicao++) {
+				dados[posicao] = dados[posicao + 1];
+			}
+			return valor;
+		} else {
+			throw ExcecaoListaVazia;
+		}
 	}
 
 	/** Retira um elemento em uma posição específica da Lista.
 	* @see listaVazia()
-	* @param posicao A posição do dado a ser retirado.
+	* @param fonte A posição do dado a ser retirado.
 	* @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado, pois a lsita já está vazia.
 	* @return o dado do tipo T que foi retirado da posição específica da Lista.
 	*/
 	T retiraDaPosicao(int posicao) {
+	    int fonte, valor;
 		if (!listaVazia()) {
-		    if (posicao > -1 && posicao <= ultimo) {
-		        T valor = dados[posicao];
-			    ultimo--;
-			    for (int i = posicao; i <= ultimo; i++) {
-			    	dados[i] = dados[i + 1];
+		    if (!(posicao > ultimo || posicao <= -1)) {
+		        valor = dados[posicao];
+			    ultimo = ultimo - 1;
+			    for (fonte = posicao; fonte <= ultimo; fonte++) {
+			    	dados[fonte] = dados[fonte + 1];
 			    }
 			    return valor;
 			 } else {
@@ -162,8 +192,17 @@ class Lista {
 	* @return o dado do tipo T que foi retirado.
 	*/
 	T retiraEspecifico(T dado) {
-		int indice = posicao(dado);
-	    return retiraDaPosicao(indice);
+	    int posicao;
+		if (!listaVazia()) {
+			posicao = this->posicao(dado);
+			if (posicao < 0) {
+				throw ExcecaoErroPosicao;
+			} else {
+				return retiraDaPosicao(posicao);
+			}
+		} else {
+			throw ExcecaoListaVazia;
+		}
 	}
 	/** Verifica se um determinado elemento existe na Lista. Se sim, retorna a sua posição.
 	* @param dado O dado que será verificado a existência dentro da Lista.
@@ -171,16 +210,19 @@ class Lista {
 	* @return um int que indica a posição do elemento que foi encontrado na Lista.
 	*/
 	int posicao(T dado) {
-	    int i;
-		for(i = 0; i <= ultimo; i++) {
-			if (igual(dados[i], dado)) {
+	    int posicao = 0;
+		for(int i = 0; i <= ultimo; i++) {
+			if (igual(dados[posicao], dado)) {
 				break;
+			} else {
+				posicao++;
 			}
 		}
-		if (i > ultimo) {
+		if (posicao > ultimo) {
 			throw ExcecaoErroPosicao;
+		} else {
+			return posicao;
 		}
-		return i;
 	}
 
 	/** Verifica se a Lista contêm o elemento especificado.
@@ -188,12 +230,14 @@ class Lista {
 	* @return um boolean que indica se a Lista contêm ou não o elemento especificado.
 	*/
 	bool contem(T dado) {
-	    try {
-	    	posicao(dado);
-		    return true;
-	    } catch (std::exception& e) {
-	    	return false;
-	    }
+	    int igl = 0;
+		for(int i = 0; i < tamanho; i++) {
+			if (igual(dados[i], dado)) {
+				igl = 1;
+				break;
+			}
+		}
+		return igl == 1;
 	}
 	/**Verifica se um dado1 do Tipo T é igual a um dado2 do Tipo T.
 	 * @param dado1 Dado a ser comparado a igualdade.

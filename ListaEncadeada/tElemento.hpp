@@ -7,10 +7,13 @@
 
 #ifndef TELEMENTO_HPP_
 #define TELEMENTO_HPP_
+#include "Lista.hpp"
 template <typename T>
 class tElemento{
+ protected:
 	tElemento *proximo;
-	T info;
+	T *info;
+ public:
 };
 
 

@@ -3,9 +3,10 @@
  * TestePilha.cpp
  */
 
-#include <stdio.h>
 #include <gtest/gtest.h>
 #include "../Pilha.hpp"
+#include "Objeto.hpp"
+
 
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -13,8 +14,7 @@ int main(int argc, char* argv[]) {
     return a;
 }
 
-class Objeto{
-};
+
 
 class TestePilha: public ::testing::Test{
  protected:
@@ -93,23 +93,24 @@ TEST_F(TestePilha, LimpaPilha) {
 	EXPECT_ANY_THROW(p.getPosTopo());
 }
 
+// Arrumar isso aqui
 TEST_F(TestePilha, DesempilhaEComparaPonteiros){
-	Objeto *objeto1 = new Objeto();
-	Objeto *objeto2 = new Objeto();
-	Objeto *objeto3 = new Objeto();
-	pobj.empilha(*objeto1);
-	pobj.empilha(*objeto2);
-	pobj.empilha(*objeto3);
+	Objeto objeto1(10);
+	Objeto objeto2(7);
+	Objeto objeto3(4);
+	pobj.empilha(objeto1);
+	pobj.empilha(objeto2);
+	pobj.empilha(objeto3);
 
 	// Testando se ponteiro confere com o endereço do objeto colocado na pilha
 	Objeto obj = pobj.desempilha();
-	ASSERT_EQ(objeto3, &obj);
+	ASSERT_EQ(objeto3, obj);
 
 	obj = pobj.desempilha();
-	ASSERT_EQ(objeto2, &obj);
+	ASSERT_EQ(objeto2, obj);
 
 	obj = pobj.desempilha();
-	ASSERT_EQ(objeto3, &obj);
+	ASSERT_EQ(objeto3, obj);
 }
 
 TEST_F(TestePilha, PosicaoTopoEmPilhaVazia){
@@ -117,29 +118,29 @@ TEST_F(TestePilha, PosicaoTopoEmPilhaVazia){
 }
 
 TEST_F(TestePilha, PilhaCheiaObjetosComplexos){
-	for(int i = 0; i < 99; i++){
-		Objeto *obj = new Objeto();
-		pobj.empilha(*obj);
+	for(int i = 0; i < 100; i++){
+		Objeto obj(i * 10);
+		pobj.empilha(obj);
 	}
 	ASSERT_TRUE(pobj.PilhaCheia());
 }
 
 TEST_F(TestePilha, PosicaoTopoEmPilhaCheia){
-	for(int i = 0; i < 99; i++){
-		Objeto *obj = new Objeto();
-		pobj.empilha(*obj);
+	for(int i = 0; i < 100; i++){
+		Objeto obj(i * 10); 
+		pobj.empilha(obj);
 	}
 	ASSERT_EQ(99, pobj.getPosTopo());
 }
 
 TEST_F(TestePilha, ExcecaoPilhaCheiaObjetosComplexos){
-	for(int i = 0; i < 100; i++){
-		Objeto *obj = new Objeto();
-		pobj.empilha(*obj);
+	for(int i = 0; i < 101; i++){
+		Objeto obj(i * 10); 
+		pobj.empilha(obj);
 	}
 }
 
-TEST_F(TestePilha, ExcecaoPilhaVaziaObjetosComplexos){
+/*TEST_F(TestePilha, ExcecaoPilhaVaziaObjetosComplexos){
 	Objeto *objeto1 = new Objeto();
 	Objeto *objeto2 = new Objeto();
 	Objeto *objeto3 = new Objeto();	
@@ -152,4 +153,4 @@ TEST_F(TestePilha, ExcecaoPilhaVaziaObjetosComplexos){
 	pobj.desempilha();
 	EXPECT_ANY_THROW(pobj.desempilha());
 }
-
+*/

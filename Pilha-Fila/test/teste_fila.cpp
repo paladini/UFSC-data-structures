@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <gtest/gtest.h>
 #include "../Fila.hpp"
+#include "Objeto.hpp"
 
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
@@ -12,12 +13,9 @@ int main(int argc, char* argv[]) {
     return a;
 }
 
-class Objeto{
-};
-
 class TesteFila: public ::testing::Test{
  protected:
-    Fila<int> f = Fila<int>(10);
+    Fila<int> fila = Fila<int>(10);
     Fila<Objeto> filaobj = Fila<Objeto>(100);
 };
 
@@ -26,7 +24,7 @@ TEST_F(TesteFila, FilaVazia) {
 }
 
 TEST_F(TesteFila, ExcecaoFilaVaziaElementoComplexo) {
-	EXPECT_ANY_THROW(filaobj.desinclui());
+	EXPECT_ANY_THROW(filaobj.retira());
 }
 
 TEST_F(TesteFila, InsereElemento) {
@@ -35,9 +33,9 @@ TEST_F(TesteFila, InsereElemento) {
 }
 
 TEST_F(TesteFila, InsereElementoComplexo) {
-	Objeto *objeto = new Objeto();
-	filaobj.inclui(*objeto);
-	ASSERT_EQ(*objeto, filaobj.ultimo())
+	Objeto objeto(10);
+	filaobj.inclui(objeto);
+	ASSERT_EQ(objeto, filaobj.ultimo());
 }
 
 TEST_F(TesteFila, FilaCheia) {
@@ -56,8 +54,8 @@ TEST_F(TesteFila, FilaCheia) {
 
 TEST_F(TesteFila, FilaCheiaElementosComplexos) {
 	for(int i = 0; i < 100; i++){
-		Objeto *obj = new Objeto();
-		filaobj.inclui(*obj);
+		Objeto objeto(i);
+		filaobj.inclui(objeto);
 	}
 	ASSERT_TRUE(filaobj.filaCheia());
 }
@@ -94,18 +92,6 @@ TEST_F(TesteFila, Ultimo) {
 	ASSERT_EQ(1, fila.ultimo());
 }
 
-TEST_F(TesteFila, UltimoElementComplexo) {
-	Objeto *obj0 = new Objeto();
-	Objeto *obj1 = new Objeto();
-	Objeto *obj2 = new Objeto();
-
-	filaobj.inclui(*obj0);
-	filaobj.inclui(*obj1);
-	filaobj.inclui(*obj2);
-	filaobj.retira();
-	ASSERT_EQ(obj2, &filaobj.ultimo()); // compara o endereço do ultimo elemento da fila, que agora é o "obj2".
-}
-
 TEST_F(TesteFila, UltimaPosicao) {
 	fila.inclui(0);
 	fila.inclui(1);
@@ -114,13 +100,13 @@ TEST_F(TesteFila, UltimaPosicao) {
 }
 
 TEST_F(TesteFila, UltimaPosicaoElementoComplexo){
-	Objeto *obj0 = new Objeto();
-	Objeto *obj1 = new Objeto();
-	Objeto *obj2 = new Objeto();
+	Objeto obj0(10);
+	Objeto obj1(5);
+	Objeto obj2(2);
 
-	fila.inclui(*obj0);
-	fila.inclui(*obj1);
-	fila.inclui(*obj2);
+	filaobj.inclui(obj0);
+	filaobj.inclui(obj1);
+	filaobj.inclui(obj2);
 	ASSERT_EQ(2, fila.getUltimo());
 }
 
@@ -140,12 +126,12 @@ TEST_F(TesteFila, ExcecaoFilaCheia) {
 
 TEST_F(TesteFila, ExcecaoFilaCheiaElementoComplexo) {
 	for(int i = 0; i < 100; i++){
-		Objeto *obj = new Objeto();
-		filaobj.inclui(*obj);
+		Objeto obj(i*2);
+		filaobj.inclui(obj);
 	}
 
-	Objeto *elementoQueEstouraFila = new Objeto();
-	EXPECT_ANY_THROW(filaobj.inclui(*elementoQueEstouraFila));
+	Objeto elementoQueEstouraFila(5);
+	EXPECT_ANY_THROW(filaobj.inclui(elementoQueEstouraFila));
 }
 
 
@@ -162,8 +148,8 @@ TEST_F(TesteFila, LimpaFila) {
 
 TEST_F(TesteFila, LimpaFilaElementoComplexo){
 	for(int i = 0; i < 50; i++){
-		Objeto *obj = new Objeto();
-		filaobj.inclui(*obj);
+		Objeto obj(i*4);
+		filaobj.inclui(obj);
 	}
 	filaobj.inicializaFila(); // LimparFila, não sei pq se chama assim
 	EXPECT_ANY_THROW(filaobj.getUltimo());

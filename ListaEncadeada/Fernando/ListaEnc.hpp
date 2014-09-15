@@ -29,6 +29,10 @@ class ListaEnc {
 		return anterior;
 	}
 
+	bool posicaoInvalida(int pos){
+		return (pos > size || pos < 0);
+	}
+
  public:
  	/** Construtor padrão da ListaEnc.
 	* O construtor padrão da ListaEnc constroi uma lista encadeada vazia e "head" apontando para NULL.
@@ -75,6 +79,8 @@ class ListaEnc {
 			head = elementoRemovido->getProximo();
 			size--;
 			delete elementoRemovido;
+		} else {
+			throw ExcecaoListaVazia;
 		}
 		return elementoRetorno;
 	}
@@ -86,8 +92,8 @@ class ListaEnc {
 	* @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
 	*/
 	void eliminaDoInicio() {
-		T *elemento = retiraDoInicio;
-		if (retiraDoInicio() == NULL) {
+		T *elemento = retiraDoInicio();
+		if (elemento == NULL) {
 			throw ExcecaoListaVazia;
 		} else {
 			delete elemento;
@@ -103,10 +109,10 @@ class ListaEnc {
 	* @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 	*/
 	void adicionaNaPosicao(const T& dado, int pos) {
-		if(pos > size + 1) {
+		if(posicaoInvalida(pos)) {
 			throw ExcecaoErroPosicao;
 		} else {
-			if(pos == 1) {
+			if(pos == 0) {
 				adicionaNoInicio(dado);
 			} else {
 				Elemento<T> *novo = new Elemento<T>(dado, NULL);
@@ -134,11 +140,20 @@ class ListaEnc {
 			throw ExcecaoListaVazia;
 		} else {
 			Elemento<T> *atual = head;
-			for(int i = 0; i <= size; i++) {
+			// int i = 0;
+			// while(atual != NULL) {
+			// 	// if(atual->getProximo() == NULL)
+			// 	if(igual(dado, atual->getInfo())) {
+			// 		return i;
+			// 	}
+			// 	atual = atual->getProximo();
+			// 	i++;
+			// }
+			for(int i = 0; i < size; i++) {
 				if(igual(dado, atual->getInfo())) {
 					return i;
 				}
-				if(i < size - 1){
+				if (i < size - 1) {
 					atual = atual->getProximo();
 				}
 			}
@@ -160,7 +175,7 @@ class ListaEnc {
 			throw ExcecaoListaVazia;
 		} else {
 			Elemento<T> *atual = head;
-			for(int i = 0; i <= size; i++) {
+			for(int i = 0; i < size; i++) {
 				if(igual(dado, head->getInfo())) {
 					return &head->getInfo();
 				}
@@ -196,8 +211,10 @@ class ListaEnc {
 	*/
 	T retiraDaPosicao(int pos) {
 		T retornar = (T)NULL;
-		if(pos <= size) {
-			if(pos == 1) {
+		if(posicaoInvalida(pos)) {
+			throw ExcecaoErroPosicao;
+		} else {
+			if(pos == 0) {
 				return retiraDoInicio();
 			} else {
 				// Elemento<T> anterior = head;
@@ -224,7 +241,7 @@ class ListaEnc {
 	* @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 	*/
 	void adiciona(const T& dado) {
-		adicionaNaPosicao(dado, size+1);
+		adicionaNaPosicao(dado, size);
 	}
 
 	/** Retira o último elemento da Lista.
@@ -245,12 +262,8 @@ class ListaEnc {
 	* @return o objeto do tipo T que foi retirado da Lista. Retorna NULL caso esse objeto não exista.
 	*/
 	T retiraEspecifico(const T& dado) {
-		try {
-			int pos = posicao(dado);
-			return retiraDaPosicao(pos);
-		} catch(std::exception& e) {
-			return (T)NULL;
-		}
+		int pos = posicao(dado);
+		return retiraDaPosicao(pos + 1);
 	}
 
 	/** Adiciona um novo elemento ordenado de forma ascendente.
@@ -335,6 +348,7 @@ class ListaEnc {
 			}
 		}
 		size = 0;
-		delete head;
+		// delete head;
+		head = NULL;
 	}
 };

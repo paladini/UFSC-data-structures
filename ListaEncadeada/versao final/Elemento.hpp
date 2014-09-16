@@ -1,6 +1,3 @@
-/*  
-* Copyright 2014 <Emmanuel Podestá Junior, Fernando Paladini>
-*/
 #ifndef ELEMENTO_HPP
 #define ELEMENTO_HPP
 
@@ -24,7 +21,6 @@ class Elemento {
 	T getInfo() const {
 		return *info;
 	}
-
 	void setProximo(Elemento<T>* next) {
 		_next = next;
 	}

@@ -307,4 +307,19 @@ class ListaEnc {
 		}
 		size = 0;
 	}
+    T coletaDado(int posicao){
+        verificaPosicaoInvalida();
+        if (listaVazia()) {
+            throw ExcecaoListaVazia;
+        } else {
+            Elemento<T> *atual = head;
+            if(posicao == 0){
+                return atual->getInfo();
+            }
+            for (int i = 0; i < posicao; i++) {
+                atual = atual->getProximo();
+            }
+            return atual->getInfo();
+        }
+    }
 };

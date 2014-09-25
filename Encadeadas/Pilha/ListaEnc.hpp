@@ -312,7 +312,7 @@ class ListaEnc {
     * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
-    T coletaDado(int posicao) {
+    T retornaDado(int posicao) {
         verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;

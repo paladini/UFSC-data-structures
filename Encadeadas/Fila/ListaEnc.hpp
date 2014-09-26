@@ -330,14 +330,26 @@ class ListaEnc {
         }
     }
 
+    /** Método retorna tamanho.
+    * É um método "getter" para o atributo "size" dessa classe.
+    * @return O tamanho da estrutura de dados.
+    */
     int retornaTamanho() {
         return this->size;
     }
 
+    /** Método define tamanho.
+    * É um método "setter" para o atributo "size" dessa classe.
+    * @param tamanho O novo tamanho da estrutura de dados.
+    */
     void defineTamanho(int tamanho) {
         this->size = tamanho;
     }
 
+    /** Método define cabeça.
+    * É um método "setter" para o atributo "head" dessa classe.
+    * @param cabeca O novo elemento cabeça ("head") dessa estrutura de dados.
+    */
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
     }

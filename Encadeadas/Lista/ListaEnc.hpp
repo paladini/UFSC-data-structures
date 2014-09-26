@@ -20,7 +20,7 @@ class ListaEnc {
  private:
     Elemento<T>* head;
     int size;
-    
+
  protected:
 /** Verifica se a posição dada é inválida.
 * Este método recebe uma posição e verifica se ela está dentro da "range" possível para essa Lista.

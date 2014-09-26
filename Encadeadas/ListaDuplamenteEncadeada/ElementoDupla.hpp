@@ -9,32 +9,32 @@
 #define ELEMENTO_HPP
 
 template<typename T>
-class Elemento {
+class ElementoDuplo {
  private:
 	T *info;
-	Elemento<T>* _next;
-	Elemento<T>* _back;
+	ElementoDuplo<T>* _next;
+	ElementoDuplo<T>* _back;
 
  public:
-	Elemento(const T& info, Elemento<T>* next, Elemento<T>* back) : info(new T(info)), _next(next), _back(back) {}
+	ElementoDuplo(const T& info, ElementoDuplo<T>* next, ElementoDuplo<T>* back) : info(new T(info)), _next(next), _back(back) {}
 
-	~Elemento() {
+	~ElementoDuplo() {
 		delete info;
 	}
 
-	Elemento<T>* getProximo() const {
+	ElementoDuplo<T>* getProximo() const {
 		return _next;
 	}
-	Elemento<T>* getAnterior() const{
+	ElementoDuplo<T>* getAnterior() const {
 		return _back;
 	}
 	T getInfo() const {
 		return *info;
 	}
-	void setProximo(Elemento<T>* next) {
+	void setProximo(ElementoDuplo<T>* next) {
 		_next = next;
 	}
-	void setAnterior(Elemento<T>* back){
+	void setAnterior(ElementoDuplo<T>* back){
 		_back = back;
 	}
 };

@@ -35,7 +35,7 @@ class FilaEnc: private ListaEnc<T>{
 	}
 
 	T ultimo() {
-		return this->retornaDado(this->retornaTamanho());
+		return this->retornaDado(this->retornaTamanho()-1);
 	}
 
 	T primeiro() {

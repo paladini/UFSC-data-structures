@@ -248,7 +248,8 @@ class ListaEnc {
         } else {
             atual = head;
             posicao = 1;
-            while (atual->getProximo() != NULL && maior(data, atual->getInfo())) {
+            while (atual->getProximo() != NULL &&
+                  maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
             }
@@ -296,15 +297,34 @@ class ListaEnc {
 */
     void destroiLista() {
         Elemento<T> *atual;
-		if (!listaVazia()) {
-			while(head != NULL) {
-				atual = head;
-				head = atual->getProximo();
-				delete atual;
-			}
-		} else {
-		    delete head;
-		}
-		size = 0;
-	}
+        if (!listaVazia()) {
+            while (head != NULL) {
+                atual = head;
+                head = atual->getProximo();
+                delete atual;
+            }
+        } else {
+            delete head;
+        }
+        size = 0;
+    }
+    /** Retorna um dado de determinada posição sem removê-lo da lista encadeada.
+    * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
+    * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
+    */
+    T retornaDado(int posicao) {
+        verificaPosicaoInvalida(posicao);
+        if (listaVazia()) {
+            throw ExcecaoListaVazia;
+        } else {
+            Elemento<T> *atual = head;
+            if (posicao == 0) {
+                return atual->getInfo();
+            }
+            for (int i = 0; i < posicao; i++) {
+                atual = atual->getProximo();
+            }
+            return atual->getInfo();
+        }
+    }
 };

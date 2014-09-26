@@ -298,7 +298,7 @@ class ListaEnc {
     void destroiLista() {
         Elemento<T> *atual;
         if (!listaVazia()) {
-            while(head != NULL) {
+            while (head != NULL) {
                 atual = head;
                 head = atual->getProximo();
                 delete atual;

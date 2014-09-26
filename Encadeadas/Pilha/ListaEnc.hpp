@@ -20,6 +20,8 @@ class ListaEnc {
  private:
     Elemento<T>* head;
     int size;
+    
+ protected:
 /** Verifica se a posição dada é inválida.
 * Este método recebe uma posição e verifica se ela está dentro da "range" possível para essa Lista.
 * @param pos A posição que precisa ser acessada.
@@ -326,5 +328,17 @@ class ListaEnc {
             }
             return atual->getInfo();
         }
+    }
+
+    int retornaTamanho() {
+        return this->size;
+    }
+
+    void defineTamanho(int tamanho) {
+        this->size = tamanho;
+    }
+
+    void defineCabeca(Elemento<T>* cabeca) {
+        this->head = cabeca;
     }
 };

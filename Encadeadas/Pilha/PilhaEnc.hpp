@@ -53,11 +53,11 @@ class PilhaEnc: private ListaEnc<T> {
 
     /** Método topo.
      * Retorna o dado que está no topo da Pilha Encadeada sem removê-lo.
-     * @see ListaEnc<T>::coletaDado(0)
+     * @see ListaEnc<T>::retornaDado(0)
      * @return O objeto que está no topo da pilha encadeada.
      */
     T topo() {
-        return this->coletaDado(0);
+        return this->retornaDado(0);
     }
 
     /** Método LimparPilha.

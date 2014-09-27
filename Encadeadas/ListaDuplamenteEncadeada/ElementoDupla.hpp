@@ -16,7 +16,8 @@ class ElementoDuplo {
 	ElementoDuplo<T>* _back;
 
  public:
-	ElementoDuplo(const T& info, ElementoDuplo<T>* next, ElementoDuplo<T>* back) : info(new T(info)), _next(next), _back(back) {}
+	ElementoDuplo(const T& info, ElementoDuplo<T>* next,
+	ElementoDuplo<T>* back) : info(new T(info)), _next(next), _back(back) {}
 
 	~ElementoDuplo() {
 		delete info;

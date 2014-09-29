@@ -39,7 +39,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
     bool verificaMemoriaCheia() {
-        Elemento<T> *novo = new Elemento<T>(0, 0);
+        Elemento<T> *novo = new Elemento<T>(0, NULL);
         if (novo == NULL) {
             throw ExcecaoListaCheia;
         }
@@ -96,12 +96,13 @@ class ListaEnc {
 * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
 */
     void eliminaDoInicio() {
+        Elemento<T> *saiu;
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
-            Elemento<T>* saiu = head;
-            head = saiu->getProximo();
-            size--;
+            saiu = head;
+            head = saiu->getPorximo();
+            size = size + 1;
             delete saiu;
         }
     }
@@ -165,7 +166,7 @@ class ListaEnc {
             Elemento<T> *atual = head;
             for (int i = 0; i < size; i++) {
                 if (igual(atual->getInfo(), dado)) {
-                    return &(atual->getInfo());
+                    return &atual->getInfo();
                 }
                 atual = atual->getProximo();
             }
@@ -303,7 +304,7 @@ class ListaEnc {
 /** Método responsável por destruir a Lista Encadeada.
 * Destrói a lista encadeada e desaloca todo o espaço de memória por ela ocupado.
 */
-    virtual void destroiLista() {
+    void destroiLista() {
         Elemento<T> *atual;
         if (!listaVazia()) {
             while (head != NULL) {
@@ -320,7 +321,7 @@ class ListaEnc {
     * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
-    virtual T retornaDado(int posicao) {
+    T retornaDado(int posicao) {
         verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
@@ -336,35 +337,17 @@ class ListaEnc {
         }
     }
 
-    /** Método retorna tamanho.
-    * É um método "getter" para o atributo "size" dessa classe.
-    * @return O tamanho da estrutura de dados.
-    */
     int retornaTamanho() const {
         return this->size;
     }
 
-    /** Método define tamanho.
-    * É um método "setter" para o atributo "size" dessa classe.
-    * @param tamanho O novo tamanho da estrutura de dados.
-    */
     void defineTamanho(int tamanho) {
-        this->size = tamanho;
+        size = tamanho;
     }
-
-    /** Método define cabeça.
-    * É um método "setter" para o atributo "head" dessa classe.
-    * @param cabeca O novo elemento cabeça ("head") dessa estrutura de dados.
-    */
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
     }
-
-    /** Método retorna tamanho.
-    * É um método "getter" para o atributo "head" dessa classe.
-    * @return O elemento da cabeça ("head") dessa estrutura de dados.
-    */
-    Elemento<T>* retornaCabeca() const {
+    Elemento<T>* retornaCabeca(){
         return this->head;
     }
 };

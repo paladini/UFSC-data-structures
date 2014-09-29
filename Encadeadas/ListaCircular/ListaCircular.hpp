@@ -29,9 +29,9 @@ class ListaCirc: public ListaEnc<T> {
     */
     ListaCirc(): ListaEnc<T>() {
         sentinel = new Elemento<T>(0, 0);
-        this->head = sentinel;
-        sentinel->setProximo(this->head);
-        this->size = 0;
+        this->defineCabeca(sentinel);
+        sentinel->setProximo(this->retornaCabeca());
+        this->defineTamanho(0);
     }
     /** Destrutor padrão da ListaCirc.
     * O destrutor padrão da ListaCirc destrói a lista circular simples.
@@ -64,7 +64,7 @@ class ListaCirc: public ListaEnc<T> {
             Elemento<T> *saiu = sentinel->getProximo();
             T volta = saiu->getInfo();
             sentinel->setProximo(saiu->getProximo());
-            this->size = this->size - 1;
+            this->defineTamanho(this->retornaTamanho() - 1);
             delete saiu;
             return volta;
         }
@@ -105,7 +105,7 @@ class ListaCirc: public ListaEnc<T> {
         // if (pos == this->size) {
         //     novo->setProximo(sentinel);
         // }
-        this->size = this->size + 1;
+        this->defineTamanho(this->retornaTamanho() + 1);
     }
     /** Verifica a posição de um dado dentro da lista circular simples.
     * Este método recebe um dado que será analisado para verificar se este dado está dentro da Lista.
@@ -119,7 +119,7 @@ class ListaCirc: public ListaEnc<T> {
             throw ExcecaoListaVazia;
         } else {
             Elemento<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < this->size; i++) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
                if (this->igual(atual->getInfo(), dado)) {
                     return i;
                 }
@@ -142,7 +142,7 @@ class ListaCirc: public ListaEnc<T> {
             throw ExcecaoListaVazia;
         } else {
             Elemento<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < this->size; i++) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
                 if (this->igual(atual->getInfo(), dado)) {
                     return &atual->getInfo();
                 }
@@ -186,7 +186,7 @@ class ListaCirc: public ListaEnc<T> {
             volta = eliminar->getInfo();
             anterior->setProximo(eliminar->getProximo());
             delete eliminar;
-            this->size = this->size - 1;
+            this->defineTamanho(this->retornaTamanho() - 1);
         }
         return volta;
     }
@@ -199,7 +199,7 @@ class ListaCirc: public ListaEnc<T> {
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
     void adiciona(const T& dado) {
-        adicionaNaPosicao(dado, this->size);
+        adicionaNaPosicao(dado, this->retornaTamanho());
     }
 /** Retira o último elemento da Lista.
 * Este método retira o último elemento da lista circular simples.
@@ -207,7 +207,7 @@ class ListaCirc: public ListaEnc<T> {
 * @return o dado do tipo T que foi retirado do final da Lista.
 */
     T retira() {
-        return retiraDaPosicao(this->size);
+        return retiraDaPosicao(this->retornaTamanho());
     }
 // Específico
 /** Retira um objeto específico da lista circular simples.
@@ -254,7 +254,7 @@ class ListaCirc: public ListaEnc<T> {
     void destroiLista() {
         Elemento<T> *atual;
         if (!this->listaVazia()) {
-            for (int i = 0; i < this->size; i++) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
                 atual = sentinel->getProximo();
                 sentinel->setProximo(atual->getProximo());
                 delete atual;

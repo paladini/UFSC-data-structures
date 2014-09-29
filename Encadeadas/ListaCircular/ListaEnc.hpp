@@ -17,7 +17,7 @@
 #include "ExcecaoListaVazia.hpp"
 template<typename T>
 class ListaEnc {
- protected:
+ private:
     Elemento<T>* head;
     int size;
 
@@ -27,6 +27,7 @@ class ListaEnc {
 * @param pos A posição que precisa ser acessada.
 * @exception ExcecaoErroPosicao Exceção que indica que a posição inserida é inválida (não está na range da Lista).
 */
+ protected:
     void verificaPosicaoInvalida(int pos) {
         if (pos > size || pos < 0) {
             throw ExcecaoErroPosicao;
@@ -339,5 +340,8 @@ class ListaEnc {
     }
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
+    }
+    Elemento<T>* retornaCabeca(){
+        return this->head;
     }
 };

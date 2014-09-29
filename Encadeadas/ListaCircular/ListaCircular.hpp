@@ -10,58 +10,34 @@
 * uma "head", que é um ponteiro para um objeto do tipo Elemento; e um "size", que indica o tamanho
 * dessa lista circular simples.
 */
+#ifndef LISTACIRC_HPP_
+#define LISTACIRC_HPP_
 #include <cstdio>
 #include "Elemento.hpp"
+#include "ListaEnc.hpp"
 #include "ExcecaoErroPosicao.hpp"
 #include "ExcecaoListaCheia.hpp"
 #include "ExcecaoListaVazia.hpp"
 template<typename T>
-class ListaCirc {
+class ListaCirc: public ListaEnc<T> {
  private:
-    Elemento<T>* head;
     Elemento<T>* sentinel;
-    int size;
-
- protected:
-/** Verifica se a posição dada é inválida.
-* Este método recebe uma posição e verifica se ela está dentro da "range" possível para essa Lista.
-* @param pos A posição que precisa ser acessada.
-* @exception ExcecaoErroPosicao Exceção que indica que a posição inserida é inválida (não está na range da Lista).
-*/
-    void verificaPosicaoInvalida(int pos) {
-        if (pos > size || pos < 0) {
-            throw ExcecaoErroPosicao;
-        }
-    }
-/** Verifica se é possível alocar mais objetos na memória.
-* Este método tenta criar um novo objeto na memória e verifica se o seu valor é NULL.
-* Caso seja, significa que a memória está cheia e que não há mais espaço para alocação de novos elementos / objetos.
-* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
-*/
-    bool verificaMemoriaCheia() {
-        Elemento<T> *novo = new Elemento<T>(0, NULL);
-        if (novo == NULL) {
-            throw ExcecaoListaCheia;
-        }
-        delete novo;
-        return true;
-    }
 
  public:
     /** Construtor padrão da ListaCirc.
     * O construtor padrão da ListaCirc constroi uma lista circular simples vazia e "head" apontando para NULL.
     */
-    ListaCirc() {
-        sentinel = new Elemento<T>(NULL, NULL);
-        // sentinel->setProximo(sentinel);
-        size = 0;
-        head = sentinel;
+    ListaCirc(): ListaEnc<T>() {
+        sentinel = new Elemento<T>(0, 0);
+        this->head = sentinel;
+        sentinel->setProximo(this->head);
+        this->size = 0;
     }
     /** Destrutor padrão da ListaCirc.
     * O destrutor padrão da ListaCirc destrói a lista circular simples.
     */
     ~ListaCirc() {
-       destroiLista();
+        destroiLista();
     }
     // Início
     /** Adiciona um novo elemento no começo da Lista Circular Simples.
@@ -70,13 +46,13 @@ class ListaCirc {
     * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
     */
     void adicionaNoInicio(const T& dado) {
-        verificaMemoriaCheia();
+        this->verificaMemoriaCheia();
         Elemento<T> *novo = new Elemento<T>(dado, sentinel->getProximo());
-        if (listaVazia()) {
-            novo->setProximo(sentinel);
-        }
+        // if (this->listaVazia()) {
+        //    novo->setProximo(sentinel);
+        // }
         sentinel->setProximo(novo);
-        size++;
+        this->defineTamanho(this->retornaTamanho() + 1);
     }
     /** Retira um elemento no começo da lista circular simples.
     * Este método retira o primeiro elemento da lista circular simples, retornando o objeto retirado.
@@ -84,11 +60,11 @@ class ListaCirc {
     * @return O elemento que estava no começo da lista ou NULL caso a lista esteja vazia.
     */
     T retiraDoInicio() {
-        if (!listaVazia()) {
+        if (!this->listaVazia()) {
             Elemento<T> *saiu = sentinel->getProximo();
             T volta = saiu->getInfo();
             sentinel->setProximo(saiu->getProximo());
-            size--;
+            this->size = this->size - 1;
             delete saiu;
             return volta;
         }
@@ -114,22 +90,22 @@ class ListaCirc {
     * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
     */
     void adicionaNaPosicao(const T& dado, int pos) {
-        verificaPosicaoInvalida(pos);
+        this->verificaPosicaoInvalida(pos);
         if (pos == 0) {
             adicionaNoInicio(dado);
             return;
         }
-        verificaMemoriaCheia();
+        this->verificaMemoriaCheia();
         Elemento<T> *anterior = sentinel->getProximo();
         for (int i = 0; i < pos - 1; i++) {
             anterior = anterior->getProximo();
         }
         Elemento<T> *novo = new Elemento<T>(dado, anterior->getProximo());
         anterior->setProximo(novo);
-        if (pos == size) {
-            novo->setProximo(sentinel);
-        }
-        size++;
+        // if (pos == this->size) {
+        //     novo->setProximo(sentinel);
+        // }
+        this->size = this->size + 1;
     }
     /** Verifica a posição de um dado dentro da lista circular simples.
     * Este método recebe um dado que será analisado para verificar se este dado está dentro da Lista.
@@ -139,12 +115,12 @@ class ListaCirc {
     * @return um inteiro que indica a posição em que o dado se encontrava.
     */
     int posicao(const T& dado) const {
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             Elemento<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < size; i++) {
-               if (igual(atual->getInfo(), dado)) {
+            for (int i = 0; i < this->size; i++) {
+               if (this->igual(atual->getInfo(), dado)) {
                     return i;
                 }
                 atual = atual->getProximo();
@@ -162,12 +138,12 @@ class ListaCirc {
     * @return um ponteiro para T que indica a posição de memória em que o dado se encontrava.
     */
     T* posicaoMem(const T& dado) const {
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             Elemento<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < size; i++) {
-                if (igual(atual->getInfo(), dado)) {
+            for (int i = 0; i < this->size; i++) {
+                if (this->igual(atual->getInfo(), dado)) {
                     return &atual->getInfo();
                 }
                 atual = atual->getProximo();
@@ -198,7 +174,7 @@ class ListaCirc {
     */
     T retiraDaPosicao(int pos) {
         T volta;
-        verificaPosicaoInvalida(pos);
+        this->verificaPosicaoInvalida(pos);
         if (pos == 0) {
             retiraDoInicio();
         } else {
@@ -210,7 +186,7 @@ class ListaCirc {
             volta = eliminar->getInfo();
             anterior->setProximo(eliminar->getProximo());
             delete eliminar;
-            size--;
+            this->size = this->size - 1;
         }
         return volta;
     }
@@ -223,7 +199,7 @@ class ListaCirc {
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
     void adiciona(const T& dado) {
-        adicionaNaPosicao(dado, size);
+        adicionaNaPosicao(dado, this->size);
     }
 /** Retira o último elemento da Lista.
 * Este método retira o último elemento da lista circular simples.
@@ -231,7 +207,7 @@ class ListaCirc {
 * @return o dado do tipo T que foi retirado do final da Lista.
 */
     T retira() {
-        return retiraDaPosicao(size);
+        return retiraDaPosicao(this->size);
     }
 // Específico
 /** Retira um objeto específico da lista circular simples.
@@ -254,54 +230,22 @@ class ListaCirc {
     void adicionaEmOrdem(const T& data) {
         Elemento<T> *atual;
         int posicao;
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             adicionaNoInicio(data);
         } else {
             atual = sentinel->getProximo();
             posicao = 1;
-            while (atual->getProximo() != NULL &&
-                maior(data, atual->getInfo())) {
+            while (atual->getProximo() != sentinel &&
+                    this->maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
             }
-            if (maior(data, atual->getInfo())) {
+            if (this->maior(data, atual->getInfo())) {
                 adicionaNaPosicao(data, posicao + 1);
             } else {
                 adicionaNaPosicao(data, posicao);
             }
         }
-    }
-// Diversos
-/** Método que verifica se a Lista está vazia.
-* Verifica se o "size" da lista circular simples é zero, se for, retorna true.
-* @return Retorna um boolean que mostra se a lista circular simples está vazia ou não.
-*/
-    bool listaVazia() const {
-        return size == 0;
-    }
-/** Verifica se um dado1 do Tipo T é igual a um dado2 do Tipo T.
-* @param dado1 Dado a ser comparado a igualdade.
-* @param dado2 Dado a ser comparado a igualdade.
-* @return um boolean que indica se os dados são iguais ou não.
-*/
-    bool igual(T dado1, T dado2) const {
-        return dado1 == dado2;
-    }
-/** Verifica se o dado1 do lado esquerdo do operador é maior do que o dado do lado direito do operador.
-* @param dado1 Dado a ser comparado que ficará à esquerda do operador de comparação.
-* @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
-* @return um boolean que mostra se um dado é maior que outro.
-*/
-    bool maior(T dado1, T dado2) const {
-        return dado1 > dado2;
-    }
-    /** Verifica se o dado1 do lado esquerdo do operador é menor do que o dado do lado direito do operador.
-    * @param dado1 Dado a ser comparado que ficará à esquerda do operador de comparação.
-    * @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
-    * @return um boolean verificando se um dado é menor que o outro.
-    */
-    bool menor(T dado1, T dado2) const {
-        return dado1 < dado2;
     }
 
     /** Método responsável por destruir a Lista Circular.
@@ -309,22 +253,22 @@ class ListaCirc {
     */
     void destroiLista() {
         Elemento<T> *atual;
-        if (!listaVazia()) {
-            for (int i = 0; i < size; i++) {
+        if (!this->listaVazia()) {
+            for (int i = 0; i < this->size; i++) {
                 atual = sentinel->getProximo();
                 sentinel->setProximo(atual->getProximo());
                 delete atual;
             }
         }
-        size = 0;
+        this->defineTamanho(0);
     }
     /** Retorna um dado de determinada posição sem removê-lo da lista circular.
     * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
     T retornaDado(int posicao) {
-        verificaPosicaoInvalida(posicao);
-        if (listaVazia()) {
+        this->verificaPosicaoInvalida(posicao);
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             Elemento<T> *atual = sentinel->getProximo();
@@ -337,28 +281,5 @@ class ListaCirc {
             return atual->getInfo();
         }
     }
-
-    /** Método retorna tamanho.
-    * É um método "getter" para o atributo "size" dessa classe.
-    * @return O tamanho da estrutura de dados.
-    */
-    int retornaTamanho() {
-        return this->size;
-    }
-
-    /** Método define tamanho.
-    * É um método "setter" para o atributo "size" dessa classe.
-    * @param tamanho O novo tamanho da estrutura de dados.
-    */
-    void defineTamanho(int tamanho) {
-        this->size = tamanho;
-    }
-
-    /** Método define cabeça.
-    * É um método "setter" para o atributo "head" dessa classe.
-    * @param cabeca O novo elemento cabeça ("head") dessa estrutura de dados.
-    */
-    void defineCabeca(Elemento<T>* cabeca) {
-        this->head = cabeca;
-    }
 };
+#endif

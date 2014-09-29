@@ -67,7 +67,7 @@ class ListaEnc {
 * @param dado O dado que será inserido dentro da lista.
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
-    void adicionaNoInicio(const T& dado) {
+    virtual void adicionaNoInicio(const T& dado) {
         verificaMemoriaCheia();
         Elemento<T> *novo = new Elemento<T>(dado, head);
         head = novo;
@@ -78,7 +78,7 @@ class ListaEnc {
 * @see listaVazia()
 * @return O elemento que estava no começo da lista ou NULL caso a lista esteja vazia.
 */
-    T retiraDoInicio() {
+    virtual T retiraDoInicio() {
         if (!listaVazia()) {
             Elemento<T> *saiu = head;
             T volta = saiu->getInfo();
@@ -95,10 +95,15 @@ class ListaEnc {
 * @see retiraDoInicio()
 * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
 */
-    void eliminaDoInicio() {
-        T elemento = retiraDoInicio();
-        delete elemento->getInfo();
-        delete elemento;
+    virtual void eliminaDoInicio() {
+        if (listaVazia()) {
+            throw ExcecaoListaVazia;
+        } else {
+            Elemento<T>* saiu = head;
+            head = saiu->getProximo();
+            size--;
+            delete saiu;
+        }
     }
 // Posição
 /** Adiciona um novo elemento na posição dada.
@@ -108,7 +113,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
-    void adicionaNaPosicao(const T& dado, int pos) {
+    virtual void adicionaNaPosicao(const T& dado, int pos) {
         verificaPosicaoInvalida(pos);
         if (pos == 0) {
             adicionaNoInicio(dado);
@@ -130,7 +135,7 @@ class ListaEnc {
 * @exception ExcecaoErroPosicao Exceção que indica que o dado do tipo T fornecido não está presente na lista.
 * @return um inteiro que indica a posição em que o dado se encontrava.
 */
-    int posicao(const T& dado) const {
+    virtual int posicao(const T& dado) const {
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
@@ -160,7 +165,7 @@ class ListaEnc {
             Elemento<T> *atual = head;
             for (int i = 0; i < size; i++) {
                 if (igual(atual->getInfo(), dado)) {
-                    return &atual->getInfo();
+                    return &(atual->getInfo());
                 }
                 atual = atual->getProximo();
             }
@@ -173,7 +178,7 @@ class ListaEnc {
 * @see posicao(const T& dado)
 * @return um boolean que indica se o dado está presente (true) ou não (false) dentro da lista.
 */
-    bool contem(const T& dado) {
+    virtual bool contem(const T& dado) {
         try {
             posicao(dado);
             return true;
@@ -188,7 +193,7 @@ class ListaEnc {
 * @see retornaAnterior(int pos)
 * @return um objeto T que foi retirado da posição especificada. Retorna NULL se não conseguiu pegar um dado dessa posição.
 */
-    T retiraDaPosicao(int pos) {
+    virtual T retiraDaPosicao(int pos) {
         T volta;
         verificaPosicaoInvalida(pos);
         if (pos == 0) {
@@ -214,7 +219,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
-    void adiciona(const T& dado) {
+    virtual void adiciona(const T& dado) {
         adicionaNaPosicao(dado, size);
     }
 /** Retira o último elemento da Lista.
@@ -222,7 +227,7 @@ class ListaEnc {
 * @see retiraDaPosicao(int pos)
 * @return o dado do tipo T que foi retirado do final da Lista.
 */
-    T retira() {
+    virtual T retira() {
         return retiraDaPosicao(size);
     }
 // Específico
@@ -232,7 +237,7 @@ class ListaEnc {
 * @see posicao(int pos)
 * @return o objeto do tipo T que foi retirado da Lista. Retorna NULL caso esse objeto não exista.
 */
-    T retiraEspecifico(const T& dado) {
+    virtual T retiraEspecifico(const T& dado) {
         int pos = posicao(dado);
         return retiraDaPosicao(pos + 1);
     }
@@ -243,7 +248,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
-    void adicionaEmOrdem(const T& data) {
+    virtual void adicionaEmOrdem(const T& data) {
         Elemento<T> *atual;
         int posicao;
         if (listaVazia()) {
@@ -298,7 +303,7 @@ class ListaEnc {
 /** Método responsável por destruir a Lista Encadeada.
 * Destrói a lista encadeada e desaloca todo o espaço de memória por ela ocupado.
 */
-    void destroiLista() {
+    virtual void destroiLista() {
         Elemento<T> *atual;
         if (!listaVazia()) {
             while (head != NULL) {
@@ -315,7 +320,7 @@ class ListaEnc {
     * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
-    T retornaDado(int posicao) {
+    virtual T retornaDado(int posicao) {
         verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
@@ -331,17 +336,35 @@ class ListaEnc {
         }
     }
 
+    /** Método retorna tamanho.
+    * É um método "getter" para o atributo "size" dessa classe.
+    * @return O tamanho da estrutura de dados.
+    */
     int retornaTamanho() const {
         return this->size;
     }
 
+    /** Método define tamanho.
+    * É um método "setter" para o atributo "size" dessa classe.
+    * @param tamanho O novo tamanho da estrutura de dados.
+    */
     void defineTamanho(int tamanho) {
-        size = tamanho;
+        this->size = tamanho;
     }
+
+    /** Método define cabeça.
+    * É um método "setter" para o atributo "head" dessa classe.
+    * @param cabeca O novo elemento cabeça ("head") dessa estrutura de dados.
+    */
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
     }
-    Elemento<T>* retornaCabeca(){
+
+    /** Método retorna tamanho.
+    * É um método "getter" para o atributo "head" dessa classe.
+    * @return O elemento da cabeça ("head") dessa estrutura de dados.
+    */
+    Elemento<T>* retornaCabeca() const {
         return this->head;
     }
 };

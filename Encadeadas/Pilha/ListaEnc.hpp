@@ -21,12 +21,13 @@ class ListaEnc {
     Elemento<T>* head;
     int size;
 
- protected:
+
 /** Verifica se a posição dada é inválida.
 * Este método recebe uma posição e verifica se ela está dentro da "range" possível para essa Lista.
 * @param pos A posição que precisa ser acessada.
 * @exception ExcecaoErroPosicao Exceção que indica que a posição inserida é inválida (não está na range da Lista).
 */
+ protected:
     void verificaPosicaoInvalida(int pos) {
         if (pos > size || pos < 0) {
             throw ExcecaoErroPosicao;
@@ -38,7 +39,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
     bool verificaMemoriaCheia() {
-        Elemento<T> *novo = new Elemento<T>(0, NULL);
+        Elemento<T> *novo = new Elemento<T>(0, 0);
         if (novo == NULL) {
             throw ExcecaoListaCheia;
         }
@@ -95,9 +96,14 @@ class ListaEnc {
 * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
 */
     void eliminaDoInicio() {
-        T elemento = retiraDoInicio();
-        delete elemento->getInfo();
-        delete elemento;
+        if (listaVazia()) {
+            throw ExcecaoListaVazia;
+        } else {
+            Elemento<T>* saiu = head;
+            head = saiu->getProximo();
+            size--;
+            delete saiu;
+        }
     }
 // Posição
 /** Adiciona um novo elemento na posição dada.
@@ -159,7 +165,7 @@ class ListaEnc {
             Elemento<T> *atual = head;
             for (int i = 0; i < size; i++) {
                 if (igual(atual->getInfo(), dado)) {
-                    return &atual->getInfo();
+                    return &(atual->getInfo());
                 }
                 atual = atual->getProximo();
             }
@@ -297,7 +303,7 @@ class ListaEnc {
 /** Método responsável por destruir a Lista Encadeada.
 * Destrói a lista encadeada e desaloca todo o espaço de memória por ela ocupado.
 */
-    void destroiLista() {
+    virtual void destroiLista() {
         Elemento<T> *atual;
         if (!listaVazia()) {
             while (head != NULL) {
@@ -314,7 +320,7 @@ class ListaEnc {
     * @param posicao Dado a ser comparado que ficará à esquerda do operador de comparação.
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
-    T retornaDado(int posicao) {
+    virtual T retornaDado(int posicao) {
         verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
@@ -334,7 +340,7 @@ class ListaEnc {
     * É um método "getter" para o atributo "size" dessa classe.
     * @return O tamanho da estrutura de dados.
     */
-    int retornaTamanho() {
+    int retornaTamanho() const {
         return this->size;
     }
 
@@ -352,5 +358,13 @@ class ListaEnc {
     */
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
+    }
+
+    /** Método retorna tamanho.
+    * É um método "getter" para o atributo "head" dessa classe.
+    * @return O elemento da cabeça ("head") dessa estrutura de dados.
+    */
+    Elemento<T>* retornaCabeca() const {
+        return this->head;
     }
 };

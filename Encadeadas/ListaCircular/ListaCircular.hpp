@@ -4,7 +4,7 @@
 * @since: Created on 28 de Setembro de 2014, 21:30.
 * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
 * < Na verdade é Copyleft, MIT License \o/ >
-*/
+*/ 
 /** Classe ListaCirc.
 * A classe ListaCirc implementa a estrutura de dados lista circular simples, uma lista formada por
 * uma "head", que é um ponteiro para um objeto do tipo Elemento; e um "size", que indica o tamanho

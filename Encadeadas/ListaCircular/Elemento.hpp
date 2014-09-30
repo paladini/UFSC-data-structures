@@ -4,7 +4,7 @@
 * @since: Created on 13 de Setembro de 2014, 21:30.
 * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
 * < Na verdade é Copyleft, MIT License \o/ >
-*/
+*/ 
 #ifndef ELEMENTO_HPP
 #define ELEMENTO_HPP
 

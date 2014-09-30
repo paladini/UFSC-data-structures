@@ -4,7 +4,7 @@
 * @since: Created on 6 de Setembro de 2014, 20:52.
 * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
 * < Na verdade é Copyleft, MIT License \o/ >
-*/
+*/ 
 #ifndef EXCECAOLISTAVAZIA_HPP_
 #define EXCECAOLISTAVAZIA_HPP_
 #include <exception>

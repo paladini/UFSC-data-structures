@@ -12,7 +12,7 @@
 */
 #ifndef LISTADUPLA_HPP
 #define LISTADUPLA_HPP
-#include "ElementoDupla.hpp"
+#include "ElementoDuplo.hpp"
 #include "ExcecaoErroPosicao.hpp"
 #include "ExcecaoListaCheia.hpp"
 #include "ExcecaoListaVazia.hpp"
@@ -27,6 +27,7 @@ class ListaDupla {
         * @param pos A posição que precisa ser acessada.
         * @exception ExcecaoErroPosicao Exceção que indica que a posição inserida é inválida (não está na range da Lista).
         */
+ protected:
         void verificaPosicaoInvalida(int pos) {
             if (pos > size || pos < 0) {
                 throw ExcecaoErroPosicao;
@@ -71,7 +72,7 @@ class ListaDupla {
     * @see verificaMemoriaCheia();
     * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
     */
-    void adicionaNoInicioDuplo(const T& dado) {
+    virtual void adicionaNoInicioDuplo(const T& dado) {
         verificaMemoriaCheia();
         ElementoDuplo<T>* novo = new ElementoDuplo<T>(dado, head, NULL);
         head = novo;
@@ -87,7 +88,7 @@ class ListaDupla {
     * @exception ExcecaoListaVazia Exceção que indica que um dado não pode ser retirado da lista, pois ela está vazia.
     * @return O elemento que estava no começo da lista caso esta não esteja vazia.
     */
-    T retiraDoInicioDuplo() {
+    virtual T retiraDoInicioDuplo() {
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         }
@@ -100,7 +101,7 @@ class ListaDupla {
             head->setAnterior(NULL);
         }
         size--;
-        free(saiu);
+        delete saiu;
         return volta;
     }
 
@@ -110,10 +111,14 @@ class ListaDupla {
     * @see retiraDoInicioDuplo()
     * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
     */
-    void eliminaDoInicioDuplo() {
-        T elemento = retiraDoInicioDuplo();
-        delete elemento->getInfo();
-        delete elemento;
+    virtual void eliminaDoInicioDuplo() {
+        if(!this->listaVazia()){
+            ElementoDuplo<T>* saiu = head;
+            head = saiu->getProximo();
+            size--;
+            delete saiu;
+        }
+        throw ExcecaoListaVazia;
     }
 
     // Posição
@@ -126,7 +131,7 @@ class ListaDupla {
     * @see verificaMemoriaCheia();
     * @see adicionaNoInicioDuplo(dado);
     */
-    void adicionaNaPosicaoDuplo(const T& dado, int pos) {
+    virtual void adicionaNaPosicaoDuplo(const T& dado, int pos) {
         verificaMemoriaCheia();
         ElementoDuplo<T>* novo = new ElementoDuplo<T>(dado, NULL, NULL);
         ElementoDuplo<T>* anterior;
@@ -157,7 +162,7 @@ class ListaDupla {
     * @exception ExcecaoErroPosicao Exceção que indica que o dado do tipo T fornecido não está presente na lista.
     * @return um inteiro que indica a posição em que o dado se encontrava.
     */
-    int posicaoDuplo(const T& dado) const {
+    virtual int posicaoDuplo(const T& dado) const {
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
@@ -202,7 +207,7 @@ class ListaDupla {
     * @see posicaoDuplo(const T& dado)
     * @return um boolean que indica se o dado está presente (true) ou não (false) dentro da lista.
     */
-    bool contemDuplo(const T& dado) {
+    virtual bool contemDuplo(const T& dado) {
         try {
             posicaoDuplo(dado);
             return true;
@@ -219,7 +224,7 @@ class ListaDupla {
     * @exception ExcecaoErroPosicao Exceção que indica que a posição dada é invalida. 
     * @return um objeto T que foi retirado da posição especificada.
     */
-    T retiraDaPosicaoDuplo(int pos) {
+    virtual T retiraDaPosicaoDuplo(int pos) {
         if (pos > size || pos < 0) {
             throw ExcecaoErroPosicao;
         }
@@ -251,7 +256,7 @@ class ListaDupla {
     * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
     * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
     */
-    void adicionaDuplo(const T& dado) {
+    virtual void adicionaDuplo(const T& dado) {
         adicionaNaPosicaoDuplo(dado, size);
     }
 
@@ -260,7 +265,7 @@ class ListaDupla {
     * @see retiraDaPosicaoDuplo(int pos)
     * @return o dado do tipo T que foi retirado do final da Lista.
     */
-    T retiraDuplo() {
+    virtual T retiraDuplo() {
         return retiraDaPosicaoDuplo(size - 1);
     }
 
@@ -271,7 +276,7 @@ class ListaDupla {
     * @see posicaoDuplo(int pos)
     * @return o objeto do tipo T que foi retirado da Lista.
     */
-    T retiraEspecificoDuplo(const T& dado) {
+    virtual T retiraEspecificoDuplo(const T& dado) {
         int posicao = posicaoDuplo(dado);
         return retiraDaPosicaoDuplo(posicao);
     }
@@ -281,7 +286,7 @@ class ListaDupla {
     * @see listaVazia()
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
-    T mostra(int pos) {
+    virtual T mostra(int pos) {
         verificaPosicaoInvalida(pos);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
@@ -307,7 +312,7 @@ class ListaDupla {
     * @see adicionaNoInicioDuplo(data);
     * @see adicionaNaPosicaoDuplo(data, posicao);
     */
-    void adicionaEmOrdem(const T& data) {
+    virtual void adicionaEmOrdem(const T& data) {
         verificaMemoriaCheia();
         ElementoDuplo<T>* atual;
         int posicao;
@@ -377,7 +382,7 @@ class ListaDupla {
     * Destrói a lista duplamente encadeada e desaloca todo o espaço de memória por ela ocupado.
     * @see listaVazia();
     */
-    void destroiListaDuplo(){
+    virtual void destroiListaDuplo(){
        ElementoDuplo<T> *atual;
         if (!listaVazia()) {
             while (head != NULL) {
@@ -389,6 +394,20 @@ class ListaDupla {
             delete head;
         }
         size = 0;
+    }
+
+    int retornaTamanho() const {
+        return this->size;
+    }
+
+    void defineTamanho(int tamanho) {
+        size = tamanho;
+    }
+    void defineCabeca(ElementoDuplo<T>* cabeca) {
+        this->head = cabeca;
+    }
+    ElementoDuplo<T>* retornaCabeca() const {
+        return this->head;
     }
 };
 

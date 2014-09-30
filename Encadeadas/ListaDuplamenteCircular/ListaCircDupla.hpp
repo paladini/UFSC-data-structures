@@ -13,49 +13,26 @@
 #ifndef LISTACIRCDUPLA_HPP_
 #define LISTACIRCDUPLA_HPP_
 #include <cstdio>
-#include "ElementoDupla.hpp"
+#include "ListaDupla.hpp"
 #include "ExcecaoErroPosicao.hpp"
 #include "ExcecaoListaCheia.hpp"
 #include "ExcecaoListaVazia.hpp"
 template<typename T>
-class ListaDuplaCirc {
+class ListaDuplaCirc: public ListaDupla<T> {
  private:
-    ElementoDuplo<T>* head;
     ElementoDuplo<T>* sentinel;
-    int size;
- /** Verifica se a posição dada é inválida.
-* Este método recebe uma posição e verifica se ela está dentro da "range" possível para essa Lista.
-* @param pos A posição que precisa ser acessada.
-* @exception ExcecaoErroPosicao Exceção que indica que a posição inserida é inválida (não está na range da Lista).
-*/
-    void verificaPosicaoInvalida(int pos) {
-        if (pos > size || pos < 0) {
-            throw ExcecaoErroPosicao;
-        }
-    }
- /** Verifica se é possível alocar mais objetos na memória.
-* Este método tenta criar um novo objeto na memória e verifica se o seu valor é NULL.
-* Caso seja, significa que a memória está cheia e que não há mais espaço para alocação de novos elementos / objetos.
-* @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
-*/
-    bool verificaMemoriaCheia() {
-        ElementoDuplo<T> *novo = new ElementoDuplo<T>(0, NULL, NULL);
-        if (novo == NULL) {
-            throw ExcecaoListaCheia;
-        }
-        delete novo;
-        return true;
-    }
 
  public:
  /** Construtor Padrão da ListaDuplaCirc.
  * Seu construtor constroi uma lista vazia, com seu head apontando para seu sentinel e este apontando
  * para valores anteriores e posteriores nulos, com dado nulo.
  */
-    ListaDuplaCirc() {
-        head = sentinel;
-        sentinel = new ElementoDuplo<T>(0, NULL, NULL);
-        size = 0;
+    ListaDuplaCirc(): ListaDupla<T>() {
+        sentinel = new ElementoDuplo<T>(0, 0, 0);
+        this->defineCabeca(sentinel);
+        sentinel->setProximo(this->retornaCabeca());
+        sentinel->setAnterior(this->retornaCabeca());
+        this->defineTamanho(0);
     }
  /** Destrutor padrão da ListaDuplaCirc.
  * Seu destrutor destroi todos os elementos da lista, porém não destroi o seu sentinel. Além disso,
@@ -71,13 +48,11 @@ class ListaDuplaCirc {
  *@see listaVazia().
  */
     void adicionaNoInicioDuplo(const T& dado) {
-        verificaMemoriaCheia();
-        ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado, sentinel->getProximo(), sentinel);
-        if (listaVazia()) {
-            novo->setProximo(sentinel);
-        }
+        this->verificaMemoriaCheia();
+        ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado, sentinel->getProximo(), sentinel->getAnterior());
+        sentinel->setAnterior(novo);
         sentinel->setProximo(novo);
-        size++;
+        this->defineTamanho(this->retornaTamanho() + 1);
     }
  /** Retira um elemento no começo da lista dupla circular.
  * Este método é responsável por retirar um elemento do inicio da lista e retornar sua informação.
@@ -87,12 +62,12 @@ class ListaDuplaCirc {
  *@return O elemento que estava no começo da lista ou NULL caso a lista esteja vazia.
  */
     T retiraDoInicioDuplo() {
-        if (!listaVazia()) {
+        if (!this->listaVazia()) {
             ElementoDuplo<T> *saiu = sentinel->getProximo();
             T volta = saiu->getInfo();
             sentinel->setProximo(saiu->getProximo());
             (saiu->getProximo())->setAnterior(sentinel);
-            size--;
+            this->defineTamanho(this->retornaTamanho() - 1);
             delete saiu;
             return volta;
         }
@@ -103,9 +78,13 @@ class ListaDuplaCirc {
  *@see retiraDoInicioDuplo.
  */
     void eliminaDoInicioDuplo()  {
-        T elemento = retiraDoInicioDuplo();
-        delete elemento->getInfo();
-        delete elemento;
+        if(!this->listaVazia()){
+            ElementoDuplo<T>* saiu = sentinel->getProximo();
+            sentinel->setProximo(saiu->getProximo());
+            this->defineTamanho(this->retornaTamanho() - 1);
+            delete saiu;
+        }
+        throw ExcecaoListaVazia;
     }
  /** Adiciona um elemento em uma dada posicao.
  * Este método recebe um dado e o adiciona em uma posição, que , também, é enviada a ele.
@@ -116,12 +95,12 @@ class ListaDuplaCirc {
  *@param pos A posicao em que o dado vai ser inserido.
  */
     void adicionaNaPosicaoDuplo(const T& dado, int pos) {
-        verificaPosicaoInvalida(pos);
+        this->verificaPosicaoInvalida(pos);
         if (pos == 0) {
             adicionaNoInicioDuplo(dado);
             return;
         }
-        verificaMemoriaCheia();
+        this->verificaMemoriaCheia();
         ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado, NULL, NULL);
         ElementoDuplo<T> *anterior = sentinel->getProximo();
         for (int i = 0; i < pos - 1; i++) {
@@ -130,11 +109,10 @@ class ListaDuplaCirc {
         novo->setProximo(anterior->getProximo());
         novo->setAnterior(anterior);
         anterior->setProximo(novo);
-        if (pos == size) {
-            novo->setProximo(sentinel);
-            (novo->getProximo())->setAnterior(novo);
+        if (pos == this->retornaTamanho()) {
+             sentinel->setAnterior(novo);
         }
-        size++;
+        this->defineTamanho(this->retornaTamanho() + 1);
     }
  /** Retorna a posicao de um dado.
  * O método recebe um dado e o procura na lista, retonando a sua posição.
@@ -143,12 +121,12 @@ class ListaDuplaCirc {
  *@return um inteiro que indica a posição em que o dado se encontrava.
  */
     int posicaoDuplo(const T& dado) const {
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             ElementoDuplo<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < size; i++) {
-               if (igual(atual->getInfo(), dado)) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
+               if (this->igual(atual->getInfo(), dado)) {
                     return i;
                 }
                 atual = atual->getProximo();
@@ -166,12 +144,12 @@ class ListaDuplaCirc {
 * @return um ponteiro para T que indica a posição de memória em que o dado se encontrava.
 */
     T* posicaoMemDuplo(const T& dado) const {
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             ElementoDuplo<T> *atual = sentinel->getProximo();
-            for (int i = 0; i < size; i++) {
-                if (igual(atual->getInfo(), dado)) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
+                if (this->igual(atual->getInfo(), dado)) {
                     return &atual->getInfo();
                 }
                 atual = atual->getProximo();
@@ -201,7 +179,7 @@ class ListaDuplaCirc {
 */
     T retiraDaPosicaoDuplo(int pos) {
         T volta;
-        verificaPosicaoInvalida(pos);
+        this->verificaPosicaoInvalida(pos);
         if (pos == 0) {
             retiraDoInicioDuplo();
         } else {
@@ -214,7 +192,7 @@ class ListaDuplaCirc {
             anterior->setProximo(eliminar->getProximo());
             (eliminar->getProximo())->setAnterior(anterior);
             delete eliminar;
-            size--;
+            this->defineTamanho(this->retornaTamanho() - 1);
         }
         return volta;
     }
@@ -226,7 +204,7 @@ class ListaDuplaCirc {
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
     void adicionaDuplo(const T& dado) {
-        adicionaNaPosicaoDuplo(dado, size);
+        adicionaNaPosicaoDuplo(dado, this->retornaTamanho());
     }
  /** Retira o último elemento da Lista.
 * Este método retira o último elemento da Lista Dupla Circular.
@@ -234,7 +212,7 @@ class ListaDuplaCirc {
 * @return o dado do tipo T que foi retirado do final da Lista.
 */
     T retiraDuplo() {
-        return retiraDaPosicaoDuplo(size);
+        return retiraDaPosicaoDuplo(this->retornaTamanho());
     }
  /** Retira um objeto específico da Lista Dupla Circular.
 * Este método retira o primeiro objeto da Lista Dupla Circular que tem o mesmo valor do dado fornecido.
@@ -254,8 +232,8 @@ class ListaDuplaCirc {
  *@return Retorna a informação presente no dado na respectiva posição.
  */
     T mostra(int pos) {
-        verificaPosicaoInvalida(pos);
-        if (listaVazia()) {
+        this->verificaPosicaoInvalida(pos);
+        if (this->listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             ElementoDuplo<T> *atual = sentinel->getProximo();
@@ -278,73 +256,36 @@ class ListaDuplaCirc {
     void adicionaEmOrdem(const T& data) {
         ElementoDuplo<T> *atual;
         int posicao;
-        if (listaVazia()) {
+        if (this->listaVazia()) {
             adicionaNoInicioDuplo(data);
         } else {
             atual = sentinel->getProximo();
             posicao = 1;
             while (atual->getProximo() != NULL &&
-                maior(data, atual->getInfo())) {
+                this->maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
             }
-            if (maior(data, atual->getInfo())) {
+            if (this->maior(data, atual->getInfo())) {
                 adicionaNaPosicaoDuplo(data, posicao + 1);
             } else {
                 adicionaNaPosicaoDuplo(data, posicao);
             }
         }
     }
- /** Método que veirifica a posicao do ultimo elemento.
- * @return Retorna o tamanho da lista menos um, o que indica a posição do último elemento da lista.
- */
-    int verUltimo() {
-        return size - 1;
-    }
- /** Método que verifica se a Lista está vazia.
-* Verifica se o "size" da Lista Encadeada é zero, se for, retorna true.
-* @return Retorna um boolean que mostra se a lista encadeada está vazia ou não.
-*/
-    bool listaVazia() const {
-        return size == 0;
-    }
- /** Verifica se um dado1 do Tipo T é igual a um dado2 do Tipo T.
-* @param dado1 Dado a ser comparado a igualdade.
-* @param dado2 Dado a ser comparado a igualdade.
-* @return um boolean que indica se os dados são iguais ou não.
-*/
-    bool igual(T dado1, T dado2) const {
-        return dado1 == dado2;
-    }
- /** Verifica se o dado1 do lado esquerdo do operador é maior do que o dado do lado direito do operador.
-* @param dado1 Dado a ser comparado que ficará à esquerda do operador de comparação.
-* @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
-* @return um boolean que mostra se um dado é maior que outro.
-*/
-    bool maior(T dado1, T dado2) const {
-        return dado1 > dado2;
-    }
- /** Verifica se o dado1 do lado esquerdo do operador é menor do que o dado do lado direito do operador.
-* @param dado1 Dado a ser comparado que ficará à esquerda do operador de comparação.
-* @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
-* @return um boolean verificando se um dado é menor que o outro.
-*/
-    bool menor(T dado1, T dado2) const {
-        return dado1 < dado2;
-    }
  /** Método responsável por destruir a Lista Dupla Circular.
 * Destrói a lista encadeada e desaloca todo o espaço de memória por ela ocupado.
 */
     void destroiListaDuplo() {
         ElementoDuplo<T> *atual;
-        if (!listaVazia()) {
-            for (int i = 0; i < size; i++) {
+        if (!this->listaVazia()) {
+            for (int i = 0; i < this->retornaTamanho(); i++) {
                 atual = sentinel->getProximo();
                 sentinel->setProximo(atual->getProximo());
                 delete atual;
             }
         }
-        size = 0;
+        this->defineTamanho(0);
     }
 };
 

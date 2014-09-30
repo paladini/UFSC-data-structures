@@ -5,8 +5,8 @@
 * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
 * < Na verdade é Copyleft, MIT License \o/ >
 */
-#ifndef ELEMENTODUPLA_HPP
-#define ELEMENTODUPLA_HPP
+#ifndef ELEMENTODUPLO_HPP
+#define ELEMENTODUPLO_HPP
 
 template<typename T>
 class ElementoDuplo {

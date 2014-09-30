@@ -31,7 +31,6 @@ class ListaCirc: public ListaEnc<T> {
         sentinel = new Elemento<T>(0, 0);
         this->defineCabeca(sentinel);
         sentinel->setProximo(this->retornaCabeca());
-        this->defineTamanho(0);
     }
     /** Destrutor padrão da ListaCirc.
     * O destrutor padrão da ListaCirc destrói a lista circular simples.

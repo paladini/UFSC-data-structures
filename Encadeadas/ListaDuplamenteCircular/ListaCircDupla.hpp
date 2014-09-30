@@ -32,7 +32,6 @@ class ListaDuplaCirc: public ListaDupla<T> {
         this->defineCabeca(sentinel);
         sentinel->setProximo(this->retornaCabeca());
         sentinel->setAnterior(this->retornaCabeca());
-        this->defineTamanho(0);
     }
  /** Destrutor padrão da ListaDuplaCirc.
  * Seu destrutor destroi todos os elementos da lista, porém não destroi o seu sentinel. Além disso,

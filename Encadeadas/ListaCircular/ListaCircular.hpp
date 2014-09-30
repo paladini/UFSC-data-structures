@@ -4,7 +4,7 @@
 * @since: Created on 28 de Setembro de 2014, 21:30.
 * Copyright 2014 Emmanuel Podestá, Fernando Paladini.
 * < Na verdade é Copyleft, MIT License \o/ >
-*/ 
+*/
 /** Classe ListaCirc.
 * A classe ListaCirc implementa a estrutura de dados lista circular simples, uma lista formada por
 * uma "head", que é um ponteiro para um objeto do tipo Elemento; e um "size", que indica o tamanho
@@ -48,9 +48,6 @@ class ListaCirc: public ListaEnc<T> {
     void adicionaNoInicio(const T& dado) {
         this->verificaMemoriaCheia();
         Elemento<T> *novo = new Elemento<T>(dado, sentinel->getProximo());
-        // if (this->listaVazia()) {
-        //    novo->setProximo(sentinel);
-        // }
         sentinel->setProximo(novo);
         this->defineTamanho(this->retornaTamanho() + 1);
     }
@@ -77,9 +74,13 @@ class ListaCirc: public ListaEnc<T> {
     * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
     */
     void eliminaDoInicio() {
-        T elemento = retiraDoInicio();
-        delete elemento->getInfo();
-        delete elemento;
+        if (!this->listaVazia()) {
+            Elemento<T> *saiu = sentinel->getProximo();
+            sentinel->setProximo(saiu->getProximo());
+            this->defineTamanho(this->retornaTamanho() - 1);
+            delete saiu;
+        }
+        throw ExcecaoListaVazia;
     }
     // Posição
     /** Adiciona um novo elemento na posição dada.
@@ -102,9 +103,6 @@ class ListaCirc: public ListaEnc<T> {
         }
         Elemento<T> *novo = new Elemento<T>(dado, anterior->getProximo());
         anterior->setProximo(novo);
-        // if (pos == this->size) {
-        //     novo->setProximo(sentinel);
-        // }
         this->defineTamanho(this->retornaTamanho() + 1);
     }
     /** Verifica a posição de um dado dentro da lista circular simples.
@@ -209,17 +207,8 @@ class ListaCirc: public ListaEnc<T> {
     T retira() {
         return retiraDaPosicao(this->retornaTamanho());
     }
+    
 // Específico
-/** Retira um objeto específico da lista circular simples.
-* Este método retira o primeiro objeto da lista circular simples que tem o mesmo valor do dado fornecido.
-* @see retiraDaPosicao(int pos)
-* @see posicao(int pos)
-* @return o objeto do tipo T que foi retirado da Lista. Retorna NULL caso esse objeto não exista.
-*/
-    T retiraEspecifico(const T& dado) {
-        int pos = posicao(dado);
-        return retiraDaPosicao(pos + 1);
-    }
 /** Adiciona um novo elemento ordenado de forma ascendente.
 * Este método recebe um dado do tipo T e adiciona este elemento na posição "pos".
 * @param dado O dado que será inserido dentro da lista.

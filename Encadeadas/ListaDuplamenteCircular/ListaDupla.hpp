@@ -112,7 +112,7 @@ class ListaDupla {
     * @exception ExcecaoListaVazia Exceção que indica que o dado não pode ser eliminado pois a lista está vazia.
     */
     virtual void eliminaDoInicioDuplo() {
-        if(!this->listaVazia()){
+        if (!this->listaVazia()) {
             ElementoDuplo<T>* saiu = head;
             head = saiu->getProximo();
             size--;
@@ -382,7 +382,7 @@ class ListaDupla {
     * Destrói a lista duplamente encadeada e desaloca todo o espaço de memória por ela ocupado.
     * @see listaVazia();
     */
-    virtual void destroiListaDuplo(){
+    virtual void destroiListaDuplo() {
        ElementoDuplo<T> *atual;
         if (!listaVazia()) {
             while (head != NULL) {

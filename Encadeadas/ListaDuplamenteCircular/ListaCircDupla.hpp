@@ -48,7 +48,8 @@ class ListaDuplaCirc: public ListaDupla<T> {
  */
     void adicionaNoInicioDuplo(const T& dado) {
         this->verificaMemoriaCheia();
-        ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado, sentinel->getProximo(), sentinel->getAnterior());
+        ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado,
+        sentinel->getProximo(), sentinel->getAnterior());
         sentinel->setAnterior(novo);
         sentinel->setProximo(novo);
         this->defineTamanho(this->retornaTamanho() + 1);
@@ -77,7 +78,7 @@ class ListaDuplaCirc: public ListaDupla<T> {
  *@see retiraDoInicioDuplo.
  */
     void eliminaDoInicioDuplo()  {
-        if(!this->listaVazia()){
+        if (!this->listaVazia()) {
             ElementoDuplo<T>* saiu = sentinel->getProximo();
             sentinel->setProximo(saiu->getProximo());
             this->defineTamanho(this->retornaTamanho() - 1);

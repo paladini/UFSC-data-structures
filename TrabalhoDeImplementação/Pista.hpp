@@ -2,22 +2,25 @@
 */
 #ifndef PISTA_HPP_
 #define PISTA_HPP_
-#include "Fila.hpp"
+#include "FilaEnc.hpp"
 #include "Carro.hpp"
 class Pista: public Fila<Carro>{
 private: 
 	int tamanho;
 	int espacoOcupado;
 	int velocidadeMedia;
+	bool fonte;
 	// Lista<Pista*> caminho;
 	// Pista *caminho = new *Pista[10];
+
 public:
-	Pista(int tam, int _velocidadeMedia): Fila<Carro>(tam) {
+	Pista(int tam, int _velocidadeMedia, bool _fonte) : Fila<Carro>() {
 		velocidadeMedia = _velocidadeMedia;
 		espacoOcupado = 0;
 		tamanho = tam;
-		// caminho = new Lista<Pista>(3);
+		fonte = _fonte;
 	}
+	
 	void adicionaCarro(Carro c) {
 		int espacoOcupadoComCarro = espacoOcupado + c->getTamanho();
 		if (espacoOcupadoComCarro > tamanho) {
@@ -30,6 +33,9 @@ public:
 	void estaCheia() {
 		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
 		return espacoOcupado + 5 >= tamanho; 
+	}
+	bool getFonte() {
+		return fonte;
 	}
 
 	/** Método estaBloqueada().

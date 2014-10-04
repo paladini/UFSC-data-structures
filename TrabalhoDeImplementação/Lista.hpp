@@ -183,6 +183,15 @@ class Lista {
 		return i;
 	}
 
+	T mostra(int posicao) {
+		for(int i = 0; i <= ultimo; i++) {
+			if (igual(dados[i], dado)) {
+				return dados[i];
+			}
+		}
+		throw ExcecaoErroPosicao;
+	}
+
 	/** Verifica se a Lista contêm o elemento especificado.
 	* @param dado O dado que será verificado a existência dentro da Lista.
 	* @return um boolean que indica se a Lista contêm ou não o elemento especificado.
@@ -228,6 +237,15 @@ class Lista {
 	bool listaCheia() {
 		return ultimo == tamanho -1;
 	}
+
+	/** Método retornaTamanho(), que retorna o tamanho da Lista de vetor.
+	 * Simplesmente retorna o atributo "tamanho".
+	 * @return Retorna um inteiro que indica o tamanho da lista de vetor.
+	 */
+	int retornaTamanho() {
+		return tamanho;
+	}
+
 	/**Método verifica se a Lista está vazia.
 	 *Por meio de uma comparação entre a variável ultimo e o valor -1(que indica uma fila sem nenhum elemento)
 	 *podemos verificar se a lista está vazia ou não.
@@ -241,17 +259,6 @@ class Lista {
 	 */
     void destroiLista() {
         ultimo = -1;
-    }
-    T mostra(int pos) {
-        verificaPosicaoInvalida(pos);
-        if (listaVazia()) {
-            throw ExcecaoListaVazia;
-        } else {
-            if (pos == 0) {
-                return dado[0];
-            }
-           	return dado[pos];
-        }
     }
 };
 #endif /* LISTA_HPP_ */

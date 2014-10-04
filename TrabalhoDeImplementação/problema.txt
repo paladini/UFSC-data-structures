@@ -1,0 +1,26 @@
+Sistema (main):
+	@ Lista<Pista> 
+	@ Lista<Semáforo>
+
+Pista (Fila):
+	@ Lista das filas de saída
+	@ Velocidade média
+	@ Tamanho fixo em metros (comporta nº limitado de carros)
+	@ isFonte ou isSumidouro (boolean)
+
+Semaforo (Fila):
+	@ Lista<Pista> 
+	(dividindo-as em aferentes e eferentes. Associa à lista de pistas eferentes uma probabilidade de um
+	carro dobrar em cada uma dessas pistas eferentes).
+
+Veículos:
+	@ Tamanho (+1 metro à frente e +2 metros atrás)
+
+Relógio:
+	@ Lista ordenada por hora da ocorrência do evento
+	@ tipoEvento 
+	(chegada de um novo carro = 0
+	 mudança de estado do semáforo = 1
+	 chegado de carro ao semáforo = 2
+	 troca de pista = 3
+	)

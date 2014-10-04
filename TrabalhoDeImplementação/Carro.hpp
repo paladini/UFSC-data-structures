@@ -5,12 +5,10 @@
 
 class Carro{
  private:
- 		int tamanho, chegada, probabilidade;
- 		Pista *pistaEscolha, *pistaAtual;
+ 		int tamanho, probabilidade;
  public:
  		Carro() {
  			tamanho = (2 + (rand() % (int)(6 - 2 + 1))) + 3;
- 			chegada = 0;
  			probabilidade = (rand() % 10) + 1;
  		}
  		
@@ -20,18 +18,6 @@ class Carro{
 
  		int getTamanho(){
  			return tamanho;
- 		}
-
- 		void setProbabilidade(int prob) {
- 			probabilidade = prob;
- 		}
-
- 		void setPistaEscolha(Pista *pistaEscolhida) {
- 			pistaEscolha = pistaEscolhida;
- 		}
-
- 		void setPistaAtual(Pista *pistaAtual){
- 			this->pistaAtual = pistaAtual;
  		}
 
 };

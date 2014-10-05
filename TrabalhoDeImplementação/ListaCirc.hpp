@@ -15,11 +15,12 @@
 #include <cstdio>
 #include "Elemento.hpp"
 #include "ListaEnc.hpp"
-#include "../excecoes/ExcecaoErroPosicao.hpp"
-#include "../excecoes/ExcecaoListaCheia.hpp"
-#include "../excecoes/ExcecaoListaVazia.hpp"
+#include "ExcecaoErroPosicao.hpp"
+#include "ExcecaoListaCheia.hpp"
+#include "ExcecaoListaVazia.hpp"
+
 template<typename T>
-class ListaCirc : public ListaEnc<T> {
+class ListaCirc: public ListaEnc<T> {
  private:
     Elemento<T>* sentinel;
 

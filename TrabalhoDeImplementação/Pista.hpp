@@ -1,6 +1,6 @@
 #ifndef PISTA_HPP_
 #define PISTA_HPP_
-#include "estruturas/FilaEnc.hpp"
+#include "FilaEnc.hpp"
 #include "Carro.hpp"
 #include <iostream>
 
@@ -15,7 +15,7 @@ public:
 		tamanho = tam;
 		espacoOcupado = 0;
 		velocidadeMedia = _velocidadeMedia;
-		proximaAtividade = calculeProximoEvento(0);
+		calculeProximoEvento(0);
 		tempoPadraoDeChegada = tamanho / velocidadeMedia;
 		fonte = _fonte;
 		tempoDeInvocacaoPositivo = _tempoDeInvocacao + _intervaloInvocacao;
@@ -28,24 +28,27 @@ public:
 
 	void adicionaCarro(Carro c) {
 		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
-		if (espacoOcupadoComCarro > tamanho) {
-			throw -1; // Excecao pista cheia / bloqueada
-		}
-		this->inclui(c);
-		espacoOcupado = espacoOcupadoComCarro;
+		if (espacoOcupadoComCarro <= tamanho) {
+			this->inclui(c);
+			espacoOcupado = espacoOcupadoComCarro;	
+ 		}
 	}
 
 	void removeCarro() {
-		T carroRetirado = this->retira();
-		// carroNoSistema++;
+		try {
+			T carroRetirado = this->retira();
+			// Sistema::quantidadeCarros++;
+		} catch (std::exception& e) {
+			std::cout << "Pista vazia, nenhum carro a ser retirado." << std::endl;
+		}
 	}
 
-	void atualiza(int tempoAtual, int tempoSemaforo) {
+	void atualizaPista(int tempoAtual, int tempoSemaforo) {
 	    if (fonte) {
 	        if (tempoAtual + tempoSemaforo > proximaAtividade) {
 	            std::cout << "A car just arrived!" << std::endl;
 	      	    adicionaCarro(Carro(tempoAtual));
-	        	calculeProximoEvento(tempoAtual);
+				calculeProximoEvento(tempoAtual);
 	      	}
 	      	return;
 	    }
@@ -66,8 +69,6 @@ public:
 	bool estaNoSemaforo(Carro c, int tempoAtual) {
 	    return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
 	}
-
-
 
 	void estaCheia() {
 		return espacoOcupado + 5 >= tamanho; 

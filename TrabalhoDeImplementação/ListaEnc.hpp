@@ -10,11 +10,14 @@
 * uma "head", que é um ponteiro para um objeto do tipo Elemento; e um "size", que indica o tamanho
 * dessa lista encadeada.
 */
+#ifndef LISTAENC_HPP_
+#define LISTAENC_HPP_
 #include <cstdio>
 #include "Elemento.hpp"
-#include "../excecoes/ExcecaoErroPosicao.hpp"
-#include "../excecoes/ExcecaoListaCheia.hpp"
-#include "../excecoes/ExcecaoListaVazia.hpp"
+#include "ExcecaoErroPosicao.hpp"
+#include "ExcecaoListaCheia.hpp"
+#include "ExcecaoListaVazia.hpp"
+
 template<typename T>
 class ListaEnc {
  private:
@@ -338,6 +341,10 @@ class ListaEnc {
         return this->size;
     }
 
+    Elemento<T>* retornaCabeca() {
+        return this->head;
+    }
+
     /** Método define tamanho.
     * É um método "setter" para o atributo "size" dessa classe.
     * @param tamanho O novo tamanho da estrutura de dados.
@@ -354,3 +361,4 @@ class ListaEnc {
         this->head = cabeca;
     }
 };
+#endif

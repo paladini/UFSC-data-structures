@@ -1,6 +1,6 @@
 #ifndef SEMAFORO_HPP
 #define SEMAFORO_HPP
-#include "estruturas/Lista.hpp"
+#include "Lista.hpp"
 #include "Pista.hpp"
 #include "Carro.hpp"
 #include <iostream>
@@ -9,7 +9,7 @@ class Semaforo {
  private:
 	Lista<Pista<Carro>*>* pistas;
 	Pista<Carro>* pistaLocal;
-	int tempoAberto;
+	int tempoSemaforo;
 	int *probabilidades; 
  public:
  	// array[] = {atual, frente, direita, esquerda};
@@ -18,42 +18,50 @@ class Semaforo {
  	// ESQUERDA = 2;
  	// DIREITA = 3;
  	// 0 0 0 0 0 0 0 0 1 2
-	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades /*, int _carroNoSistema*/) {
+	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades, int _tempoSemaforo /*, int _carroNoSistema*/) {
 		pistas = new Lista<Pista<Carro>*>(3);
 		probabilidades = _probabilidades;
 		// pistas.adiciona(pistaLocal);
+		tempoSemaforo = _tempoSemaforo;
 		pistaLocal = arranjo[0];
 		pistas->adiciona(arranjo[1]);
 		pistas->adiciona(arranjo[2]);
 		pistas->adiciona(arranjo[3]);
 	}
 	
-	void atualiza(int tempoAtual) {
-	   	std::cout << "A traffic light is green." << std::endl;
-	    pistaLocal->atualiza(tempoAtual, tempoAberto);
-	    passaCarro(tempoAtual);
-	    std::cout << "A traffic light is red." << std::endl;
+	void atualiza(int tempoAtual, int tempoDeExecucao) {
+		if (tempoAtual < tempoDeExecucao) {
+		   	std::cout << "A traffic light is green." << std::endl;
+		   	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+		    passaCarro(tempoAtual);
+		    std::cout << "A traffic light is red." << std::endl;	
+		}
 	}
 
 	void passaCarro(int tempoAtual) {
-		Carro carroAtual = pistaLocal->primeiro();
-		bool possivel = true;
-		Pista<Carro>* proxima;
-		while (possivel) {
-			carroAtual = pistaLocal->primeiro();
-		    if (pistaLocal->estaNoSemaforo(carroAtual, tempoAtual)) {
-		   	    int pistaEscolhida = calculaProbabilidade(carroAtual);
-			    proxima = pistas->mostra(pistaEscolhida);
-			    //this->proximaPista(carroAtual->getProbabilidade());
-		        std::cout << "A car passed through a traffic light" << std::endl;
-			   	proxima->adicionaCarro(carroAtual);
-			    pistaLocal->retira();
-	    	} else {
-	    		possivel = false;
+		if (!pistaLocal->filaVazia()) {
+			Carro carroAtual = pistaLocal->primeiro();
+			bool possivel = true;
+			Pista<Carro>* proxima;
+			while (possivel) {
+				if (pistaLocal->estaNoSemaforo(carroAtual, tempoAtual) 
+					&& pistaLocal->getFonte() && !pistaLocal->filaVazia()) {
+					carroAtual = pistaLocal->primeiro();
+				  	int pistaEscolhida = calculaProbabilidade(carroAtual);
+				    proxima = pistas->mostra(pistaEscolhida);
+				    //this->proximaPista(carroAtual->getProbabilidade());
+				    std::cout << "A car passed through a traffic light" << std::endl;
+				   	proxima->adicionaCarro(carroAtual);
+					pistaLocal->removeCarro();
+				    std::cout << "paranue" << std::endl;
+		    	} else {
+		    		possivel = false;
+		    	}
 	    	}
-	    }
+		    std::cout << "passou do while" << std::endl;
+
+		}
 	}
-	
 
 	int calculaProbabilidade(Carro c) {
 		int *prob = probabilidades;

@@ -48,26 +48,30 @@ int main() {
 	std::cin >> opcao;
 
 	switch (opcao) {
-		case 1:
+		case 1: {
 			limparTela();
 			pedeTempoDeExecucao();
 			pedeTempoSemaforo();
-			Sistema sistema = new Sistema(tempoAberturaSemaforo, tempoDeExecucao);
-			sistema.queComecemOsJogos();
+			Sistema *sistema = new Sistema(tempoAberturaSemaforo, tempoDeExecucao);
+			sistema->atualizarSistema();
 			break;
-		case 2: 
+		}
+		case 2: {
 			limparTela();
 			std::cout << "A treta é barata" << std::endl;
 			break;
-		case 3:
+		}
+		case 3: {
 			limparTela();
 			std::cout << "Qual o negócio?" << std::endl;
 			std::cout << "comer..." << std::endl;
 			break;
-		default:
+		}
+		default: {
 			limparTela();
 			std::cout << "Opção inválida! Saindo..." << std::endl;
-			return -1;
+			break;
+		}
 	}
 	return 0;
 }

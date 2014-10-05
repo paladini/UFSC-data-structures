@@ -1,28 +1,33 @@
-/**Projeto
-*/
 #ifndef PISTA_HPP_
 #define PISTA_HPP_
 #include "FilaEnc.hpp"
 #include "Carro.hpp"
-class Pista: public Fila<Carro>{
+#include <iostream>
+
+template<typename T>
+class Pista : public FilaEnc<T> {
 private: 
-	int tamanho;
-	int espacoOcupado;
-	int velocidadeMedia;
+	int tamanho, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo,tempoDeInvocacaoNegativo;
 	bool fonte;
-	// Lista<Pista*> caminho;
-	// Pista *caminho = new *Pista[10];
 
 public:
-	Pista(int tam, int _velocidadeMedia, bool _fonte) : Fila<Carro>() {
-		velocidadeMedia = _velocidadeMedia;
-		espacoOcupado = 0;
+	Pista(int tam, int _velocidadeMedia, bool _fonte, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
 		tamanho = tam;
+		espacoOcupado = 0;
+		velocidadeMedia = _velocidadeMedia;
+		proximaAtividade = calculeProximoEvento(0);
+		tempoPadraoDeChegada = tamanho / velocidadeMedia;
 		fonte = _fonte;
+		tempoDeInvocacaoPositivo = _tempoDeInvocacao + _intervaloInvocacao;
+		tempoDeInvocacaoNegativo = _tempoDeInvocacao - _intervaloInvocacao;
+		if (!fonte) {
+			tempoDeInvocacaoPositivo = 0;
+			tempoDeInvocacaoNegativo = 0;
+		}
 	}
-	
+
 	void adicionaCarro(Carro c) {
-		int espacoOcupadoComCarro = espacoOcupado + c->getTamanho();
+		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
 		if (espacoOcupadoComCarro > tamanho) {
 			throw -1; // Excecao pista cheia / bloqueada
 		}
@@ -30,49 +35,48 @@ public:
 		espacoOcupado = espacoOcupadoComCarro;
 	}
 
-	void estaCheia() {
-		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
-		return espacoOcupado + 5 >= tamanho; 
+	void removeCarro() {
+		T carroRetirado = this->retira();
+		// carroNoSistema++;
 	}
+
+	void atualiza(int tempoAtual, int tempoSemaforo) {
+	    if (fonte) {
+	        if (tempoAtual + tempoSemaforo > proximaAtividade) {
+	            std::cout << "A car just arrived!" << std::endl;
+	      	    adicionaCarro(Carro(tempoAtual));
+	        	calculeProximoEvento(tempoAtual);
+	      	}
+	      	return;
+	    }
+	    std::cout << "A car's gone!" << std::endl;
+	    removeCarro();
+	    calculeProximoEvento(tempoAtual);
+	}
+
+	void calculeProximoEvento(int tempoAtual) {
+ 		int tempo = tempoDeInvocacaoNegativo + (rand() % (int) (tempoDeInvocacaoPositivo - 2 + 1));
+		proximaAtividade = tempo + tempoAtual;
+	}
+
+	// static int getCarrosLiberados() {
+	// 	return carroNoSistema;
+	// }
+
+	bool estaNoSemaforo(Carro c, int tempoAtual) {
+	    return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
+	}
+
+
+
+	void estaCheia() {
+		return espacoOcupado + 5 >= tamanho; 
+		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
+	}
+
 	bool getFonte() {
 		return fonte;
 	}
-
-	/** Método estaBloqueada().
-	* Esse método verifica se é possível adicionar um carro de tamanho mínimo na pista, caso
-	* não seja possível significa que a pista deve ficar bloqueada, pois já está cheia. 
-	*
-	* O cálculo é feito baseado no espaço mínimo que pode ser ocupado por um carro em uma pista:
-	* 	espacoOcupado (até agora) + 3m (1m de frente, 2m de trás) + 2m (tamanho mínimo de um carro);
-	* 
-	* @return um boolean que, se true, indica se a pista está cheia.
-	*/
-	// bool estaBloqueada() {
-	// 	return espacoOcupado + 3 + 2 >= tamanho;
-	// }
-	// void setPistaEsquerda(*Pista p){
-	// 	caminho[0] = p;
-	// }
-	// void direita(*Pista p){
-	// 	caminho[1] = p;
-	// }
-	// void frente(*Pista p){
-	// 	caminho[2] = p;
-	// }
-
-	// void determinaDestino(Carro c) {
-	// 	int escolha = (rand() % 100) + 1;
-	// 	if(escolha >= 1 && escolha < 60){
-	// 		c->setPistaEscolha(caminho[0]);
-	// 	} else {
-	// 		if (escolha >= 60 && escolha < 80) {
-	// 			c->setPistaEscolha(caminho[1]);
-	// 		} else {
-	// 			if (escolha >= 80 && escolha < 100) {
-	// 				c->setPistaEscolha(caminho[2]);
-	// 			}
-	// 		}
-	// 	}
-	// }
 };
+
 #endif

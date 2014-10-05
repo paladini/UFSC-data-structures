@@ -16,7 +16,6 @@
 #include "ExcecaoListaCheia.hpp"
 #include "ExcecaoListaVazia.hpp"
 #include "ExcecaoErroPosicao.hpp"
-
 template <typename T>
 class Lista {
  private:
@@ -185,7 +184,6 @@ class Lista {
 	}
 
 	T mostra(int posicao) {
-		T dado = dados[0];
 		for(int i = 0; i <= ultimo; i++) {
 			if (igual(dados[i], dado)) {
 				return dados[i];

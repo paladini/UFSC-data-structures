@@ -10,7 +10,6 @@
 #define	FILA_HPP
 #define MAXFILA 100
 #include "EstruturaLinear.hpp"
- 
 template<typename T>
 /** Classe Fila
  * Essa classe representará uma fila que herda métodos e atributos

@@ -12,9 +12,9 @@
 */
 #include <cstdio>
 #include "Elemento.hpp"
-#include "ExcecaoErroPosicao.hpp"
-#include "ExcecaoListaCheia.hpp"
-#include "ExcecaoListaVazia.hpp"
+#include "../excecoes/ExcecaoErroPosicao.hpp"
+#include "../excecoes/ExcecaoListaCheia.hpp"
+#include "../excecoes/ExcecaoListaVazia.hpp"
 template<typename T>
 class ListaEnc {
  private:

@@ -13,9 +13,9 @@
 #ifndef LISTA_HPP_
 #define LISTA_HPP_
 #define MAXLISTA 100
-#include "ExcecaoListaCheia.hpp"
-#include "ExcecaoListaVazia.hpp"
-#include "ExcecaoErroPosicao.hpp"
+#include "../excecoes/ExcecaoListaCheia.hpp"
+#include "../excecoes/ExcecaoListaVazia.hpp"
+#include "../excecoes/ExcecaoErroPosicao.hpp"
 template <typename T>
 class Lista {
  private:
@@ -184,10 +184,11 @@ class Lista {
 	}
 
 	T mostra(int posicao) {
-		for(int i = 0; i <= ultimo; i++) {
-			if (igual(dados[i], dado)) {
-				return dados[i];
-			}
+		if (listaVazia()) {
+			throw ExcecaoListaVazia;
+		}
+		if (posicao >= 0 && posicao < tamanho) {
+			return dados[posicao];
 		}
 		throw ExcecaoErroPosicao;
 	}

@@ -1,6 +1,6 @@
 #ifndef SEMAFORO_HPP
 #define SEMAFORO_HPP
-#include "Lista.hpp"
+#include "estruturas/Lista.hpp"
 #include "Pista.hpp"
 #include "Carro.hpp"
 #include <iostream>
@@ -18,7 +18,7 @@ class Semaforo {
  	// ESQUERDA = 2;
  	// DIREITA = 3;
  	// 0 0 0 0 0 0 0 0 1 2
-	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades, int _carroNoSistema) {
+	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades /*, int _carroNoSistema*/) {
 		pistas = new Lista<Pista<Carro>*>(3);
 		probabilidades = _probabilidades;
 		// pistas.adiciona(pistaLocal);

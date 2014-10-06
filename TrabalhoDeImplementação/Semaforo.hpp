@@ -29,15 +29,27 @@ class Semaforo {
 		pistas->adiciona(arranjo[3]);
 	}
 	
-	void atualiza(int tempoAtual, int tempoDoSemaforo) {
-		if (tempoAtual < tempoDoSemaforo) {
-		   	std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
+	void atualiza(int tempoAtual, int tempoSemaforo) {
+		if (tempoAtual <= tempoSemaforo) {
+			std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
 	        passaCarro(tempoAtual);
-	    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
-		}
-		pistaLocal->atualizaPista(tempoAtual);
-	}
-	
+	        pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+	        std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
+		} else {
+			// tinha um else aqui
+	    	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+    	}
+    }
+	// // github - 3 horas
+	// void atualiza(int tempoAtual, int tempoDeExecucao) {
+	// 	if (tempoAtual < tempoDeExecucao) {
+	// 		std::cout << "A traffic light is green." << std::endl;
+	// 		pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+	// 		passaCarro(tempoAtual);
+	// 		std::cout << "A traffic light is red." << std::endl;	
+	// 	}
+	// }
+		
 	// void atualizaDuplo(int tempoAtual, int tempoDoSemaforo, Semaforo* oSimultaneo) {
 	//     if (tempoAtual < tempoDoSemaforo) {
 	//         std::cout << "Two traffic lights are green. Actual time is " << tempoAtual << std::endl;
@@ -53,7 +65,6 @@ class Semaforo {
 	// }
 	
 	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
-	//
 
 	void passaCarro(int tempoAtual) {
 		if (!pistaLocal->filaVazia()) {

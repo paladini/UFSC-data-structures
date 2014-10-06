@@ -23,20 +23,20 @@ class Sistema {
     }
 
     void instanciar() { //tamanho, velocidadeMedia, fonte
-        Pista<Carro>* n1sul    = new Pista<Carro>(500, 60, true, tempoSemaforo, 0);
-        Pista<Carro>* n1norte  = new Pista<Carro>(500, 60, false, tempoSemaforo, 0);
-        Pista<Carro>* n2sul    = new Pista<Carro>(500, 40, true, tempoSemaforo, 0);
-        Pista<Carro>* n2norte  = new Pista<Carro>(500, 40, false, tempoSemaforo, 0);
-        Pista<Carro>* o1oeste  = new Pista<Carro>(2000, 80, false, tempoSemaforo, 0);
-        Pista<Carro>* o1leste  = new Pista<Carro>(2000, 80, true, tempoSemaforo, 0);
-        Pista<Carro>* s1sul    = new Pista<Carro>(500, 60, false, tempoSemaforo, 0);
-        Pista<Carro>* s1norte  = new Pista<Carro>(500, 60, true, tempoSemaforo, 0);
-        Pista<Carro>* s2sul    = new Pista<Carro>(500, 40, false, tempoSemaforo, 0);
-        Pista<Carro>* s2norte  = new Pista<Carro>(500, 40, true, tempoSemaforo, 0);
-        Pista<Carro>* l1leste  = new Pista<Carro>(400, 30, false, tempoSemaforo, 0);
-        Pista<Carro>* l1oeste  = new Pista<Carro>(400, 30, true, tempoSemaforo, 0);
-        Pista<Carro>* c1oeste  = new Pista<Carro>(300, 60, false, tempoSemaforo, 0);
-        Pista<Carro>* c1leste  = new Pista<Carro>(300, 60, false, tempoSemaforo, 0);
+        Pista<Carro>* n1sul    = new Pista<Carro>(500, 60, true, 5, 20);
+        Pista<Carro>* n1norte  = new Pista<Carro>(500, 60, false, 0, 0);
+        Pista<Carro>* n2sul    = new Pista<Carro>(500, 40, true, 5, 20);
+        Pista<Carro>* n2norte  = new Pista<Carro>(500, 40, false, 0, 0);
+        Pista<Carro>* o1oeste  = new Pista<Carro>(2000, 80, false, 0, 0);
+        Pista<Carro>* o1leste  = new Pista<Carro>(2000, 80, true, 2, 10);
+        Pista<Carro>* s1sul    = new Pista<Carro>(500, 60, false, 0, 0);
+        Pista<Carro>* s1norte  = new Pista<Carro>(500, 60, true, 7, 30);
+        Pista<Carro>* s2sul    = new Pista<Carro>(500, 40, false, 0, 0);
+        Pista<Carro>* s2norte  = new Pista<Carro>(500, 40, true, 15, 60);
+        Pista<Carro>* l1leste  = new Pista<Carro>(400, 30, false, 0, 0);
+        Pista<Carro>* l1oeste  = new Pista<Carro>(400, 30, true, 2, 10);
+        Pista<Carro>* c1oeste  = new Pista<Carro>(300, 60, false, 0, 0);
+        Pista<Carro>* c1leste  = new Pista<Carro>(300, 60, false, 0, 0);
 
         // Adicionando na lista
         pistas->adiciona(n1sul);
@@ -110,20 +110,27 @@ class Sistema {
 
         // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
         while (tempoAtual < tempoDeExecucao) {
+            // pistaLocal->atualizaPista(tempoAtual);
             for (int i = 0; i < 2; i++) {
                 semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
             }
-            tempoAtual += tempoSemaforo;
+            if (tempoAtual < tempoDeExecucao) {
+                tempoAtual += tempoSemaforo;
+            }
+            // pistaLocal->atualizaPista(tempoAtual);
             for (int i = 2; i < 4; i++) {
                 semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
             }
+            if (tempoAtual < tempoDeExecucao) {
                 tempoAtual += tempoSemaforo;
+            }
+            // pistaLocal->atualizaPista(tempoAtual);
             for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
                 semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
                 tempoAtual += tempoSemaforo;
             }
         }
-
+        
         // Contando carros que foram e sairam das pistas;
         contarCarros();
         std::cout << "Foram simulados " << tempoAtual << " segundos." << std::endl;

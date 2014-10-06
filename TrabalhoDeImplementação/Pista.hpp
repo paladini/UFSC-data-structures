@@ -100,8 +100,8 @@ public:
 	//     return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
 	// }
 
-	int tempoDeChegada(int tempoQueNascue) {
-		return tempoQueNascue + tempoPadraoDeChegada;
+	int tempoDeChegada(int tempoQueNasceu) {
+		return tempoQueNasceu + tempoPadraoDeChegada;
 	}
 
 	// int tempoParaChegar(int tempoQueNasceu) {

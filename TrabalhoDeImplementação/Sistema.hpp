@@ -10,7 +10,7 @@ class Sistema {
  public:
     ListaCirc<Semaforo*>* semaforos;
     ListaCirc<Pista<Carro>*>* pistas;
-    ListaEnc<Evento> listaDeEventos;
+    ListaEnc<Evento>* listaDeEventos;
     int tempoAtual, tempoSemaforo, tempoDeExecucao;
     int carrosQuePassaram = 0;
     int carrosQueEntraram = 0;
@@ -75,40 +75,44 @@ class Sistema {
         // {atual, frente, direita, esquerda}, probabilidades
         Pista<Carro>* arg1[4] = {o1leste, c1leste, s1sul, n1norte};
         int arg2[3] = {80, 10, 10};
-        Semaforo* so1leste = new Semaforo(arg1, arg2, tempoSemaforo);
+        Semaforo* so1leste = new Semaforo(true, arg1, arg2, tempoSemaforo);
    
         Pista<Carro>* arg3[4] = {c1leste, l1leste, s2sul, n2norte};
         int arg4[3] = {40, 30, 30};
-        Semaforo* sc1leste = new Semaforo(arg3, arg4, tempoSemaforo);
+        Semaforo* sc1leste = new Semaforo(true, arg3, arg4, tempoSemaforo);
 
         Pista<Carro>* arg5[4] = {c1oeste, o1oeste, s1sul, n1norte};
         int arg6[3] = {40, 30, 30};
-        Semaforo* sc1oeste = new Semaforo(arg1,arg2, tempoSemaforo);
+        Semaforo* sc1oeste = new Semaforo(false, arg1,arg2, tempoSemaforo);
         
         Pista<Carro>* arg7[4] = {s1norte, n1norte, c1leste, o1oeste};
         int arg8[3] = {10, 10, 80};
-        Semaforo* ss1norte = new Semaforo(arg1,arg2, tempoSemaforo);
+        Semaforo* ss1norte = new Semaforo(false, arg1,arg2, tempoSemaforo);
       
         Pista<Carro>* arg9[4] = {s2norte, c1oeste, s2sul, l1leste};
         int arg10[3] = {30, 30, 40};
-        Semaforo* ss2norte = new Semaforo(arg1,arg2, tempoSemaforo);
+        Semaforo* ss2norte = new Semaforo(false, arg1,arg2, tempoSemaforo);
        
         Pista<Carro>* arg11[4] = {n1sul, s1sul, c1leste, o1oeste};
         int arg12[3] = {10, 80, 10};
-        Semaforo* sn1sul = new Semaforo(arg1, arg2, tempoSemaforo);
+        Semaforo* sn1sul = new Semaforo(false, arg1, arg2, tempoSemaforo);
 
         Pista<Carro>* arg13[4] = {n2sul, n2norte, l1leste, c1oeste};
         int arg14[3] = {30, 40, 30};
-        Semaforo* sn2sul = new Semaforo(arg1,arg2, tempoSemaforo);
+        Semaforo* sn2sul = new Semaforo(false, arg1,arg2, tempoSemaforo);
 
         // Adicionando na lista de semáforos
-        semaforos->adiciona(so1leste);
-        semaforos->adiciona(sc1leste);
-        semaforos->adiciona(ss1norte);
-        semaforos->adiciona(ss2norte);
         semaforos->adiciona(sn1sul);
         semaforos->adiciona(sn2sul);
+        
         semaforos->adiciona(sc1oeste);
+        // falta l1oeste
+
+        semaforos->adiciona(ss1norte);
+        semaforos->adiciona(ss2norte);
+
+        semaforos->adiciona(so1leste);
+        semaforos->adiciona(sc1leste);
     }
 
     int iniciar() {
@@ -186,27 +190,71 @@ class Sistema {
         return NULL;
     }
 
-    void gerarNovoEvento(Pista<Carro>* proximaPista, _tempoChegada) {
-        int tempoChegada = _tempoChegada;
-        Pista<Carro>* atual = proximaPista;
-        Semaforo* semaforo = procurarPorSemaforo(atual);
+    // void gerarNovoEvento(bool continuaNaPista, Pista<Carro>* proximaPista, int _tempoChegada) {
+    //     int tempoChegada = _tempoChegada;
+    //     Pista<Carro>* atual = proximaPista;
+    //     Semaforo* semaforo = procurarPorSemaforo(atual);
+    //     Evento* evento;
+
+    //     // Se não conseguiu achar um semáforo, significa que é sumidouro.
+    //     if (semaforo == NULL) {
+    //         // TODO: não é para passar o semaforo aqui.
+    //         evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 3); 
+    //     } else {
+    //         evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 2);
+    //     }
+    //     listaDeEventos->adiciona(evento);
+
+    //     ordenarVetorEventos();
+    // }
+
+    /**
+    *
+    * O carro chegou no semáforo, existem algumas coisas que podem acontecer:
+    *
+    *   1) Pista destino lotada -> nesse caso cria um evento desse mesmo carro que vai acontecer na próxima vez que o sinal estiver verde.
+    *   2) ProximaPista é sumidouro -> cria um evento de que o carro vai ser deletado (tipo 3).
+    *   3) ProximaPista é semaforo -> cria um evento de que o carro vai chegar no semáforo. (tipo 2)
+    *   4) Sinal vermelho (o lançamento do throw) -> cria um evento no tempo seguinte de abertura do semáforo. (tempo de abertura do semaforo + 1)
+    *
+    */
+    void executarCarroChegouNoSemaforo(Evento* eventoAtual) {
+        
         Evento* evento;
+        Semaforo* semaforo = eventoAtual->getObjeto();
+        tempoAtual = eventoAtual->getTempo();
 
-        // Se não conseguiu achar um semáforo, significa que é sumidouro.
-        if (semaforo == NULL) {
-            // TODO: não é para passar o semaforo aqui.
-            evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 3); 
-        } else {
-            evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 2);
+        try {
+            Pista<Carro>* proximaPista = semaforo->passaCarro();
+
+            // Se pista destino estiver lotada.
+            if (proximaPista == semaforo->retornaPistaLocal()) {
+                evento = new Evento(tempoAtual + (proximaPista->retornaIntervalo() * 2), semaforo, NULL, 2); 
+            } else {
+                
+                // Verifica se próxima pista é semaforo ou sumidouro.
+                Semaforo* semaforo = procurarPorSemaforo(proximaPista);
+                if (semaforo == NULL) { // sumidouro
+                    evento = new Evento(proximaPista->tempoDeChegada(tempoAtual), proximaPista, NULL, 3); 
+                } else { // semaforo
+                    evento = new Evento(proximaPista->tempoDeChegada(tempoAtual), semaforo, NULL, 2);
+                }
+            }
+
+        } catch(std::exception& e) { // sinal vermelho
+            evento = new Evento(semaforo->retornaTempoQueVaiAbrir(), semaforo, NULL, 2);
         }
-        listaDeEventos->adiciona(evento);
 
+        listaDeEventos->adiciona(evento);
         ordenarVetorEventos();
     }
 
     int executarEventos() {
         for(int i = 0; i < listaDeEventos->retornaTamanho(); i++) {
             Evento* eventoAtual = listaDeEventos->retornaDado(i);
+            if(eventoAtual->getTempo() >= tempoDeExecucao){
+                break;
+            }
             switch (eventoAtual->getTipo()) {
                 case 0: { // adiciona carro
                     Pista<Carro>* pista = eventoAtual->getRelacionado();
@@ -221,21 +269,12 @@ class Sistema {
                     break;
                 }
                 case 2: { // carro chegou no semaforo
-                    Semaforo* semaforo = eventoAtual->getObjeto();
-                    Pista<Carro>* proximaPista = semaforo->passaCarro();
-                    tempoAtual = eventoAtual->getTempo();
-
-                    // Se pista destino estiver lotada.
-                    if (proximaPista == semaforo->retornaPistaLocal()) {
-                        gerarNovoEvento(proximaPista, eventoAtual->getTempo() + (proximaPista->retornaIntervalo() * 2));
-                    } else {
-                        gerarNovoEvento(proximaPista, eventoAtual->getTempo());
-                    }
+                    executarCarroChegouNoSemaforo(eventoAtual);
                     break;
                 }
                 case 3: { // carro chegou no final de uma pista sumidouro
-                    Semaforo* semaforo = eventoAtual->getObjeto();
-                    semaforo->removeCarro();
+                    Pista<Carro>* pista = eventoAtual->getObjeto();
+                    pista->removeCarro();
                     tempoAtual = eventoAtual->getTempo();
                     break;
                 }
@@ -246,7 +285,7 @@ class Sistema {
                 // tempoAtual = eventoAtual->getTempo();
             }
         }
-        return 0;
+        finalizarPrograma();
     }
 
     void ordenarVetorEventos() {
@@ -256,7 +295,7 @@ class Sistema {
             k = i;
             x = listaDeEventos->retornaDado(i);
             for (int j = i + 1; listaDeEventos->retornaTamanho(); j++) {
-                if (listaDeEventos->retornaDado(j)->getTempo() < x->getTempo()) {
+                if ((listaDeEventos->retornaDado(j)).getTempo() < x.getTempo()) {
                     k = j;
                     x = listaDeEventos->retornaDado(k);
                 }

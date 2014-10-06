@@ -13,6 +13,8 @@ tipo   |     descricao do evento
 3      |    exclusao do carro 
 
 */
+#ifndef EVENTO_HPP_
+#define EVENTO_HPP_
 #include "ListaEnc.hpp"
 class Evento {
 public:
@@ -40,3 +42,4 @@ public:
     return relacionado;
   }
 };
+#endif

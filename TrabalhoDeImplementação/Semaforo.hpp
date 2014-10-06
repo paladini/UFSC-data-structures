@@ -3,6 +3,7 @@
 #include "Lista.hpp"
 #include "Pista.hpp"
 #include "Carro.hpp"
+#include "ExcecaoSinalVermelho.hpp"
 #include <iostream>
 
 class Semaforo {
@@ -10,7 +11,8 @@ class Semaforo {
 	Lista<Pista<Carro>*>* pistas;
 	Pista<Carro>* pistaLocal;
 	int tempoIntervalo;
-	int *probabilidades; 
+	int *probabilidades;
+	int tempoQueVaiAbrir; 
 	bool aberto;
  public:
  	// array[] = {atual, frente, direita, esquerda};
@@ -26,6 +28,7 @@ class Semaforo {
 		probabilidades = _probabilidades;
 		// pistas.adiciona (pistaLocal);
 		tempoIntervalo = _tempoIntervalo;
+		tempoQueVaiAbrir = 0;
 		aberto = _estaAberto;
 		pistaLocal = arranjo[0];
 		pistas->adiciona(arranjo[1]);
@@ -38,13 +41,18 @@ class Semaforo {
 
 		int pistaEscolhida = calculaProbabilidade(c);
 		Pista<Carro>* proxima = pistas->mostra(pistaEscolhida);
-		if (!proxima->estaCheia(c)) {
-			pistaLocal->retira();
-			proxima->adicionaCarro(c);
-			return proxima;
+		if(isAberto()) {
+			if (!proxima->estaCheia(c) && isAberto()) {
+				pistaLocal->retira();
+				proxima->adicionaCarro(c);
+				return proxima;
+			} else {
+				proxima = pistaLocal;
+			}
 		} else {
-			return pistaLocal;
+			throw ExcecaoSinalVermelho;
 		}
+		return proxima;
 	}
 	
 	// void atualiza(int tempoAtual, int tempoSemaforo) {
@@ -83,16 +91,18 @@ class Semaforo {
 	// 	}
 	// }
 
-	void trocarAberto() {
+	void trocarAberto(int tempoAtual) {
 		if (aberto) {
 			aberto = false;
+			calculeProximoEvento(tempoAtual);
 		} else {
 			aberto = true;
 		}
 	}
 
 	int calculeProximoEvento(int tempoAtual) {
-		return tempoAtual + tempoIntervalo;
+		tempoQueVaiAbrir = tempoAtual + tempoIntervalo;
+		return tempoQueVaiAbrir;
 	}
 
 	int calculaProbabilidade(Carro c) {
@@ -122,6 +132,10 @@ class Semaforo {
 
 	Pista<Carro>* retornaPistaLocal() {
 		return pistaLocal;
+	}
+
+	int retornarTempoQueVaiAbrir() {
+		return tempoQueVaiAbrir;
 	}
 };
 

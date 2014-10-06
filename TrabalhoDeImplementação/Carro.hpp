@@ -6,21 +6,16 @@
 
 class Carro {
  private:
- 		int tamanho, tempoInvocacao, probabilidade;
+ 		int tamanho, probabilidade;
  		
  public:
- 		Carro(int _tempoInvocacao) {
+ 		Carro() {
  			tamanho = (2 + (rand() % (int)(6 - 2 + 1))) + 3;
  			probabilidade = (rand() % 10) + 1;
- 			tempoInvocacao = _tempoInvocacao;
   		}
 
  		int getProbabilidade() {
  			return probabilidade;
- 		}
-
- 		int getTempoDeInvocacao() {
- 			return tempoInvocacao;
  		}
 
  		int getTamanho(){

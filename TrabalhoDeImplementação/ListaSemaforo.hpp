@@ -24,8 +24,17 @@ if(semaforo->estaAberto()) {
   pistaProxima->adiciona(carroAtual);
 }
 
-
 */
+
+gerarEventos(pista1) {
+  listDeEventos.adiciona(new Evento(entrouCarro, 0, carro));
+  listDeEventos.adiciona(new Evento(entrouCarro, 32, carro));
+}
+gerarEventos(pista2){
+  listDeEventos.adiciona(new Evento(entrouCarro, 20, carro));
+  listDeEventos.adiciona(new Evento(entrouCarro, 45, carro));
+}
+
 
 
 #include "ListaEnc.hpp"

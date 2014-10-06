@@ -9,18 +9,19 @@ class Pista : public FilaEnc<T> {
 private: 
 	int tamanho, numeroCarrosPassaram, numeroCarrosEntraram, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, 
 		intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo, tempoDeInvocacaoNegativo;
-	bool fonte;
+	bool fonte, sumidouro;
 
 public:
-	Pista(int tam, int _velocidadeMedia, bool _fonte, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
+	Pista(int tam, int _velocidadeMedia, bool _fonte, bool _sumidouro, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
 		tamanho = tam;
 		espacoOcupado = 0;
 		numeroCarrosPassaram = 0;
 		numeroCarrosEntraram = 0;
 		velocidadeMedia = _velocidadeMedia;
-		calculeProximoEvento(0);
+		// calculeProximoEvento(0);
 		tempoPadraoDeChegada = tamanho / velocidadeMedia;
 		fonte = _fonte;
+		sumidouro = _sumidouro;
 		tempoDeInvocacaoPositivo = _tempoDeInvocacao + _intervaloInvocacao;
 		tempoDeInvocacaoNegativo = _tempoDeInvocacao - _intervaloInvocacao;
 		if (!fonte) {
@@ -31,6 +32,7 @@ public:
 
 	void adicionaCarro(Carro c) {
 		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
+		// if (espacoOcupadoComCarro <= tamanho) {
 		if (espacoOcupadoComCarro <= tamanho) {
 			this->inclui(c);
 			espacoOcupado = espacoOcupadoComCarro;	
@@ -73,10 +75,12 @@ public:
 	    }
 	}
 
+	// Só cuidar do adicionar carro;
 	void calculeProximoEvento(int tempoAtual) {
  		int tempo = tempoDeInvocacaoNegativo + (rand() % (int) (tempoDeInvocacaoPositivo - 2 + 1));
 		proximaAtividade = tempo + tempoAtual;
 	}
+	
 	// 30 - 20 = 10 ---> 10 * 20ms ---> 200m >= tamanho ----> já passou por ela inteira
 	// tempoAtual - tempoQueChegouNaPista * (tamanho / velocidadeMedia) >= tamanho
 	bool carroChegouNoFinal(int tempoAtual) {
@@ -90,6 +94,11 @@ public:
 	    return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
 	}
 
+
+	int tempoDeChegada(int tempoAtual, int tempoDeChegada) {
+		return tempoAtual - tempoDeChegada * tempoPadraoDeChegada;
+	}
+
 	void estaCheia() {
 		return espacoOcupado + 5 >= tamanho; 
 		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
@@ -97,8 +106,11 @@ public:
 	int getAtividade() {
 		return proximaAtividade;
 	}
-	bool getFonte() {
+	bool isFonte() {
 		return fonte;
+	}
+	bool isSumidouro() {
+		return sumidouro;
 	}
 
 	int retornaCarrosQuePassaram() {

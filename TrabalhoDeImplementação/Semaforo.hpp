@@ -9,8 +9,9 @@ class Semaforo {
  private:
 	Lista<Pista<Carro>*>* pistas;
 	Pista<Carro>* pistaLocal;
-	int tempoSemaforo;
+	int tempoIntervalo;
 	int *probabilidades; 
+	bool estaAberto;
  public:
  	// array[] = {atual, frente, direita, esquerda};
  	// ATUAL = 0;
@@ -18,27 +19,38 @@ class Semaforo {
  	// ESQUERDA = 2;
  	// DIREITA = 3;
  	// 0 0 0 0 0 0 0 0 1 2
-	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades, int _tempoSemaforo /*, int _carroNoSistema*/) {
+
+
+ 	// COLOCAR NO CONSTRUTOR SE SEMÁFORO ESTÁ ABERTO OU FECHADO.
+	Semaforo(bool _estaAberto, Pista<Carro>* arranjo[], int *_probabilidades, int _tempoIntervalo /*, int _carroNoSistema*/) {
 		pistas = new Lista<Pista<Carro>*>(3);
 		probabilidades = _probabilidades;
 		// pistas.adiciona (pistaLocal);
-		tempoSemaforo = _tempoSemaforo;
+		tempoIntervalo = _tempoIntervalo;
+		estaAberto = _estaAberto;
 		pistaLocal = arranjo[0];
 		pistas->adiciona(arranjo[1]);
 		pistas->adiciona(arranjo[2]);
 		pistas->adiciona(arranjo[3]);
+	}
+
+	void passarCarro(Pista<Carro>* pista){
+
+
+
 	}
 	
 	void atualiza(int tempoAtual, int tempoSemaforo) {
 		if (tempoAtual <= tempoSemaforo) {
 			std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
 	        passaCarro(tempoAtual);
-	        pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-	        std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
+	        // pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
 		} else {
 			// tinha um else aqui
+			std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
 	    	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
     	}
+    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
     }
 	// // github - 3 horas
 	// void atualiza(int tempoAtual, int tempoDeExecucao) {
@@ -65,27 +77,38 @@ class Semaforo {
 	// }
 	
 	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
+	// void passaCarro(int tempoAtual) {
+	// 	if (!pistaLocal->filaVazia()) {
+	// 		Carro carroAtual = pistaLocal->primeiro();
+	// 		bool possivel = true;
+	// 		Pista<Carro>* proxima;
+	// 		while (possivel) {
+	// 			if (pistaLocal->estaNoSemaforo(carroAtual, tempoAtual) 
+	// 				&& pistaLocal->getFonte() && !pistaLocal->filaVazia()) {
+	// 				carroAtual = pistaLocal->primeiro();
+	// 			  	int pistaEscolhida = calculaProbabilidade(carroAtual);
+	// 			    proxima = pistas->mostra(pistaEscolhida);
+	// 			    //this->proximaPista(carroAtual->getProbabilidade());
+	// 			    std::cout << "A car passed through a traffic light" << std::endl;
+	// 			   	proxima->adicionaCarro(carroAtual);
+	// 				pistaLocal->removeCarroSemMensagem(tempoAtual);
+	// 	    	} else {
+	// 	    		possivel = false;
+	// 	    	}
+	//     	}
+	// 	}
+	// }
 
-	void passaCarro(int tempoAtual) {
-		if (!pistaLocal->filaVazia()) {
-			Carro carroAtual = pistaLocal->primeiro();
-			bool possivel = true;
-			Pista<Carro>* proxima;
-			while (possivel) {
-				if (pistaLocal->estaNoSemaforo(carroAtual, tempoAtual) 
-					&& pistaLocal->getFonte() && !pistaLocal->filaVazia()) {
-					carroAtual = pistaLocal->primeiro();
-				  	int pistaEscolhida = calculaProbabilidade(carroAtual);
-				    proxima = pistas->mostra(pistaEscolhida);
-				    //this->proximaPista(carroAtual->getProbabilidade());
-				    std::cout << "A car passed through a traffic light" << std::endl;
-				   	proxima->adicionaCarro(carroAtual);
-					pistaLocal->removeCarroSemMensagem(tempoAtual);
-		    	} else {
-		    		possivel = false;
-		    	}
-	    	}
+	void trocarAberto() {
+		if (estaAberto) {
+			estaAberto = false;
+		} else {
+			estaAberto = true;
 		}
+	}
+
+	int calculeProximoEvento(int tempoAtual) {
+		return tempoAtual + tempoIntervalo;
 	}
 
 	int calculaProbabilidade(Carro c) {
@@ -103,6 +126,18 @@ class Semaforo {
 			}
 		}
 		return -1;
+	}
+
+	int retornaIntervalo() {
+		return tempoIntervalo;
+	}
+
+	bool estaAberto() {
+		return estaAberto;
+	}
+
+	Pista<Carro>* retornaPistaLocal() {
+		return pistaLocal;
 	}
 };
 

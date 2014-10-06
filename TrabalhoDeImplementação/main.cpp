@@ -13,23 +13,23 @@ void limparTela() {
 	}
 }
 
-void pedeTempoSemaforo() {
-	bool continuar = true;
-	while(continuar) {
-		std::cout << "Informe o tempo de abertura do semáforo: " << std::endl;
-		std::cin >> tempoAberturaSemaforo;
-		if(tempoAberturaSemaforo > 0) {
-			continuar = false;
-		}
-	}
-}
-
 void pedeTempoDeExecucao() {
 	bool continuar = true;
 	while(continuar) {
 		std::cout << "Informe o tempo de execução: " << std::endl;
 		std::cin >> tempoDeExecucao;
 		if(tempoDeExecucao > 0) {
+			continuar = false; // overflow de int 64 bits faz o input ficar sendo executado, tratar o overflow
+		}
+	}
+}
+
+void pedeTempoSemaforo() {
+	bool continuar = true;
+	while(continuar) {
+		std::cout << "Informe o tempo de abertura do semáforo: " << std::endl;
+		std::cin >> tempoAberturaSemaforo;
+		if(tempoAberturaSemaforo > 0) {
 			continuar = false;
 		}
 	}

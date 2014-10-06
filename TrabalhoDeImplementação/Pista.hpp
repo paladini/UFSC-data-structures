@@ -6,14 +6,14 @@
 
 template<typename T>
 class Pista : public FilaEnc<T> {
-private: 
+ private: 
 	int tamanho, numeroCarrosPassaram, numeroCarrosEntraram, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, 
 		intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo, tempoDeInvocacaoNegativo;
 	bool fonte;
 
-public:
-	Pista(int tam, int _velocidadeMedia, bool _fonte, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
-		tamanho = tam;
+ public:
+	Pista(int tam, int _velocidadeMedia, bool _fonte, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<T>() {
+		 tamanho = tam;
 		espacoOcupado = 0;
 		numeroCarrosPassaram = 0;
 		numeroCarrosEntraram = 0;

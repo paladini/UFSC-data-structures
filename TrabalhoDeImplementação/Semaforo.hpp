@@ -29,32 +29,28 @@ class Semaforo {
 		pistas->adiciona(arranjo[3]);
 	}
 	
-	void atualizaUnico(int tempoAtual, int tempoDoSemaforo) {
+	void atualiza(int tempoAtual, int tempoDoSemaforo) {
 		if (tempoAtual < tempoDoSemaforo) {
-		    int tempoExtra = tempoAtual;
 		   	std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
-		   	while (tempoAtual < tempoDoSemaforo + tempoExtra) {
-		   	    pistaLocal->atualizaPista(tempoAtual);
-		        passaCarro(tempoAtual);
-		        tempoAtual++;
-		   	}
-		    std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
+	        passaCarro(tempoAtual);
+	    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
 		}
+		pistaLocal->atualizaPista(tempoAtual);
 	}
 	
-	void atualizaDuplo(int tempoAtual, int tempoDoSemaforo, Semaforo* oSimultaneo) {
-	    if (tempoAtual < tempoDoSemaforo) {
-	        std::cout << "Two traffic lights are green. Actual time is " << tempoAtual << std::endl;
-	        while (tempoAtual < tempoDoSemaforo) {
-		        pistaLocal->atualizaPista(tempoAtual, tempoDoSemaforo);
-		        oSimultaneo->pistaLocal->atualizaPista(tempoAtual);
-		        passaCarro(tempoAtual);
-		        oSimultaneo->passaCarro(tempoAtual);
-		        tempoAtual++;
-	        }
-	        std::cout << "Two traffic lights are red. Actual time is " << tempoAtual << std::endl;
-	    }
-	}
+	// void atualizaDuplo(int tempoAtual, int tempoDoSemaforo, Semaforo* oSimultaneo) {
+	//     if (tempoAtual < tempoDoSemaforo) {
+	//         std::cout << "Two traffic lights are green. Actual time is " << tempoAtual << std::endl;
+	//         while (tempoAtual < tempoDoSemaforo) {
+	// 	        pistaLocal->atualizaPista(tempoAtual, tempoDoSemaforo);
+	// 	        oSimultaneo->pistaLocal->atualizaPista(tempoAtual);
+	// 	        passaCarro(tempoAtual);
+	// 	        oSimultaneo->passaCarro(tempoAtual);
+	// 	        tempoAtual++;
+	//         }
+	//         std::cout << "Two traffic lights are red. Actual time is " << tempoAtual << std::endl;
+	//     }
+	// }
 	
 	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
 	//

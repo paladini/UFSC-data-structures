@@ -8,14 +8,14 @@
 class Sistema {
  public:
     ListaCirc<Semaforo*>* semaforos;
-    ListaEnc<Pista<Carro>*>* pistas;
+    ListaCirc<Pista<Carro>*>* pistas;
     int tempoAtual, tempoSemaforo, tempoDeExecucao;
     int carrosQuePassaram = 0;
     int carrosQueEntraram = 0;
     
     Sistema(int _tempoSemaforo, int _tempoDeExecucao) {
         this->semaforos = new ListaCirc<Semaforo*>();  
-        this->pistas = new ListaEnc<Pista<Carro>*>();
+        this->pistas = new ListaCirc<Pista<Carro>*>();
         tempoAtual = 0;
         tempoSemaforo = _tempoSemaforo;
         tempoDeExecucao = _tempoDeExecucao;
@@ -110,31 +110,49 @@ class Sistema {
 
         // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
         while (tempoAtual < tempoDeExecucao) {
-            semaforos->retornaDado(0)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(1)); // 0 e 1 são os semaforos da  principal do sistema
-            if (tempoAtual < tempoSemaforo) {
-                tempoAtual += tempoSemaforo;
+            for (int i = 0; i < 2; i++) {
+                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
             }
-            semaforos->retornaDado(2)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(3));
-            if (tempoAtual< tempoSemaforo) {
-                tempoAtual += tempoSemaforo;
-            }
-            semaforos->retornaDado(4)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(5));
-            if (tempoAtual< tempoSemaforo) {
-                tempoAtual += tempoSemaforo;
-            }
-            // for (int i = 4; (i < (semaforos->retornaTamanho() - 4)) && (tempoAtual < tempoSemaforo); i++) {
-            semaforos->retornaDado(6)->atualizaUnico(tempoAtual, tempoSemaforo);
             tempoAtual += tempoSemaforo;
-            // }
-            
+            for (int i = 2; i < 4; i++) {
+                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+            }
+                tempoAtual += tempoSemaforo;
+            for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
+                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+                tempoAtual += tempoSemaforo;
+            }
         }
 
         // Contando carros que foram e sairam das pistas;
         contarCarros();
         std::cout << "Foram simulados " << tempoAtual << " segundos." << std::endl;
         std::cout << carrosQueEntraram << " carros entraram no sistema." << std::endl;
-        std::cout << carrosQuePassaram << " carros passaram pelo sistema." << std::endl; 
+        std::cout << carrosQuePassaram << " carros passaram pelo sistema." << std::endl;
     }
+
+    // void atualizarSistema() {
+
+    //     // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
+    //     while (tempoAtual < tempoDeExecucao) {
+    //         for (int i = 0; i < 2; i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
+    //         }
+    //         tempoAtual += tempoSemaforo;
+    //         for (int i = 2; i < 4; i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+    //         }
+    //         tempoAtual += tempoSemaforo;
+    //         for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+    //             tempoAtual += tempoSemaforo;
+    //         }
+    //     }
+    //     //int carros = getCarrosLiberados();
+
+    //     int contarCarros = contarCarros();
+    //     std::cout << "Foram simulados " << tempoAtual << " segundos e " << " carros passaram pelo sistema." << std::endl; 
+    // }
 
     void contarCarros() {
         for (int i = 0; i < pistas->retornaTamanho(); i++) {

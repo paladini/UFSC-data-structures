@@ -56,16 +56,16 @@ public:
 		}
 	}
 
-	void atualizaPista(int tempoAtual, int tempoDeExecucao) {
+	void atualizaPista(int tempoAtual) {
 	    if (fonte) { 
-	        if (tempoAtual + tempoDeExecucao >= proximaAtividade) {
+	        if (tempoAtual >= proximaAtividade) {
 	            std::cout << "A car just arrived! Actual time is " << tempoAtual << std::endl;
 	      	    adicionaCarro(Carro(tempoAtual));
 				calculeProximoEvento(tempoAtual);
 	      	}
 	      	return;
 	    }
-	    if (tempoAtual + tempoDeExecucao >= proximaAtividade) {
+	    if (tempoAtual >= proximaAtividade) {
 	        removeCarro(tempoAtual);
 	        calculeProximoEvento(tempoAtual);
 	    }

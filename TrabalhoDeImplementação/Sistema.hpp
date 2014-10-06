@@ -99,29 +99,33 @@ class Sistema {
         // Adicionando na lista de semáforos
         semaforos->adiciona(so1leste);
         semaforos->adiciona(sc1leste);
-        semaforos->adiciona(sc1oeste);
         semaforos->adiciona(ss1norte);
         semaforos->adiciona(ss2norte);
         semaforos->adiciona(sn1sul);
         semaforos->adiciona(sn2sul);
+        semaforos->adiciona(sc1oeste);
     }
 
     void atualizarSistema() {
 
         // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
         while (tempoAtual < tempoDeExecucao) {
-            semaforos->retornaDado(0)->atualizaDuplo(tempoAtual, tempoDeExecucao, semaforos->retornaDado(1)); // 0 e 1 são os semaforos da  principal do sistema
-            if (tempoAtual < tempoDeExecucao) {
+            semaforos->retornaDado(0)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(1)); // 0 e 1 são os semaforos da  principal do sistema
+            if (tempoAtual < tempoSemaforo) {
                 tempoAtual += tempoSemaforo;
             }
-            semaforos->retornaDado(2)->atualizaDuplo(tempoAtual, tempoDeExecucao, semaforos->retornaDado(3));
-            if (tempoAtual< tempoDeExecucao) {
+            semaforos->retornaDado(2)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(3));
+            if (tempoAtual< tempoSemaforo) {
                 tempoAtual += tempoSemaforo;
             }
-            for (int i = 4; (i < (semaforos->retornaTamanho() - 4)) && (tempoAtual < tempoDeExecucao); i++) {
-                semaforos->retornaDado(i)->atualizaUnico(tempoAtual, tempoDeExecucao);
+            semaforos->retornaDado(4)->atualizaDuplo(tempoAtual, tempoSemaforo, semaforos->retornaDado(5));
+            if (tempoAtual< tempoSemaforo) {
                 tempoAtual += tempoSemaforo;
             }
+            // for (int i = 4; (i < (semaforos->retornaTamanho() - 4)) && (tempoAtual < tempoSemaforo); i++) {
+            semaforos->retornaDado(6)->atualizaUnico(tempoAtual, tempoSemaforo);
+            tempoAtual += tempoSemaforo;
+            // }
             
         }
 

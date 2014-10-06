@@ -79,11 +79,12 @@ public:
 	// }
 
 	// Só cuidar do adicionar carro;
-	void calculeProximoEvento(int tempoAtual) {
+	int calculeProximoEvento(int tempoAtual) {
  		int tempo = tempoDeInvocacaoNegativo + (rand() % (int) (tempoDeInvocacaoPositivo - 2 + 1));
  		// a exceção de ponto flutuante que acontece quando é colocado 1 segundo de abertura de semáforo
  		// acontece pq não dá de tirar % de 0 ou número negativo
 		proximaAtividade = tempo + tempoAtual;
+		return proximaAtividade;
 	}
 	
 	// 30 - 20 = 10 ---> 10 * 20ms ---> 200m >= tamanho ----> já passou por ela inteira

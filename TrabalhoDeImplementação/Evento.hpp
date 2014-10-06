@@ -23,7 +23,7 @@ public:
   void *objeto;
   void *relacionado;
 
-  Evento(int t, void* o, void* _relacionado,int tipo) {
+  Evento(int t, void* o, void* _relacionado, int tipo) {
     tipo = t;
     objeto = o;
     this->tipo = tipo;

@@ -53,7 +53,7 @@ int main() {
 			pedeTempoDeExecucao();
 			pedeTempoSemaforo();
 			Sistema *sistema = new Sistema(tempoAberturaSemaforo, tempoDeExecucao);
-			sistema->atualizarSistema();
+			sistema->iniciar();
 			break;
 		}
 		case 2: {

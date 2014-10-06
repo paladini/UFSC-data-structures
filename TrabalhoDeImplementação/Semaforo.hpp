@@ -11,7 +11,7 @@ class Semaforo {
 	Pista<Carro>* pistaLocal;
 	int tempoIntervalo;
 	int *probabilidades; 
-	bool estaAberto;
+	bool aberto;
  public:
  	// array[] = {atual, frente, direita, esquerda};
  	// ATUAL = 0;
@@ -26,36 +26,39 @@ class Semaforo {
 		probabilidades = _probabilidades;
 		// pistas.adiciona (pistaLocal);
 		tempoIntervalo = _tempoIntervalo;
-		estaAberto = _estaAberto;
+		aberto = _estaAberto;
 		pistaLocal = arranjo[0];
 		pistas->adiciona(arranjo[1]);
 		pistas->adiciona(arranjo[2]);
 		pistas->adiciona(arranjo[3]);
 	}
 
-	void passaCarro() {
-		Carro* c = pistaLocal->primeiro();
+	Pista<Carro>* passaCarro() {
+		Carro c = pistaLocal->primeiro();
 
 		int pistaEscolhida = calculaProbabilidade(c);
 		Pista<Carro>* proxima = pistas->mostra(pistaEscolhida);
-		if(!estaCheia(c)){
+		if (!proxima->estaCheia(c)) {
 			pistaLocal->retira();
 			proxima->adicionaCarro(c);
+			return proxima;
+		} else {
+			return pistaLocal;
 		}
 	}
 	
-	void atualiza(int tempoAtual, int tempoSemaforo) {
-		if (tempoAtual <= tempoSemaforo) {
-			std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
-	        passaCarro(tempoAtual);
-	        // pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-		} else {
-			// tinha um else aqui
-			std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
-	    	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-    	}
-    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
-    }
+	// void atualiza(int tempoAtual, int tempoSemaforo) {
+	// 	if (tempoAtual <= tempoSemaforo) {
+	// 		std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
+	//         passaCarro(tempoAtual);
+	//         // pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+	// 	} else {
+	// 		// tinha um else aqui
+	// 		std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
+	//     	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
+ //    	}
+ //    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
+ //    }
 	
 	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
 	// void passaCarro(int tempoAtual) {
@@ -81,10 +84,10 @@ class Semaforo {
 	// }
 
 	void trocarAberto() {
-		if (estaAberto) {
-			estaAberto = false;
+		if (aberto) {
+			aberto = false;
 		} else {
-			estaAberto = true;
+			aberto = true;
 		}
 	}
 
@@ -113,8 +116,8 @@ class Semaforo {
 		return tempoIntervalo;
 	}
 
-	bool estaAberto() {
-		return estaAberto;
+	bool isAberto() {
+		return aberto;
 	}
 
 	Pista<Carro>* retornaPistaLocal() {

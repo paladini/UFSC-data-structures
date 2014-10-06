@@ -61,22 +61,22 @@ public:
 		}
 	}
 
-	void atualizaPista(int tempoAtual, int tempoSemaforo) {
-	    if (fonte) { 
-	        if (tempoAtual + tempoSemaforo >= proximaAtividade) {
-	      	    adicionaCarro(Carro(tempoAtual));
-	      	   	std::cout << "A car just arrived! Actual time is " << tempoAtual << std::endl;
-				calculeProximoEvento(tempoAtual);
-	      	}
-	      	return;
-	    }
-	    if (!this->filaVazia()) {
-	    	if (carroChegouNoFinal(tempoAtual)) {
-		        removeCarro(tempoAtual);
-		        calculeProximoEvento(tempoAtual);
-		    }
-	    }
-	}
+	// void atualizaPista(int tempoAtual, int tempoSemaforo) {
+	//     if (fonte) { 
+	//         if (tempoAtual + tempoSemaforo >= proximaAtividade) {
+	//       	    adicionaCarro(Carro(tempoAtual));
+	//       	   	std::cout << "A car just arrived! Actual time is " << tempoAtual << std::endl;
+	// 			calculeProximoEvento(tempoAtual);
+	//       	}
+	//       	return;
+	//     }
+	//     if (!this->filaVazia()) {
+	//     	if (carroChegouNoFinal(tempoAtual)) {
+	// 	        removeCarro(tempoAtual);
+	// 	        calculeProximoEvento(tempoAtual);
+	// 	    }
+	//     }
+	// }
 
 	// Só cuidar do adicionar carro;
 	void calculeProximoEvento(int tempoAtual) {
@@ -88,28 +88,32 @@ public:
 	
 	// 30 - 20 = 10 ---> 10 * 20ms ---> 200m >= tamanho ----> já passou por ela inteira
 	// tempoAtual - tempoQueChegouNaPista * (tamanho / velocidadeMedia) >= tamanho
-	bool carroChegouNoFinal(int tempoAtual) {
-		return tempoAtual - (this->primeiro()).getTempoDeInvocacao() * tempoPadraoDeChegada >= tamanho;
-	}
+	// bool carroChegouNoFinal(int tempoAtual) {
+	// 	return tempoAtual - (this->primeiro()).getTempoDeInvocacao() * tempoPadraoDeChegada >= tamanho;
+	// }
 
 	// static int getCarrosLiberados() {
 	// 	return carroNoSistema;
 	// }
 
-	bool estaNoSemaforo(Carro c, int tempoAtual) {
-	    return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
+	// bool estaNoSemaforo(Carro c, int tempoAtual) {
+	//     return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
+	// }
+
+	int tempoDeChegada(int tempoQueNascue) {
+		return tempoQueNascue + tempoPadraoDeChegada;
 	}
 
-	int tempoDeChegada(int tempoAtual, int tempoDeChegada) {
-		return tempoAtual - tempoDeChegada * tempoPadraoDeChegada;
-	}
+	// int tempoParaChegar(int tempoQueNasceu) {
+	// 	return tempoQueNasceu + tempoPadraoDeChegada;
+	// }
 
-	void estaCheia() {
+	bool estaCheia() {
 		return espacoOcupado + 5 >= tamanho; 
 		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
 	}
 
-	void estaCheia(Carro c) {
+	bool estaCheia(Carro c) {
 		return espacoOcupado + c.getTamanho() > tamanho;
 	}
 	

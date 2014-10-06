@@ -7,13 +7,16 @@
 template<typename T>
 class Pista : public FilaEnc<T> {
 private: 
-	int tamanho, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo,tempoDeInvocacaoNegativo;
+	int tamanho, numeroCarrosPassaram, numeroCarrosEntraram, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, 
+		intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo, tempoDeInvocacaoNegativo;
 	bool fonte;
 
 public:
 	Pista(int tam, int _velocidadeMedia, bool _fonte, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
 		tamanho = tam;
 		espacoOcupado = 0;
+		numeroCarrosPassaram = 0;
+		numeroCarrosEntraram = 0;
 		velocidadeMedia = _velocidadeMedia;
 		calculeProximoEvento(0);
 		tempoPadraoDeChegada = tamanho / velocidadeMedia;
@@ -31,30 +34,41 @@ public:
 		if (espacoOcupadoComCarro <= tamanho) {
 			this->inclui(c);
 			espacoOcupado = espacoOcupadoComCarro;	
+			numeroCarrosEntraram++;
  		}
 	}
 
-	void removeCarro() {
+	void removeCarroSemMensagem(int tempoAtual) {
 		try {
 			T carroRetirado = this->retira();
-			// Sistema::quantidadeCarros++;
 		} catch (std::exception& e) {
-			std::cout << "Pista vazia, nenhum carro a ser retirado." << std::endl;
+			std::cout << "Empty queue, no car to be seen. Actual time is " << tempoAtual << std::endl;
 		}
 	}
 
-	void atualizaPista(int tempoAtual, int tempoSemaforo) {
-	    if (fonte) {
-	        if (tempoAtual + tempoSemaforo > proximaAtividade) {
-	            std::cout << "A car just arrived!" << std::endl;
+	void removeCarro(int tempoAtual) {
+		try {
+			T carroRetirado = this->retira();
+			std::cout << "A car's gone! Actual time is " << tempoAtual << std::endl;
+			numeroCarrosPassaram++;
+		} catch (std::exception& e) {
+			std::cout << "Empty queue, no car to be seen. Actual time is " << tempoAtual << std::endl;
+		}
+	}
+
+	void atualizaPista(int tempoAtual, int tempoDeExecucao) {
+	    if (fonte) { 
+	        if (tempoAtual + tempoDeExecucao >= proximaAtividade) {
+	            std::cout << "A car just arrived! Actual time is " << tempoAtual << std::endl;
 	      	    adicionaCarro(Carro(tempoAtual));
 				calculeProximoEvento(tempoAtual);
 	      	}
 	      	return;
 	    }
-	    std::cout << "A car's gone!" << std::endl;
-	    removeCarro();
-	    calculeProximoEvento(tempoAtual);
+	    if (tempoAtual + tempoDeExecucao >= proximaAtividade) {
+	        removeCarro(tempoAtual);
+	        calculeProximoEvento(tempoAtual);
+	    }
 	}
 
 	void calculeProximoEvento(int tempoAtual) {
@@ -77,6 +91,14 @@ public:
 
 	bool getFonte() {
 		return fonte;
+	}
+
+	int retornaCarrosQuePassaram() {
+		return numeroCarrosPassaram;
+	}
+
+	int retornaCarrosQueEntraram() {
+		return numeroCarrosEntraram;
 	}
 };
 

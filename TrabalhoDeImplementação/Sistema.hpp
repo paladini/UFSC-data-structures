@@ -2,18 +2,20 @@
 #define SISTEMA_HPP_
 #include "ListaCirc.hpp"
 #include "Semaforo.hpp"
+#include "ListaEnc.hpp"
 #include <iostream>
 
 class Sistema {
  public:
     ListaCirc<Semaforo*>* semaforos;
-    int tempoAtual;
-    int tempoSemaforo;
-    int tempoDeExecucao;
-    // static int quantidadeCarros = 0;
+    ListaEnc<Pista<Carro>*>* pistas;
+    int tempoAtual, tempoSemaforo, tempoDeExecucao;
+    int carrosQuePassaram = 0;
+    int carrosQueEntraram = 0;
     
     Sistema(int _tempoSemaforo, int _tempoDeExecucao) {
         this->semaforos = new ListaCirc<Semaforo*>();  
+        this->pistas = new ListaEnc<Pista<Carro>*>();
         tempoAtual = 0;
         tempoSemaforo = _tempoSemaforo;
         tempoDeExecucao = _tempoDeExecucao;
@@ -35,6 +37,22 @@ class Sistema {
         Pista<Carro>* l1oeste  = new Pista<Carro>(400, 30, true, tempoSemaforo, 0);
         Pista<Carro>* c1oeste  = new Pista<Carro>(300, 60, false, tempoSemaforo, 0);
         Pista<Carro>* c1leste  = new Pista<Carro>(300, 60, false, tempoSemaforo, 0);
+
+        // Adicionando na lista
+        pistas->adiciona(n1sul);
+        pistas->adiciona(n1norte);
+        pistas->adiciona(n2sul);
+        pistas->adiciona(n2norte);
+        pistas->adiciona(o1oeste);
+        pistas->adiciona(o1leste);
+        pistas->adiciona(s1sul);
+        pistas->adiciona(s1norte);
+        pistas->adiciona(s2sul);
+        pistas->adiciona(s2norte);
+        pistas->adiciona(l1leste);
+        pistas->adiciona(l1oeste);
+        pistas->adiciona(c1oeste);                
+        pistas->adiciona(c1leste);
 
         // backup, deixar aqui até commit (tudo correto)
         // Semaforo o1leste = new Semaforo(0, o1leste, s1sul, n1norte, c1leste, {10, 10, 80});
@@ -92,41 +110,35 @@ class Sistema {
 
         // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
         while (tempoAtual < tempoDeExecucao) {
-            for (int i = 0; i < 2; i++) {
-                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
-            }
-            tempoAtual += tempoSemaforo;
-            for (int i = 2; i < 4; i++) {
-                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
-            }
-            tempoAtual += tempoSemaforo;
-            for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
-                semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+            semaforos->retornaDado(0)->atualizaDuplo(tempoAtual, tempoDeExecucao, semaforos->retornaDado(1)); // 0 e 1 são os semaforos da  principal do sistema
+            if (tempoAtual < tempoDeExecucao) {
                 tempoAtual += tempoSemaforo;
             }
+            semaforos->retornaDado(2)->atualizaDuplo(tempoAtual, tempoDeExecucao, semaforos->retornaDado(3));
+            if (tempoAtual< tempoDeExecucao) {
+                tempoAtual += tempoSemaforo;
+            }
+            for (int i = 4; (i < (semaforos->retornaTamanho() - 4)) && (tempoAtual < tempoDeExecucao); i++) {
+                semaforos->retornaDado(i)->atualizaUnico(tempoAtual, tempoDeExecucao);
+                tempoAtual += tempoSemaforo;
+            }
+            
         }
-        //int carros = getCarrosLiberados();
 
-        int contarCarros = contarCarros();
-        std::cout << "Foram simulados " << tempoAtual << " segundos e " << " carros passaram pelo sistema." << std::endl; 
+        // Contando carros que foram e sairam das pistas;
+        contarCarros();
+        std::cout << "Foram simulados " << tempoAtual << " segundos." << std::endl;
+        std::cout << carrosQueEntraram << " carros entraram no sistema." << std::endl;
+        std::cout << carrosQuePassaram << " carros passaram pelo sistema." << std::endl; 
     }
 
-    int carros() {
-        
-        return ;
+    void contarCarros() {
+        for (int i = 0; i < pistas->retornaTamanho(); i++) {
+            carrosQueEntraram = carrosQueEntraram + pistas->retornaDado(i)->retornaCarrosQueEntraram();
+            carrosQuePassaram = carrosQuePassaram + pistas->retornaDado(i)->retornaCarrosQuePassaram();
+        }
     }
-    // void limparArray(Pista<Carro>* arg1[], int arg2[]) {
-    //     for(int i = 0; i < 4; i++) {
-    //         delete arg1[i];
-    //     }
 
-    //     for(int i = 0; i < 3; i++) {
-    //         delete arg2[i];
-    //     }
-
-    //     delete arg1;
-    //     delete arg2;
-    // }
 };
 
 #endif

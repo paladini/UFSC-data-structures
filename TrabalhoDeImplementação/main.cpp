@@ -4,8 +4,8 @@
 
 // Variáveis
 int opcao = -1;
-int tempoAberturaSemaforo = -1;
-int tempoDeExecucao = -1;
+long tempoAberturaSemaforo = -1;
+long tempoDeExecucao = -1;
 
 void limparTela() {
 	for(int i = 0; i < 10; i++) {
@@ -47,7 +47,7 @@ int main() {
 	std::cout << "\nPor favor, escolha uma opção: " << std::endl;
 	std::cin >> opcao;
 
-	switch (opcao) {
+	switch (opcao) {	
 		case 1: {
 			limparTela();
 			pedeTempoDeExecucao();

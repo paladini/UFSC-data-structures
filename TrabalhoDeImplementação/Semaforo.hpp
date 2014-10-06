@@ -21,7 +21,7 @@ class Semaforo {
 	Semaforo(Pista<Carro>* arranjo[], int *_probabilidades, int _tempoSemaforo /*, int _carroNoSistema*/) {
 		pistas = new Lista<Pista<Carro>*>(3);
 		probabilidades = _probabilidades;
-		// pistas.adiciona(pistaLocal);
+		// pistas.adiciona (pistaLocal);
 		tempoSemaforo = _tempoSemaforo;
 		pistaLocal = arranjo[0];
 		pistas->adiciona(arranjo[1]);
@@ -29,13 +29,30 @@ class Semaforo {
 		pistas->adiciona(arranjo[3]);
 	}
 	
-	void atualiza(int tempoAtual, int tempoDeExecucao) {
+	void atualizaUnico(int tempoAtual, int tempoDeExecucao) {
 		if (tempoAtual < tempoDeExecucao) {
-		   	std::cout << "A traffic light is green." << std::endl;
-		   	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-		    passaCarro(tempoAtual);
-		    std::cout << "A traffic light is red." << std::endl;	
+		   	std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
+		   	while (tempoAtual < tempoDeExecucao) {
+		   	    pistaLocal->atualizaPista(tempoAtual, tempoDeExecucao);
+		        passaCarro(tempoAtual);
+		        tempoAtual++;
+		   	}
+		    std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
 		}
+	}
+	
+	void atualizaDuplo(int tempoAtual, int tempoDeExecucao, Semaforo* oSimultaneo) {
+	    if (tempoAtual < tempoDeExecucao) {
+	        std::cout << "Two traffic lights are green. Actual time is " << tempoAtual << std::endl;
+	        // while (tempoAtual < tempoDeExecucao) {
+		        // pistaLocal->atualizaPista(tempoAtual, tempoDeExecucao);
+		        oSimultaneo->pistaLocal->atualizaPista(tempoAtual, tempoDeExecucao);
+		        passaCarro(tempoAtual);
+		        oSimultaneo->passaCarro(tempoAtual);
+		        tempoAtual++;
+	        // }
+	        std::cout << "Two traffic lights are red. Actual time is " << tempoAtual << std::endl;
+	    }
 	}
 
 	void passaCarro(int tempoAtual) {
@@ -52,14 +69,11 @@ class Semaforo {
 				    //this->proximaPista(carroAtual->getProbabilidade());
 				    std::cout << "A car passed through a traffic light" << std::endl;
 				   	proxima->adicionaCarro(carroAtual);
-					pistaLocal->removeCarro();
-				    std::cout << "paranue" << std::endl;
+					pistaLocal->removeCarroSemMensagem(tempoAtual);
 		    	} else {
 		    		possivel = false;
 		    	}
 	    	}
-		    std::cout << "passou do while" << std::endl;
-
 		}
 	}
 

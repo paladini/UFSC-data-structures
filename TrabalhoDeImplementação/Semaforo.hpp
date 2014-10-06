@@ -20,7 +20,6 @@ class Semaforo {
  	// DIREITA = 3;
  	// 0 0 0 0 0 0 0 0 1 2
 
-
  	// COLOCAR NO CONSTRUTOR SE SEMÁFORO ESTÁ ABERTO OU FECHADO.
 	Semaforo(bool _estaAberto, Pista<Carro>* arranjo[], int *_probabilidades, int _tempoIntervalo /*, int _carroNoSistema*/) {
 		pistas = new Lista<Pista<Carro>*>(3);
@@ -34,10 +33,15 @@ class Semaforo {
 		pistas->adiciona(arranjo[3]);
 	}
 
-	void passarCarro(Pista<Carro>* pista){
+	void passaCarro() {
+		Carro* c = pistaLocal->primeiro();
 
-
-
+		int pistaEscolhida = calculaProbabilidade(c);
+		Pista<Carro>* proxima = pistas->mostra(pistaEscolhida);
+		if(!estaCheia(c)){
+			pistaLocal->retira();
+			proxima->adicionaCarro(c);
+		}
 	}
 	
 	void atualiza(int tempoAtual, int tempoSemaforo) {
@@ -52,29 +56,6 @@ class Semaforo {
     	}
     	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
     }
-	// // github - 3 horas
-	// void atualiza(int tempoAtual, int tempoDeExecucao) {
-	// 	if (tempoAtual < tempoDeExecucao) {
-	// 		std::cout << "A traffic light is green." << std::endl;
-	// 		pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-	// 		passaCarro(tempoAtual);
-	// 		std::cout << "A traffic light is red." << std::endl;	
-	// 	}
-	// }
-		
-	// void atualizaDuplo(int tempoAtual, int tempoDoSemaforo, Semaforo* oSimultaneo) {
-	//     if (tempoAtual < tempoDoSemaforo) {
-	//         std::cout << "Two traffic lights are green. Actual time is " << tempoAtual << std::endl;
-	//         while (tempoAtual < tempoDoSemaforo) {
-	// 	        pistaLocal->atualizaPista(tempoAtual, tempoDoSemaforo);
-	// 	        oSimultaneo->pistaLocal->atualizaPista(tempoAtual);
-	// 	        passaCarro(tempoAtual);
-	// 	        oSimultaneo->passaCarro(tempoAtual);
-	// 	        tempoAtual++;
-	//         }
-	//         std::cout << "Two traffic lights are red. Actual time is " << tempoAtual << std::endl;
-	//     }
-	// }
 	
 	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
 	// void passaCarro(int tempoAtual) {

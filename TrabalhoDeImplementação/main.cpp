@@ -5,7 +5,7 @@
 // Variáveis
 int opcao = -1;
 long tempoAberturaSemaforo = -1;
-long tempoDeExecucao = -1;
+long long tempoDeExecucao = -1;
 
 void limparTela() {
 	for(int i = 0; i < 10; i++) {
@@ -19,7 +19,7 @@ void pedeTempoDeExecucao() {
 		std::cout << "Informe o tempo de execução: " << std::endl;
 		std::cin >> tempoDeExecucao;
 		if(tempoDeExecucao > 0) {
-			continuar = false; // overflow de int 64 bits faz o input ficar sendo executado, tratar o overflow
+			continuar = false; // overflow de int 128 bits faz o input ficar sendo executado, tratar o overflow
 		}
 	}
 }

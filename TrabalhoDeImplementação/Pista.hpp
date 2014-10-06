@@ -30,13 +30,16 @@ public:
 		}
 	}
 
-	void adicionaCarro(Carro c) {
+	bool adicionaCarro(Carro c) {
 		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
 		// if (espacoOcupadoComCarro <= tamanho) {
 		if (espacoOcupadoComCarro <= tamanho) {
 			this->inclui(c);
 			espacoOcupado = espacoOcupadoComCarro;	
 			numeroCarrosEntraram++;
+			return true;
+ 		} else {
+ 			return false;
  		}
 	}
 
@@ -48,13 +51,13 @@ public:
 		}
 	}
 
-	void removeCarro(int tempoAtual) {
+	void removeCarro() {
 		try {
 			T carroRetirado = this->retira();
-			std::cout << "A car's gone! Actual time is " << tempoAtual << std::endl;
+			std::cout << "A car's gone!" << std::endl;
 			numeroCarrosPassaram++;
 		} catch (std::exception& e) {
-			std::cout << "Empty queue, no car to be seen. Actual time is " << tempoAtual << std::endl;
+			std::cout << "Empty queue, no car to be seen " << std::endl;
 		}
 	}
 
@@ -78,6 +81,8 @@ public:
 	// Só cuidar do adicionar carro;
 	void calculeProximoEvento(int tempoAtual) {
  		int tempo = tempoDeInvocacaoNegativo + (rand() % (int) (tempoDeInvocacaoPositivo - 2 + 1));
+ 		// a exceção de ponto flutuante que acontece quando é colocado 1 segundo de abertura de semáforo
+ 		// acontece pq não dá de tirar % de 0 ou número negativo
 		proximaAtividade = tempo + tempoAtual;
 	}
 	
@@ -86,6 +91,7 @@ public:
 	bool carroChegouNoFinal(int tempoAtual) {
 		return tempoAtual - (this->primeiro()).getTempoDeInvocacao() * tempoPadraoDeChegada >= tamanho;
 	}
+
 	// static int getCarrosLiberados() {
 	// 	return carroNoSistema;
 	// }
@@ -93,7 +99,6 @@ public:
 	bool estaNoSemaforo(Carro c, int tempoAtual) {
 	    return ((tempoPadraoDeChegada + c.getTempoDeInvocacao()) < tempoAtual);
 	}
-
 
 	int tempoDeChegada(int tempoAtual, int tempoDeChegada) {
 		return tempoAtual - tempoDeChegada * tempoPadraoDeChegada;
@@ -103,12 +108,19 @@ public:
 		return espacoOcupado + 5 >= tamanho; 
 		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
 	}
+
+	void estaCheia(Carro c) {
+		return espacoOcupado + c.getTamanho() > tamanho;
+	}
+	
 	int getAtividade() {
 		return proximaAtividade;
 	}
+
 	bool isFonte() {
 		return fonte;
 	}
+
 	bool isSumidouro() {
 		return sumidouro;
 	}

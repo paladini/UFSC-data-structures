@@ -2,9 +2,9 @@
 #define SEMAFORO_HPP
 #include "Lista.hpp"
 #include "Pista.hpp"
-#include "Carro.hpp"
 #include "ExcecaoSinalVermelho.hpp"
 #include <iostream>
+#include <cstdio>
 
 class Semaforo {
  private:
@@ -43,7 +43,7 @@ class Semaforo {
 		Pista<Carro>* proxima = pistas->mostra(pistaEscolhida);
 		if(isAberto()) {
 			if (!proxima->estaCheia(c) && isAberto()) {
-				pistaLocal->retira();
+				pistaLocal->removeCarro();
 				proxima->adicionaCarro(c);
 				return proxima;
 			} else {

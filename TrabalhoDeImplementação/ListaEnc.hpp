@@ -17,7 +17,7 @@
 #include "ExcecaoErroPosicao.hpp"
 #include "ExcecaoListaCheia.hpp"
 #include "ExcecaoListaVazia.hpp"
-
+#include <iostream>
 template<typename T>
 class ListaEnc {
  private:
@@ -258,6 +258,7 @@ class ListaEnc {
                 atual = atual->getProximo();
                 posicao++;
             }
+            std::cout << "posicao" << posicao << std::endl;
             if (maior(data, atual->getInfo())) {
                 adicionaNaPosicao(data, posicao + 1);
             } else {
@@ -318,7 +319,7 @@ class ListaEnc {
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
     T retornaDado(int posicao) {
-        verificaPosicaoInvalida(posicao);
+        // verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {

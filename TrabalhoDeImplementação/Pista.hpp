@@ -3,6 +3,7 @@
 #include "FilaEnc.hpp"
 #include "Carro.hpp"
 #include <iostream>
+#include <cstdio>
 
 template<typename T>
 class Pista : public FilaEnc<T> {
@@ -19,7 +20,7 @@ public:
 		numeroCarrosEntraram = 0;
 		velocidadeMedia = _velocidadeMedia;
 		// calculeProximoEvento(0);
-		tempoPadraoDeChegada = tamanho / velocidadeMedia;
+		tempoPadraoDeChegada = tam / _velocidadeMedia;
 		fonte = _fonte;
 		sumidouro = _sumidouro;
 		tempoDeInvocacaoPositivo = _tempoDeInvocacao + _intervaloInvocacao;
@@ -30,17 +31,18 @@ public:
 		}
 	}
 
-	bool adicionaCarro(Carro c) {
+	void adicionaCarro(Carro c) {
 		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
 		// if (espacoOcupadoComCarro <= tamanho) {
 		if (espacoOcupadoComCarro <= tamanho) {
 			this->inclui(c);
 			espacoOcupado = espacoOcupadoComCarro;	
 			numeroCarrosEntraram++;
-			return true;
- 		} else {
- 			return false;
+			// return true;
  		}
+ 		// } else {
+ 		// 	// return false;
+ 		// }
 	}
 
 	void removeCarroSemMensagem(int tempoAtual) {
@@ -53,7 +55,7 @@ public:
 
 	void removeCarro() {
 		try {
-			T carroRetirado = this->retira();
+			Carro carroRetirado = this->retira();
 			std::cout << "A car's gone!" << std::endl;
 			numeroCarrosPassaram++;
 		} catch (std::exception& e) {

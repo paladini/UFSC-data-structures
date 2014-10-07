@@ -42,7 +42,7 @@ class FilaEnc: private ListaEnc<T>{
      * @see ListaEnc<T>::verificarMemoriaCheia();
      */
 	void inclui(const T& dado) {
-		this->verificaMemoriaCheia();
+		// this->verificaMemoriaCheia();
 		Elemento<T>* novo = new Elemento<T>(dado, NULL);
 		if (filaVazia()) {
 			this->defineCabeca(novo);

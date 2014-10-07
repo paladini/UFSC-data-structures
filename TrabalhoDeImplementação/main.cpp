@@ -1,11 +1,12 @@
 #include <iostream>
 #include <stdlib.h>
 #include "Sistema.hpp"
+#include <cstdio>
 
 // Variáveis
 int opcao = -1;
-long tempoAberturaSemaforo = -1;
-long long tempoDeExecucao = -1;
+int tempoAberturaSemaforo = -1;
+int tempoDeExecucao = -1;
 
 void limparTela() {
 	for(int i = 0; i < 10; i++) {
@@ -46,6 +47,7 @@ int main() {
 	std::cout << "\t3 - A treta é barata" << std::endl;
 	std::cout << "\t4 - Sair" << std::endl;
 	std::cout << "\nPor favor, escolha uma opção: " << std::endl;
+	std::cin >> opcao;
 	
 	switch (opcao) {	
 		case 1: {

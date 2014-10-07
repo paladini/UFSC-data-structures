@@ -1,6 +1,7 @@
 #ifndef CARRO_HPP_
 #define	CARRO_HPP_
 #include <cstdlib>
+#include <cstdio>
 
 // NAO MEXER NESSA CLASSE
 

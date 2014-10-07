@@ -1,26 +1,566 @@
-Sistema (main):
-	@ Lista<Pista> 
-	@ Lista<Semáforo>
-
-Pista (Fila):
-	@ Lista das filas de saída
-	@ Velocidade média
-	@ Tamanho fixo em metros (comporta nº limitado de carros)
-	@ isFonte ou isSumidouro (boolean)
-
-Semaforo (Fila):
-	@ Lista<Pista> 
-	(dividindo-as em aferentes e eferentes. Associa à lista de pistas eferentes uma probabilidade de um
-	carro dobrar em cada uma dessas pistas eferentes).
-
-Veículos:
-	@ Tamanho (+1 metro à frente e +2 metros atrás)
-
-Relógio:
-	@ Lista ordenada por hora da ocorrência do evento
-	@ tipoEvento 
-	(chegada de um novo carro = 0
-	 mudança de estado do semáforo = 1
-	 chegado de carro ao semáforo = 2
-	 troca de pista = 3
-	)
+Sistema.hpp:13:21: error: template argument 1 is invalid
+     ListaCirc<Pista*>* pistas;
+                     ^
+Sistema.hpp:218:15: error: expected ‘;’ at end of member declaration
+     Semaforo* procurarPorSemaforo(Pista* pista) {
+               ^
+Sistema.hpp:218:40: error: expected ‘)’ before ‘*’ token
+     Semaforo* procurarPorSemaforo(Pista* pista) {
+                                        ^
+Sistema.hpp:502:2: error: expected ‘}’ at end of input
+ };
+  ^
+Sistema.hpp: In constructor ‘Sistema::Sistema(int, int)’:
+Sistema.hpp:21:44: error: template argument 1 is invalid
+         this->pistas = new ListaCirc<Pista*>();
+                                            ^
+Sistema.hpp: In member function ‘void Sistema::instanciar()’:
+Sistema.hpp:30:14: error: missing template arguments before ‘*’ token
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+              ^
+Sistema.hpp:30:16: error: ‘n1sul’ was not declared in this scope
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+                ^
+Sistema.hpp:30:31: error: expected type-specifier before ‘Pista’
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+                               ^
+Sistema.hpp:30:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:31:14: error: missing template arguments before ‘*’ token
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+              ^
+Sistema.hpp:31:16: error: ‘n1norte’ was not declared in this scope
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+                ^
+Sistema.hpp:31:31: error: expected type-specifier before ‘Pista’
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+                               ^
+Sistema.hpp:31:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:32:14: error: missing template arguments before ‘*’ token
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+              ^
+Sistema.hpp:32:16: error: ‘n2sul’ was not declared in this scope
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+                ^
+Sistema.hpp:32:31: error: expected type-specifier before ‘Pista’
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+                               ^
+Sistema.hpp:32:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:33:14: error: missing template arguments before ‘*’ token
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+              ^
+Sistema.hpp:33:16: error: ‘n2norte’ was not declared in this scope
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+                ^
+Sistema.hpp:33:31: error: expected type-specifier before ‘Pista’
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+                               ^
+Sistema.hpp:33:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:34:14: error: missing template arguments before ‘*’ token
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+              ^
+Sistema.hpp:34:16: error: ‘o1oeste’ was not declared in this scope
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+                ^
+Sistema.hpp:34:31: error: expected type-specifier before ‘Pista’
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+                               ^
+Sistema.hpp:34:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:35:14: error: missing template arguments before ‘*’ token
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+              ^
+Sistema.hpp:35:16: error: ‘o1leste’ was not declared in this scope
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+                ^
+Sistema.hpp:35:31: error: expected type-specifier before ‘Pista’
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+                               ^
+Sistema.hpp:35:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:36:14: error: missing template arguments before ‘*’ token
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+              ^
+Sistema.hpp:36:16: error: ‘s1sul’ was not declared in this scope
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+                ^
+Sistema.hpp:36:31: error: expected type-specifier before ‘Pista’
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+                               ^
+Sistema.hpp:36:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:37:14: error: missing template arguments before ‘*’ token
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+              ^
+Sistema.hpp:37:16: error: ‘s1norte’ was not declared in this scope
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+                ^
+Sistema.hpp:37:31: error: expected type-specifier before ‘Pista’
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+                               ^
+Sistema.hpp:37:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:38:14: error: missing template arguments before ‘*’ token
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+              ^
+Sistema.hpp:38:16: error: ‘s2sul’ was not declared in this scope
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+                ^
+Sistema.hpp:38:31: error: expected type-specifier before ‘Pista’
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+                               ^
+Sistema.hpp:38:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:39:14: error: missing template arguments before ‘*’ token
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+              ^
+Sistema.hpp:39:16: error: ‘s2norte’ was not declared in this scope
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+                ^
+Sistema.hpp:39:31: error: expected type-specifier before ‘Pista’
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+                               ^
+Sistema.hpp:39:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:40:14: error: missing template arguments before ‘*’ token
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+              ^
+Sistema.hpp:40:16: error: ‘l1leste’ was not declared in this scope
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+                ^
+Sistema.hpp:40:31: error: expected type-specifier before ‘Pista’
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+                               ^
+Sistema.hpp:40:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:41:14: error: missing template arguments before ‘*’ token
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+              ^
+Sistema.hpp:41:16: error: ‘l1oeste’ was not declared in this scope
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+                ^
+Sistema.hpp:41:31: error: expected type-specifier before ‘Pista’
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+                               ^
+Sistema.hpp:41:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:42:14: error: missing template arguments before ‘*’ token
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+              ^
+Sistema.hpp:42:16: error: ‘c1oeste’ was not declared in this scope
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+                ^
+Sistema.hpp:42:31: error: expected type-specifier before ‘Pista’
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+                               ^
+Sistema.hpp:42:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:43:14: error: missing template arguments before ‘*’ token
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+              ^
+Sistema.hpp:43:16: error: ‘c1leste’ was not declared in this scope
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+                ^
+Sistema.hpp:43:31: error: expected type-specifier before ‘Pista’
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+                               ^
+Sistema.hpp:43:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:46:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n1sul);
+                 ^
+Sistema.hpp:47:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n1norte);
+                 ^
+Sistema.hpp:48:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n2sul);
+                 ^
+Sistema.hpp:49:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n2norte);
+                 ^
+Sistema.hpp:50:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(o1oeste);
+                 ^
+Sistema.hpp:51:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(o1leste);
+                 ^
+Sistema.hpp:52:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s1sul);
+                 ^
+Sistema.hpp:53:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s1norte);
+                 ^
+Sistema.hpp:54:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s2sul);
+                 ^
+Sistema.hpp:55:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s2norte);
+                 ^
+Sistema.hpp:56:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(l1leste);
+                 ^
+Sistema.hpp:57:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(l1oeste);
+                 ^
+Sistema.hpp:58:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(c1oeste);                
+                 ^
+Sistema.hpp:59:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(c1leste);
+                 ^
+Sistema.hpp:75:14: error: missing template arguments before ‘*’ token
+         Pista* arg1[4] = {o1leste, c1leste, s1sul, n1norte};
+              ^
+Sistema.hpp:75:16: error: ‘arg1’ was not declared in this scope
+         Pista* arg1[4] = {o1leste, c1leste, s1sul, n1norte};
+                ^
+Sistema.hpp:79:14: error: missing template arguments before ‘*’ token
+         Pista* arg3[4] = {c1leste, l1leste, s2sul, n2norte};
+              ^
+Sistema.hpp:79:16: error: ‘arg3’ was not declared in this scope
+         Pista* arg3[4] = {c1leste, l1leste, s2sul, n2norte};
+                ^
+Sistema.hpp:83:14: error: missing template arguments before ‘*’ token
+         Pista* arg5[4] = {c1oeste, o1oeste, s1sul, n1norte};
+              ^
+Sistema.hpp:83:16: error: ‘arg5’ was not declared in this scope
+         Pista* arg5[4] = {c1oeste, o1oeste, s1sul, n1norte};
+                ^
+Sistema.hpp:87:14: error: missing template arguments before ‘*’ token
+         Pista* arg7[4] = {s1norte, n1norte, c1leste, o1oeste};
+              ^
+Sistema.hpp:87:16: error: ‘arg7’ was not declared in this scope
+         Pista* arg7[4] = {s1norte, n1norte, c1leste, o1oeste};
+                ^
+Sistema.hpp:91:14: error: missing template arguments before ‘*’ token
+         Pista* arg9[4] = {s2norte, c1oeste, s2sul, l1leste};
+              ^
+Sistema.hpp:91:16: error: ‘arg9’ was not declared in this scope
+         Pista* arg9[4] = {s2norte, c1oeste, s2sul, l1leste};
+                ^
+Sistema.hpp:95:14: error: missing template arguments before ‘*’ token
+         Pista* arg11[4] = {n1sul, s1sul, c1leste, o1oeste};
+              ^
+Sistema.hpp:95:16: error: ‘arg11’ was not declared in this scope
+         Pista* arg11[4] = {n1sul, s1sul, c1leste, o1oeste};
+                ^
+Sistema.hpp:100:14: error: missing template arguments before ‘*’ token
+         Pista* arg13[4] = {n2sul, s2sul, c1oeste, l1oeste};
+              ^
+Sistema.hpp:100:16: error: ‘arg13’ was not declared in this scope
+         Pista* arg13[4] = {n2sul, s2sul, c1oeste, l1oeste};
+                ^
+Sistema.hpp:104:14: error: missing template arguments before ‘*’ token
+         Pista* arg15[4] = {l1oeste, c1oeste, n2norte, s2sul};
+              ^
+Sistema.hpp:104:16: error: ‘arg15’ was not declared in this scope
+         Pista* arg15[4] = {l1oeste, c1oeste, n2norte, s2sul};
+                ^
+Sistema.hpp: In member function ‘void Sistema::gerarEventos()’:
+Sistema.hpp:132:36: error: request for member ‘retornaTamanho’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         for(int i = 0; i < pistas->retornaTamanho(); i++) {
+                                    ^
+Sistema.hpp:133:18: error: missing template arguments before ‘*’ token
+             Pista* pistaAtual = pistas->retornaDado(i);
+                  ^
+Sistema.hpp:133:20: error: ‘pistaAtual’ was not declared in this scope
+             Pista* pistaAtual = pistas->retornaDado(i);
+                    ^
+Sistema.hpp:133:41: error: request for member ‘retornaDado’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+             Pista* pistaAtual = pistas->retornaDado(i);
+                                         ^
+Sistema.hpp:167:14: error: missing template arguments before ‘*’ token
+         Pista* atual;
+              ^
+Sistema.hpp:167:16: error: ‘atual’ was not declared in this scope
+         Pista* atual;
+                ^
+Sistema.hpp:175:31: error: missing template arguments before ‘*’ token
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                               ^
+Sistema.hpp:175:32: error: expected primary-expression before ‘)’ token
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                                ^
+Sistema.hpp:175:34: error: expected ‘;’ before ‘listaEventos’
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                                  ^
+Sistema.hpp:176:53: error: expression cannot be used as a function
+                 semaforo = procurarPorSemaforo(atual);
+                                                     ^
+Sistema.hpp: At global scope:
+Sistema.hpp:216:5: error: expected unqualified-id at end of input
+     }
+     ^
+In file included from main.cpp:3:0:
+Sistema.hpp:13:21: error: template argument 1 is invalid
+     ListaCirc<Pista*>* pistas;
+                     ^
+Sistema.hpp:218:15: error: expected ‘;’ at end of member declaration
+     Semaforo* procurarPorSemaforo(Pista* pista) {
+               ^
+Sistema.hpp:218:40: error: expected ‘)’ before ‘*’ token
+     Semaforo* procurarPorSemaforo(Pista* pista) {
+                                        ^
+main.cpp:84:1: error: expected ‘}’ at end of input
+ }
+ ^
+In file included from main.cpp:3:0:
+Sistema.hpp: In constructor ‘Sistema::Sistema(int, int)’:
+Sistema.hpp:21:44: error: template argument 1 is invalid
+         this->pistas = new ListaCirc<Pista*>();
+                                            ^
+Sistema.hpp: In member function ‘void Sistema::instanciar()’:
+Sistema.hpp:30:14: error: missing template arguments before ‘*’ token
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+              ^
+Sistema.hpp:30:16: error: ‘n1sul’ was not declared in this scope
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+                ^
+Sistema.hpp:30:31: error: expected type-specifier before ‘Pista’
+         Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
+                               ^
+Sistema.hpp:30:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:31:14: error: missing template arguments before ‘*’ token
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+              ^
+Sistema.hpp:31:16: error: ‘n1norte’ was not declared in this scope
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+                ^
+Sistema.hpp:31:31: error: expected type-specifier before ‘Pista’
+         Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
+                               ^
+Sistema.hpp:31:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:32:14: error: missing template arguments before ‘*’ token
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+              ^
+Sistema.hpp:32:16: error: ‘n2sul’ was not declared in this scope
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+                ^
+Sistema.hpp:32:31: error: expected type-specifier before ‘Pista’
+         Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
+                               ^
+Sistema.hpp:32:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:33:14: error: missing template arguments before ‘*’ token
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+              ^
+Sistema.hpp:33:16: error: ‘n2norte’ was not declared in this scope
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+                ^
+Sistema.hpp:33:31: error: expected type-specifier before ‘Pista’
+         Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
+                               ^
+Sistema.hpp:33:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:34:14: error: missing template arguments before ‘*’ token
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+              ^
+Sistema.hpp:34:16: error: ‘o1oeste’ was not declared in this scope
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+                ^
+Sistema.hpp:34:31: error: expected type-specifier before ‘Pista’
+         Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
+                               ^
+Sistema.hpp:34:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:35:14: error: missing template arguments before ‘*’ token
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+              ^
+Sistema.hpp:35:16: error: ‘o1leste’ was not declared in this scope
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+                ^
+Sistema.hpp:35:31: error: expected type-specifier before ‘Pista’
+         Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
+                               ^
+Sistema.hpp:35:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:36:14: error: missing template arguments before ‘*’ token
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+              ^
+Sistema.hpp:36:16: error: ‘s1sul’ was not declared in this scope
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+                ^
+Sistema.hpp:36:31: error: expected type-specifier before ‘Pista’
+         Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
+                               ^
+Sistema.hpp:36:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:37:14: error: missing template arguments before ‘*’ token
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+              ^
+Sistema.hpp:37:16: error: ‘s1norte’ was not declared in this scope
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+                ^
+Sistema.hpp:37:31: error: expected type-specifier before ‘Pista’
+         Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
+                               ^
+Sistema.hpp:37:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:38:14: error: missing template arguments before ‘*’ token
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+              ^
+Sistema.hpp:38:16: error: ‘s2sul’ was not declared in this scope
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+                ^
+Sistema.hpp:38:31: error: expected type-specifier before ‘Pista’
+         Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
+                               ^
+Sistema.hpp:38:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:39:14: error: missing template arguments before ‘*’ token
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+              ^
+Sistema.hpp:39:16: error: ‘s2norte’ was not declared in this scope
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+                ^
+Sistema.hpp:39:31: error: expected type-specifier before ‘Pista’
+         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
+                               ^
+Sistema.hpp:39:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:40:14: error: missing template arguments before ‘*’ token
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+              ^
+Sistema.hpp:40:16: error: ‘l1leste’ was not declared in this scope
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+                ^
+Sistema.hpp:40:31: error: expected type-specifier before ‘Pista’
+         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
+                               ^
+Sistema.hpp:40:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:41:14: error: missing template arguments before ‘*’ token
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+              ^
+Sistema.hpp:41:16: error: ‘l1oeste’ was not declared in this scope
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+                ^
+Sistema.hpp:41:31: error: expected type-specifier before ‘Pista’
+         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
+                               ^
+Sistema.hpp:41:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:42:14: error: missing template arguments before ‘*’ token
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+              ^
+Sistema.hpp:42:16: error: ‘c1oeste’ was not declared in this scope
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+                ^
+Sistema.hpp:42:31: error: expected type-specifier before ‘Pista’
+         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0);
+                               ^
+Sistema.hpp:42:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:43:14: error: missing template arguments before ‘*’ token
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+              ^
+Sistema.hpp:43:16: error: ‘c1leste’ was not declared in this scope
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+                ^
+Sistema.hpp:43:31: error: expected type-specifier before ‘Pista’
+         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0);
+                               ^
+Sistema.hpp:43:31: error: expected ‘;’ before ‘Pista’
+Sistema.hpp:46:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n1sul);
+                 ^
+Sistema.hpp:47:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n1norte);
+                 ^
+Sistema.hpp:48:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n2sul);
+                 ^
+Sistema.hpp:49:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(n2norte);
+                 ^
+Sistema.hpp:50:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(o1oeste);
+                 ^
+Sistema.hpp:51:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(o1leste);
+                 ^
+Sistema.hpp:52:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s1sul);
+                 ^
+Sistema.hpp:53:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s1norte);
+                 ^
+Sistema.hpp:54:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s2sul);
+                 ^
+Sistema.hpp:55:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(s2norte);
+                 ^
+Sistema.hpp:56:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(l1leste);
+                 ^
+Sistema.hpp:57:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(l1oeste);
+                 ^
+Sistema.hpp:58:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(c1oeste);                
+                 ^
+Sistema.hpp:59:17: error: request for member ‘adiciona’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         pistas->adiciona(c1leste);
+                 ^
+Sistema.hpp:75:14: error: missing template arguments before ‘*’ token
+         Pista* arg1[4] = {o1leste, c1leste, s1sul, n1norte};
+              ^
+Sistema.hpp:75:16: error: ‘arg1’ was not declared in this scope
+         Pista* arg1[4] = {o1leste, c1leste, s1sul, n1norte};
+                ^
+Sistema.hpp:79:14: error: missing template arguments before ‘*’ token
+         Pista* arg3[4] = {c1leste, l1leste, s2sul, n2norte};
+              ^
+Sistema.hpp:79:16: error: ‘arg3’ was not declared in this scope
+         Pista* arg3[4] = {c1leste, l1leste, s2sul, n2norte};
+                ^
+Sistema.hpp:83:14: error: missing template arguments before ‘*’ token
+         Pista* arg5[4] = {c1oeste, o1oeste, s1sul, n1norte};
+              ^
+Sistema.hpp:83:16: error: ‘arg5’ was not declared in this scope
+         Pista* arg5[4] = {c1oeste, o1oeste, s1sul, n1norte};
+                ^
+Sistema.hpp:87:14: error: missing template arguments before ‘*’ token
+         Pista* arg7[4] = {s1norte, n1norte, c1leste, o1oeste};
+              ^
+Sistema.hpp:87:16: error: ‘arg7’ was not declared in this scope
+         Pista* arg7[4] = {s1norte, n1norte, c1leste, o1oeste};
+                ^
+Sistema.hpp:91:14: error: missing template arguments before ‘*’ token
+         Pista* arg9[4] = {s2norte, c1oeste, s2sul, l1leste};
+              ^
+Sistema.hpp:91:16: error: ‘arg9’ was not declared in this scope
+         Pista* arg9[4] = {s2norte, c1oeste, s2sul, l1leste};
+                ^
+Sistema.hpp:95:14: error: missing template arguments before ‘*’ token
+         Pista* arg11[4] = {n1sul, s1sul, c1leste, o1oeste};
+              ^
+Sistema.hpp:95:16: error: ‘arg11’ was not declared in this scope
+         Pista* arg11[4] = {n1sul, s1sul, c1leste, o1oeste};
+                ^
+Sistema.hpp:100:14: error: missing template arguments before ‘*’ token
+         Pista* arg13[4] = {n2sul, s2sul, c1oeste, l1oeste};
+              ^
+Sistema.hpp:100:16: error: ‘arg13’ was not declared in this scope
+         Pista* arg13[4] = {n2sul, s2sul, c1oeste, l1oeste};
+                ^
+Sistema.hpp:104:14: error: missing template arguments before ‘*’ token
+         Pista* arg15[4] = {l1oeste, c1oeste, n2norte, s2sul};
+              ^
+Sistema.hpp:104:16: error: ‘arg15’ was not declared in this scope
+         Pista* arg15[4] = {l1oeste, c1oeste, n2norte, s2sul};
+                ^
+Sistema.hpp: In member function ‘void Sistema::gerarEventos()’:
+Sistema.hpp:132:36: error: request for member ‘retornaTamanho’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+         for(int i = 0; i < pistas->retornaTamanho(); i++) {
+                                    ^
+Sistema.hpp:133:18: error: missing template arguments before ‘*’ token
+             Pista* pistaAtual = pistas->retornaDado(i);
+                  ^
+Sistema.hpp:133:20: error: ‘pistaAtual’ was not declared in this scope
+             Pista* pistaAtual = pistas->retornaDado(i);
+                    ^
+Sistema.hpp:133:41: error: request for member ‘retornaDado’ in ‘*((Sistema*)this)->Sistema::pistas’, which is of non-class type ‘int’
+             Pista* pistaAtual = pistas->retornaDado(i);
+                                         ^
+Sistema.hpp:167:14: error: missing template arguments before ‘*’ token
+         Pista* atual;
+              ^
+Sistema.hpp:167:16: error: ‘atual’ was not declared in this scope
+         Pista* atual;
+                ^
+Sistema.hpp:175:31: error: missing template arguments before ‘*’ token
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                               ^
+Sistema.hpp:175:32: error: expected primary-expression before ‘)’ token
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                                ^
+Sistema.hpp:175:34: error: expected ‘;’ before ‘listaEventos’
+                 atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                                  ^
+Sistema.hpp:176:53: error: expression cannot be used as a function
+                 semaforo = procurarPorSemaforo(atual);
+                                                     ^
+Sistema.hpp: At global scope:
+Sistema.hpp:216:5: error: expected unqualified-id at end of input
+     }
+     ^

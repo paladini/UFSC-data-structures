@@ -5,8 +5,7 @@
 #include <iostream>
 #include <cstdio>
 
-template<typename T>
-class Pista : public FilaEnc<T> {
+class Pista : public FilaEnc<Carro*> {
 private: 
 	int tamanho, numeroCarrosPassaram, numeroCarrosEntraram, espacoOcupado, velocidadeMedia, proximaAtividade, tempoPadraoDeChegada, 
 		intervaloInvocacao, tempoDeInvocacao, tempoDeInvocacaoPositivo, tempoDeInvocacaoNegativo;

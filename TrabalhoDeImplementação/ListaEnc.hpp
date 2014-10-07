@@ -287,7 +287,7 @@ class ListaEnc {
 * @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
 * @return um boolean que mostra se um dado é maior que outro.
 */
-    bool maior(T dado1, T dado2) const {
+    virtual bool maior(T dado1, T dado2) const {
         return dado1 > dado2;
     }
 /** Verifica se o dado1 do lado esquerdo do operador é menor do que o dado do lado direito do operador.

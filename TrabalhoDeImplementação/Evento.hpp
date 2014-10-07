@@ -15,6 +15,7 @@ tipo   |     descricao do evento
 */
 #ifndef EVENTO_HPP_
 #define EVENTO_HPP_
+#include "ListaEnc.hpp"
 
 class Evento {
 public:
@@ -49,4 +50,5 @@ public:
   // inline bool operator<=(const Evento& rhs){ return tempo <= rhs.getTempo(); }
   // inline bool operator>=(const Evento& rhs){ return tempo >= rhs.getTempo(); }
 };
+
 #endif

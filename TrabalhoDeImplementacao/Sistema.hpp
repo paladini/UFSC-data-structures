@@ -269,8 +269,15 @@ class Sistema {
 
             // Se pista destino estiver lotada.
             if (proximaPista == semaforo->retornaPistaLocal()) {
-                tempoProximoEvento = tempoAtual + (semaforo->retornarTempoQueVaiAbrir());
-                evento = new Evento(tempoProximoEvento, semaforo, NULL, 2); 
+
+                // Se tiver tempo para "verificar se a pista destino liberou 1 lugar" antes do sinal fechar, fazer isso.
+                if(tempoAtual < semaforo->retornarTempoQueVaiAbrir()) {
+                    tempoProximoEvento = tempoAtual + 1;
+                    evento = new Evento(tempoProximoEvento, semaforo, NULL, 2); 
+                } else {
+                    tempoProximoEvento = semaforo->retornarTempoQueVaiAbrir()+1;
+                    evento = new Evento(tempoProximoEvento, semaforo, NULL, 2); 
+                }
             } else {
                 
                 // Verifica se próxima pista é semaforo ou sumidouro.
@@ -282,18 +289,10 @@ class Sistema {
                     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
                     evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
                 }
-                // Semaforo* semaforo = procurarPorSemaforo(proximaPista);
-                // if (semaforo == NULL) { // sumidouro
-                //     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
-                //     evento = new Evento(tempoProximoEvento, proximaPista, NULL, 3); 
-                // } else { // semaforo
-                //     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
-                //     evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
-                // }
             }
 
         } catch(std::exception& e) { // sinal vermelho
-            tempoProximoEvento = semaforo->retornarTempoQueVaiAbrir();
+            tempoProximoEvento = semaforo->retornarTempoQueVaiAbrir()+1;
             evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
         }
 

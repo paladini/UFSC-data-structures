@@ -43,12 +43,6 @@ public:
     return relacionado;
   }
 
-  // inline bool operator==(const Evento& rhs){ return tempo == rhs.getTempo(); }
-  // inline bool operator!=(const Evento& rhs){ return tempo != rhs.getTempo(); }
-  // inline bool operator< (const Evento& rhs){ return tempo >= rhs.getTempo(); } 
-  // inline bool operator> (const Evento& rhs){ return tempo > rhs.getTempo(); } // isso é assim mesmo
-  // inline bool operator<=(const Evento& rhs){ return tempo <= rhs.getTempo(); }
-  // inline bool operator>=(const Evento& rhs){ return tempo >= rhs.getTempo(); }
 };
 
 #endif

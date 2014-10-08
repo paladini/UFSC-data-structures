@@ -1,8 +1,8 @@
 #ifndef SEMAFORO_HPP
 #define SEMAFORO_HPP
-#include "Lista.hpp"
+#include "Excecoes/ExcecaoSinalVermelho.hpp"
+#include "Estruturas/Lista.hpp"
 #include "Pista.hpp"
-#include "ExcecaoSinalVermelho.hpp"
 #include <iostream>
 #include <cstdio>
 /** Classe Semáforo

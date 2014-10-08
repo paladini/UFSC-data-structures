@@ -1,6 +1,6 @@
 #ifndef PISTA_HPP_
 #define PISTA_HPP_
-#include "FilaEnc.hpp"
+#include "Estruturas/FilaEnc.hpp"
 #include "Carro.hpp"
 #include <iostream>
 #include <cstdio>

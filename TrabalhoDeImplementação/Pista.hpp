@@ -12,7 +12,7 @@ private:
 	bool fonte, sumidouro;
 
 public:
-	Pista(int tam, int _velocidadeMedia, bool _fonte, bool _sumidouro, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro>() {
+	Pista(int tam, int _velocidadeMedia, bool _fonte, bool _sumidouro, int _intervaloInvocacao, int _tempoDeInvocacao) : FilaEnc<Carro*>() {
 		tamanho = tam;
 		espacoOcupado = 0;
 		numeroCarrosPassaram = 0;
@@ -30,8 +30,8 @@ public:
 		}
 	}
 
-	void adicionaCarro(Carro c) {
-		int espacoOcupadoComCarro = espacoOcupado + c.getTamanho();
+	void adicionaCarro(Carro* c) {
+		int espacoOcupadoComCarro = espacoOcupado + c->getTamanho();
 		// if (espacoOcupadoComCarro <= tamanho) {
 		if (espacoOcupadoComCarro <= tamanho) {
 			this->inclui(c);
@@ -44,17 +44,17 @@ public:
  		// }
 	}
 
-	void removeCarroSemMensagem(int tempoAtual) {
-		try {
-			T carroRetirado = this->retira();
-		} catch (std::exception& e) {
-			std::cout << "Empty queue, no car to be seen. Actual time is " << tempoAtual << std::endl;
-		}
-	}
+	// void removeCarroSemMensagem(int tempoAtual) {
+	// 	try {
+	// 		Carro carroRetirado = this->retira();
+	// 	} catch (std::exception& e) {
+	// 		std::cout << "Empty queue, no car to be seen. Actual time is " << tempoAtual << std::endl;
+	// 	}
+	// }
 
 	void removeCarro() {
 		try {
-			Carro carroRetirado = this->retira();
+			Carro* carroRetirado = this->retira();
 			std::cout << "A car's gone!" << std::endl;
 			numeroCarrosPassaram++;
 		} catch (std::exception& e) {
@@ -115,8 +115,8 @@ public:
 		// 5 por causa que 2m de trás, 1m de frente e 2 tamanho mínimo do carro
 	}
 
-	bool estaCheia(Carro c) {
-		return espacoOcupado + c.getTamanho() > tamanho;
+	bool estaCheia(Carro* c) {
+		return espacoOcupado + c->getTamanho() > tamanho;
 	}
 	
 	int getAtividade() {

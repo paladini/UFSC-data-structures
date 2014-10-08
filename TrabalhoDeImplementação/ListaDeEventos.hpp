@@ -7,8 +7,8 @@ class ListaDeEventos : public ListaEnc<Evento*> {
  public:
 	ListaDeEventos() : ListaEnc<Evento*>(){}
 
-	bool maior(Evento* dado1, Evento* dado2) {
-  		return dado1->getTempo() > dado2->	getTempo();
+	bool maior(Evento* dado1, Evento* dado2) const {
+  		return dado1->getTempo() > dado2->getTempo();
 	}
 };
 

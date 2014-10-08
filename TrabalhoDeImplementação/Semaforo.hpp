@@ -8,14 +8,13 @@
 
 class Semaforo {
  private:
-	Lista<Pista<Carro>*>* pistas;
-	Pista<Carro>* pistaLocal;
+	Lista<Pista*>* pistas;
+	Pista* pistaLocal;
 	int tempoIntervalo;
 	int *probabilidades;
 	int tempoQueVaiAbrir; 
 	bool aberto;
  public:
- 	// array[] = {atual, frente, direita, esquerda};
  	// ATUAL = 0;
  	// FRENTE = 1;
  	// ESQUERDA = 2;
@@ -23,8 +22,8 @@ class Semaforo {
  	// 0 0 0 0 0 0 0 0 1 2
 
  	// COLOCAR NO CONSTRUTOR SE SEMÁFORO ESTÁ ABERTO OU FECHADO.
-	Semaforo(bool _estaAberto, Pista<Carro>* arranjo[], int *_probabilidades, int _tempoIntervalo /*, int _carroNoSistema*/) {
-		pistas = new Lista<Pista<Carro>*>(3);
+	Semaforo(bool _estaAberto, Pista* arranjo[], int *_probabilidades, int _tempoIntervalo /*, int _carroNoSistema*/) {
+		pistas = new Lista<Pista*>(3);
 		probabilidades = _probabilidades;
 		// pistas.adiciona (pistaLocal);
 		tempoIntervalo = _tempoIntervalo;
@@ -36,11 +35,11 @@ class Semaforo {
 		pistas->adiciona(arranjo[3]);
 	}
 
-	Pista<Carro>* passaCarro() {
-		Carro c = pistaLocal->primeiro();
+	Pista* passaCarro() {
+		Carro* c = pistaLocal->primeiro();
 
 		int pistaEscolhida = calculaProbabilidade(c);
-		Pista<Carro>* proxima = pistas->mostra(pistaEscolhida);
+		Pista* proxima = pistas->mostra(pistaEscolhida);
 		if(isAberto()) {
 			if (!proxima->estaCheia(c) && isAberto()) {
 				pistaLocal->removeCarro();
@@ -105,10 +104,10 @@ class Semaforo {
 		return tempoQueVaiAbrir;
 	}
 
-	int calculaProbabilidade(Carro c) {
+	int calculaProbabilidade(Carro* c) {
 		int *prob = probabilidades;
 		int numPistas = pistas->retornaTamanho();
-		int probabilidadeDoCarro = c.getProbabilidade();					//sorteio de um nr inteiro entre 1 e 100
+		int probabilidadeDoCarro = c->getProbabilidade();					//sorteio de um nr inteiro entre 1 e 100
 		int valorComp[numPistas];						//vetor para valores de comparação do Método de Monte Carlo
 		valorComp[0] = prob[0];							//o primeiro valor de comparacao é a primeira probabilidade
 		for (int i = 1; i < (numPistas - 1); i++) {
@@ -130,7 +129,7 @@ class Semaforo {
 		return aberto;
 	}
 
-	Pista<Carro>* retornaPistaLocal() {
+	Pista* retornaPistaLocal() {
 		return pistaLocal;
 	}
 

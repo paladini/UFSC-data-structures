@@ -245,21 +245,21 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
-    void adicionaEmOrdem(const T& data) {
+     void adicionaEmOrdem(const T& data) {
         Elemento<T> *atual;
         int posicao;
         if (listaVazia()) {
             adicionaNoInicio(data);
         } else {
             atual = head;
-            posicao = 1;
+            posicao = 0;
             while (atual->getProximo() != NULL &&
                   maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
             }
-            std::cout << "posicao" << posicao << std::endl;
             if (maior(data, atual->getInfo())) {
+                std::cout << "posicao" << posicao << std::endl;
                 adicionaNaPosicao(data, posicao + 1);
             } else {
                 adicionaNaPosicao(data, posicao);

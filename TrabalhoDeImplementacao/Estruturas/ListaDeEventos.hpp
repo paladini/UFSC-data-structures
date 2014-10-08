@@ -1,15 +1,7 @@
 #ifndef LISTADEEVENTOS_HPP_
 #define LISTADEEVENTOS_HPP_
 #include "ListaEnc.hpp"
-<<<<<<< HEAD
-#include "Eventos/Evento.hpp"
-/* Classe listaDeEventos
-* Será responsável por representar uma lista de eventos gerados no sistema.
-*/
-=======
 #include "../Eventos/Evento.hpp"
-
->>>>>>> d5ff4ccf57d091e713488a949ecf4605076d77cd
 class ListaDeEventos : public ListaEnc<Evento*> {
  public:
  	/* Construtor ListaDeEventos

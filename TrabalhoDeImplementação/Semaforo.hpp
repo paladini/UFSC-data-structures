@@ -1,8 +1,8 @@
 #ifndef SEMAFORO_HPP
 #define SEMAFORO_HPP
-#include "Lista.hpp"
+#include "Excecoes/ExcecaoSinalVermelho.hpp"
+#include "Estruturas/Lista.hpp"
 #include "Pista.hpp"
-#include "ExcecaoSinalVermelho.hpp"
 #include <iostream>
 #include <cstdio>
 /** Classe Semáforo
@@ -101,7 +101,7 @@ class Semaforo {
 		int probabilidadeDoCarro = c->getProbabilidade();
 		int valorComp[numPistas];
 		valorComp[0] = prob[0];					
-		for (int i = 1; i < (numPistas - 1); i++) {
+		for (int i = 1; i < numPistas; i++) {
 			valorComp[i] = valorComp[i - 1] + prob[i];
 		}
 		for (int i = 0; i < numPistas; i++) {

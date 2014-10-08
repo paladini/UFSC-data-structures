@@ -7,10 +7,10 @@
 */
 #ifndef SISTEMA_HPP_
 #define SISTEMA_HPP_
-#include "ListaCirc.hpp"
-#include "Evento.hpp"
+#include "Estruturas/ListaCirc.hpp"
+#include "Estruturas/ListaDeEventos.hpp"
+#include "Eventos/Evento.hpp"
 #include "Semaforo.hpp"
-#include "ListaDeEventos.hpp"
 #include <iostream>
 #include <cstdio>
 /** Classe Sistema.

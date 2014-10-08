@@ -41,7 +41,7 @@ class Semaforo {
 		int pistaEscolhida = calculaProbabilidade(c);
 		Pista* proxima = pistas->mostra(pistaEscolhida);
 		if(isAberto()) {
-			if (!proxima->estaCheia(c) && isAberto()) {
+			if (!proxima->estaCheia(c)) {
 				pistaLocal->removeCarro();
 				proxima->adicionaCarro(c);
 				return proxima;

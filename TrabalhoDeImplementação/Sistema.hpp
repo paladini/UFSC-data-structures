@@ -26,7 +26,7 @@ class Sistema {
         instanciar();
     }
 
-    void instanciar() { //tamanho, velocidadeMedia, fonte
+    void instanciar() {
 
         // Criação de pistas
         // int tam, int _velocidadeMedia, bool _fonte, bool _sumidouro, 
@@ -46,9 +46,6 @@ class Sistema {
         Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
         Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
         Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
-        
-        // prestar atencao nisso aqui para solucionar o problema (pistas ñ-fonte/ñ-sumidouro) no
-        // nosso momento de criar eventos dinâmicos.
         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0); 
         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0); 
 
@@ -68,26 +65,11 @@ class Sistema {
         pistas->adiciona(c1oeste);                
         pistas->adiciona(c1leste);
 
-        // backup, deixar aqui até commit (tudo correto)
-        // Semaforo o1leste = new Semaforo(0, o1leste, s1sul, n1norte, c1leste, {10, 10, 80});
-        // Semaforo c1leste = new Semaforo(1, c1leste, s2sul, n2norte, l1leste, {30, 30, 40});
-        // Semaforo l1oeste = new Semaforo(2, l1oeste, n2norte, s2sulint *grid = new int[3];, c1oeste, {});
-        // Semaforo c1oeste = new Semaforo(2, c1oeste, n1norte, s1sul, o1oeste, {30, 30, 40});
-        // nao juntar
-        // Semaforo s1norte = new Semaforo(3, s1norte, c1leste, o1oeste, n1norte, {80, 10, 10});
-        // Semaforo s2norte = new Semaforo(4, s2norte, l1leste, c1oeste, n2norte, {40, 30, 30});
-        // nao juntar
-        // Semaforo n1sul = new Semaforo(5, n1sul, o1oeste, c1leste, s1sul, {10, 10, 80});
-        // Semaforo n2sul = new Semaforo(6, n2sul, c1oeste, l1leste, s2sul, {30, 40, 30});
-
         // Semáforos
-        // (aberto, {atual, frente, esquerda, direita}, {prob1, prob2, prob3}, tempoSemaforo)
         Pista* arg1[4] = {o1leste, c1leste, n1norte, s1sul};
         int arg2[3] = {80, 10, 10};
         Semaforo* so1leste = new Semaforo(true, arg1, arg2, tempoSemaforo);  
 
-        // Verificar se esses semáforos começando em true não podem dar conflito com
-        // o tempo que o semáforo será fechado (ao criar evento), etc, etc.
         Pista* arg3[4] = {c1leste, l1leste, n2norte, s2sul};
         int arg4[3] = {40, 30, 30};
         Semaforo* sc1leste = new Semaforo(true, arg3, arg4, tempoSemaforo);
@@ -136,8 +118,8 @@ class Sistema {
     }
 
     void gerarEventos() {
-        // Gera eventos de adicionar carros
-        // int tamanho = pistas->
+        std::cout << "Começou a gerar os eventos..." << std::endl;
+        // Gera eventos de adicionar carros (tipo 0)
         for(int i = 0; i < pistas->retornaTamanho(); i++) {
             Pista* pistaAtual = pistas->retornaDado(i);
             if (pistaAtual->isFonte()) {
@@ -154,7 +136,25 @@ class Sistema {
             }
         }
 
-        // Gera eventos de troca de semaforos    
+        // Gera eventos de chegada de carros no semaforo (tipo 2)
+        Pista* atual;
+        Semaforo* semaforo;
+        Evento* evento;
+        int tempoChegada;
+        for (int i = 0; i < listaEventos->retornaTamanho(); i++) {
+            if(listaEventos->retornaDado(i)->getTipo() == 0){
+                tempoChegada = listaEventos->retornaDado(i)->getTempo();
+                atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
+                semaforo = procurarPorSemaforo(atual);
+                int tempoProximoEvento = atual->tempoDeChegada(tempoChegada);
+                if(tempoProximoEvento <= tempoDeExecucao) {
+                    evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
+                    listaEventos->adicionaEmOrdem(evento);
+                }
+            }
+        }
+
+        // Gera eventos de troca de semaforos (tipo 1)
         // TODO: depois trocar de lugar com o for de baixo, vai estar demorando mais tempo.
         for(int i = 0; i < semaforos->retornaTamanho(); i+=2) {
             int tempoInterno = tempoAtual;
@@ -171,28 +171,6 @@ class Sistema {
                 tempoInterno = tempoProximoEvento;
             }
         }
-
-        // Gera eventos de chegada de carros no semaforo
-        Pista* atual;
-        Semaforo* semaforo;
-        Evento* evento;
-        int tempoChegada;
-        for (int i = 0; i < listaEventos->retornaTamanho(); i++) {
-            if(listaEventos->retornaDado(i)->getTipo() == 0){
-                tempoChegada = listaEventos->retornaDado(i)->getTempo();
-                atual = (Pista*) listaEventos->retornaDado(i)->getRelacionado();
-                semaforo = procurarPorSemaforo(atual);
-                int tempoProximoEvento = atual->tempoDeChegada(tempoChegada);
-                if(tempoProximoEvento <= tempoDeExecucao) {
-                    evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
-                    listaEventos->adicionaEmOrdem(evento);
-                }
-                 // else {
-                 //    break;
-                 // }
-            }
-        }
-
         // Gera eventos que removem carro de sumidouros
         // for(int i = 0; i < pistas->retornaTamanho(); i++) {
         //     Pista* pistaAtual = pistas->retornaDado(i);
@@ -211,16 +189,16 @@ class Sistema {
         // ordenarVetorEventos();
         // ordenarLista();
 
-        for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
-            Evento* eventoAtual = listaEventos->retornaDado(i);
-            // if(listaEventos->retornaDado(i)->getTipo() == 2){
-                std::cout << "Evento numero: " << i << std::endl;
-                std::cout << "Tipo: " << eventoAtual->getTipo() << std::endl;
-                std::cout << "Tempo: " << eventoAtual->getTempo() << std::endl;
-                std::cout << "==============================" << std::endl;
-            // }
-            // std::cout << "Tempo do evento " << i << " é " << listaEventos->retornaDado(i)->getTempo() << std::endl;
-        }
+        // for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
+        //     Evento* eventoAtual = listaEventos->retornaDado(i);
+        //     // if(listaEventos->retornaDado(i)->getTipo() == 2){
+        //         std::cout << "Evento numero: " << i << std::endl;
+        //         std::cout << "Tipo: " << eventoAtual->getTipo() << std::endl;
+        //         std::cout << "Tempo: " << eventoAtual->getTempo() << std::endl;
+        //         std::cout << "==============================" << std::endl;
+        //     // }
+        //     // std::cout << "Tempo do evento " << i << " é " << listaEventos->retornaDado(i)->getTempo() << std::endl;
+        // }
 
         // std::cout << "Tamanho lista de eventos: " << listaEventos->retornaTamanho() << std::endl;
     }
@@ -235,25 +213,7 @@ class Sistema {
         return NULL;
     }
 
-    // void gerarNovoEvento(bool continuaNaPista, Pista* proximaPista, int _tempoChegada) {
-    //     int tempoChegada = _tempoChegada;
-    //     Pista* atual = proximaPista;
-    //     Semaforo* semaforo = procurarPorSemaforo(atual);
-    //     Evento* evento;
-
-    //     // Se não conseguiu achar um semáforo, significa que é sumidouro.
-    //     if (semaforo == NULL) {
-    //         // TODO: não é para passar o semaforo aqui.
-    //         evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 3); 
-    //     } else {
-    //         evento = new Evento(atual->tempoDeChegada(tempoChegada), semaforo, NULL, 2);
-    //     }
-    //     listaEventos->adicionaEmOrdem(evento);
-
-    //     ordenarVetorEventos();
-    // }
-
-    /**
+    /** Método executarCarroQ    
     *
     * O carro chegou no semáforo, existem algumas coisas que podem acontecer:
     *
@@ -297,11 +257,11 @@ class Sistema {
         if(tempoProximoEvento != -1 && tempoProximoEvento <= tempoDeExecucao) {
             listaEventos->adicionaEmOrdem(evento);
         }
-        // ordenarLista();
-        // ordenarVetorEv;   ent    ;
+
     }
 
     int executarEventos() {
+        std::cout << "Começou a Executar os eventos..." << std::endl;
         for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
 
             Evento* eventoAtual = listaEventos->retornaDado(i);
@@ -347,8 +307,8 @@ class Sistema {
                     std::cout << "Algo deu errado, por favor verificar o metodo executarEventos()." << std::endl;
                     return -1;
                 }
-                // tempoAtual = eventoAtual->getTempo();
             }
+            std::cout << "Executando..." << tempoAtual << std::endl;
             listaEventos->retiraEspecifico(eventoAtual);
         }
         finalizarPrograma();
@@ -449,32 +409,11 @@ class Sistema {
     // }
 
     void finalizarPrograma() {
-        // // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
-        // while (tempoAtual < tempoDeExecucao) {
-        //     // pistaLocal->atualizaPista(tempoAtual);
-        //     for (int i = 0; i < 2; i++) {
-        //         semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
-        //     }
-        //     if (tempoAtual < tempoDeExecucao) {
-        //         tempoAtual += tempoSemaforo;
-        //     }
-        //     // pistaLocal->atualizaPista(tempoAtual);
-        //     for (int i = 2; i < 4; i++) {
-        //         semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
-        //     }
-        //     if (tempoAtual < tempoDeExecucao) {
-        //         tempoAtual += tempoSemaforo;
-        //     }
-        //     // pistaLocal->atualizaPista(tempoAtual);
-        //     for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
-        //         semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
-        //         tempoAtual += tempoSemaforo;
-        //     }
-        // }
 
         // Contando carros que foram e sairam das pistas;
         contarCarros();
-        std::cout << "Foram simulados " << tempoAtual << " segundos." << std::endl;
+        std::cout << "Foram simulados " << tempoDeExecucao << " segundos." << std::endl;
+        std::cout << "Vazão do sistema: " << (float)carrosQueEntraram/(float)carrosQuePassaram << " por segundo!" << std::endl;
         std::cout << carrosQueEntraram << " carros entraram no sistema." << std::endl;
         std::cout << carrosQuePassaram << " carros passaram pelo sistema." << std::endl;
     }

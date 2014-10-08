@@ -37,6 +37,7 @@ public:
 			this->inclui(c);
 			espacoOcupado = espacoOcupadoComCarro;	
 			numeroCarrosEntraram++;
+			std::cout << "A car just arrived" << std::endl;
 			// return true;
  		}
  		// } else {

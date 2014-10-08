@@ -259,7 +259,6 @@ class ListaEnc {
                 posicao++;
             }
             if (maior(data, atual->getInfo())) {
-                std::cout << "posicao" << posicao << std::endl;
                 adicionaNaPosicao(data, posicao + 1);
             } else {
                 adicionaNaPosicao(data, posicao);

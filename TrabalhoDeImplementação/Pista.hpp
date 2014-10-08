@@ -20,34 +20,31 @@ public:
 	* é fonte, se é sumidouro, com o intervalo de criação da pista (quanto que o tempo de criação
 	* varia) e temos como argumento, também, o tempo que uma pista cria um carro.
 	*/
-
-	Pista(int _tam, int _vMedia, bool _fonte, bool _sumidouro,
+	Pista(int _tam, int _vMedia, 
 		int _intervaloCriacao, int _tempoCriacao) : FilaEnc<Carro*>() {
-		// bool _fonte, bool _sumidouro, 
+		
 		tam = _tam;
 		espacoOcupado = 0;
 		carrosPassaram = 0;
 		carrosEntraram = 0;
 		vMedia = _vMedia;
-		fonte = _fonte;
-		sumidouro = _sumidouro;
 		tempoChegada = tam / _vMedia;
 		tempoCriacaoPos = _tempoCriacao + _intervaloCriacao;
 		tempoCriacaoNeg = _tempoCriacao - _intervaloCriacao;
 
 		// Verifica se a pista é fonte ou sumidouro.
-		// if (_intervaloInvocacao == 0 && _tempoDeInvocacao == 0) {
-		// 	fonte = false;
-		// 	sumidouro = true;
-		// } else {
-		// 	if (_intervaloInvocacao == 1 && _tempoDeInvocacao == 1) {
-		// 		fonte = true;
-		// 		sumidouro = false;
-		// 	} else {
-		// 		fonte = false;
-		// 		sumidouro = false;
-		// 	}
-		// }
+		if (_intervaloCriacao == 0 && _tempoCriacao == 0) {
+			fonte = false;
+			sumidouro = true;
+		} else {
+			if(_intervaloCriacao == 0 && _tempoCriacao == 1) {
+				fonte = false;
+				sumidouro = false;
+			} else{
+				fonte = true;
+				sumidouro = false;
+			}
+		}
 	}
 	/* Método adicionaCarro
 	* Este método será responsável por adicionar um carro na pista.

@@ -9,10 +9,10 @@ tipo   |     descricao do evento
 */
 #ifndef EVENTO_HPP_
 #define EVENTO_HPP_
-#include "ListaEnc.hpp"
 /* Classe Evento
 * Esta classe será responsável por instanciar um evento,
 */
+#include "../Estruturas/ListaEnc.hpp"
 class Evento {
 public:
   int tempo;

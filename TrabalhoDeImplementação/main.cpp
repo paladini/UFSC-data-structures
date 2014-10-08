@@ -8,9 +8,6 @@ using std::string;
 
 // Variáveis
 int opcao = -1;
-int tempoAberturaSemaforo = -1;
-int tempoDeExecucao = -1;
-int temporizacao = -1;
 string temporizacaoUtilizada;
 
 /** Método limparTela.
@@ -27,11 +24,10 @@ void limparTela() {
 * Essa métrica será multiplicada depois pelo tempo de execução do programa e pelo tempo de 
 * abertura dos semáforos.
 */
-void pedeTemporizacao() {
-	bool continuar = true;
-	while(continuar) {
+int pedeTemporizacao() {
+	while(true){
 		limparTela();
-		int opt;
+		int opt = -1;
 		std::cout << "Qual a temporização deseja usar?" << std::endl;
 		std::cout << "\n\t1 - Padrão (Segundos)" << std::endl;
 		std::cout << "\t2 - Minutos" << std::endl;
@@ -39,23 +35,18 @@ void pedeTemporizacao() {
 		std::cout << "\nOpção escolhida:" << std::endl;
 		std::cin >> opt;
 		if(opt > 0) {
-			continuar = false;
-
 			switch(opt) {
 				case 1: {
-					temporizacao = 1;
 					temporizacaoUtilizada = "segundo(s)";
-					break;
+					return 1;
 				}
 				case 2: {
-					temporizacao = 60;
 					temporizacaoUtilizada = "minuto(s)";
-					break;
+					return 60;
 				}
 				case 3: {
-					temporizacao = 3600;
 					temporizacaoUtilizada = "hora(s)";
-					break;
+					return 3600;
 				}
 				default: {
 					std::cout << "Problema na temporizacao!" << std::endl;
@@ -68,15 +59,17 @@ void pedeTemporizacao() {
 /** Método pedeTempoDeExecucao.
 * Método que pede ao usuário o tempo de execucação do sistema, que depois será multiplicado
 * pela temporização escolhida pelo usuário anteriormente (segundos / minutos / horas).
+*
+* @return int Inteiro fornecido pelo usuário que indica.
 */
-void pedeTempoDeExecucao() {
-	bool continuar = true;
-	while(continuar) {
+int pedeTempoDeExecucao() {
+	int tempoDeExecucao = -1;
+	while(true) {
 		limparTela();
 		std::cout << "Informe o tempo de execução (em " << temporizacaoUtilizada << "):" << std::endl;
 		std::cin >> tempoDeExecucao;
 		if(tempoDeExecucao > 0) {
-			continuar = false;
+			return tempoDeExecucao;
 		}
 	}
 }
@@ -85,17 +78,22 @@ void pedeTempoDeExecucao() {
 * Método que pede ao usuário o tempo que cada semáforo ficara aberto e/ou fechado, ou seja, o intervalo
 * de cada semáforo. Esse valor também será multiplicado pela temporização escolhida pelo usuário
 * anteriormente (segundos / minutos / horas).
+* 
+* @return int Inteiro fornecido pelo usuário que indica quanto tempo os semaforos ficaram abertos / fechados.
 */
-void pedeTempoSemaforo() {
-	bool continuar = true;
-	while(continuar) {
+int pedeTempoSemaforo() {
+	// bool continuar = true;
+	int tempoAberturaSemaforo = -1;
+	// while(continuar) {
+	while(true) {
 		limparTela();
 		std::cout << "Informe o tempo de abertura do semáforo (em " << temporizacaoUtilizada << "):" << std::endl;
 		std::cin >> tempoAberturaSemaforo;
 		if(tempoAberturaSemaforo > 0) {
-			continuar = false;
+			return tempoAberturaSemaforo;
 		}
 	}
+
 }
 
 int main() {
@@ -112,12 +110,16 @@ int main() {
 	switch (opcao) {	
 		case 1: {
 			limparTela();
-			pedeTemporizacao();
-			pedeTempoDeExecucao();
-			pedeTempoSemaforo();
+			int temporizacao = pedeTemporizacao();
+			int tempoDeExecucao = pedeTempoDeExecucao();
+			int tempoAberturaSemaforo = pedeTempoSemaforo();
 			limparTela();
 			Sistema *sistema = new Sistema(tempoAberturaSemaforo*temporizacao, tempoDeExecucao*temporizacao);
-			sistema->iniciar();
+			return sistema->iniciar();
+		}
+		case 2: {
+			limparTela();
+			std::cout << "Obrigado por utilizar o    S I M U L A D O R   D E   T R A F E G O    9 0 0 0  " << std::endl;
 			break;
 		}
 		default: {

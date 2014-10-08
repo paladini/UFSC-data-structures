@@ -13,9 +13,9 @@
 #ifndef LISTA_HPP_
 #define LISTA_HPP_
 #define MAXLISTA 100
-#include "Excecoes/ExcecaoListaCheia.hpp"
-#include "Excecoes/ExcecaoListaVazia.hpp"
-#include "Excecoes/ExcecaoErroPosicao.hpp"
+#include "../Excecoes/ExcecaoListaCheia.hpp"
+#include "../Excecoes/ExcecaoListaVazia.hpp"
+#include "../Excecoes/ExcecaoErroPosicao.hpp"
 
 template <typename T>
 class Lista {

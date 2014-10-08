@@ -14,9 +14,9 @@
 #define LISTAENC_HPP_
 #include <cstdio>
 #include "Elemento.hpp"
-#include "Excecoes/ExcecaoErroPosicao.hpp"
-#include "Excecoes/ExcecaoListaCheia.hpp"
-#include "Excecoes/ExcecaoListaVazia.hpp"
+#include "../Excecoes/ExcecaoErroPosicao.hpp"
+#include "../Excecoes/ExcecaoListaCheia.hpp"
+#include "../Excecoes/ExcecaoListaVazia.hpp"
 #include <iostream>
 template<typename T>
 class ListaEnc {
@@ -40,13 +40,13 @@ class ListaEnc {
 * Caso seja, significa que a memória está cheia e que não há mais espaço para alocação de novos elementos / objetos.
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
-    bool verificaMemoriaCheia() {
-        Elemento<T> *novo = new Elemento<T>(0, NULL);
-        if (novo == NULL) {
+    void verificaMemoriaCheia() {
+        Elemento<T> *novo = new Elemento<T>(0, 0);
+        if (novo == 0) {
             throw ExcecaoListaCheia;
         }
         delete novo;
-        return true;
+        // return true;
     }
 
  public:
@@ -55,7 +55,7 @@ class ListaEnc {
 */
     ListaEnc() {
         size = 0;
-        head = NULL;
+        head = 0;
     }
 /** Destrutor padrão da ListaEnc.
 * O destrutor padrão da ListaEnc destrói a lista encadeada atribuindo à "size" o valor 0 e deletando o ponteiro "head".
@@ -70,11 +70,16 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
     void adicionaNoInicio(const T& dado) {
-        verificaMemoriaCheia();
-        Elemento<T> *novo = new Elemento<T>(dado, head);
+        // verificaMemoriaCheia();
+        Elemento<T> *novo = new Elemento<T>(dado, 0);
+        if(novo == 0){
+            throw ExcecaoListaCheia;
+        }
+        novo->setProximo(head);
         head = novo;
         size++;
     }
+
 /** Retira um elemento no começo da Lista Encadeada.
 * Este método retira o primeiro elemento da Lista Encadeada, retornando o objeto retirado.
 * @see listaVazia()
@@ -253,7 +258,7 @@ class ListaEnc {
         } else {
             atual = head;
             posicao = 0;
-            while (atual->getProximo() != NULL &&
+            while (atual->getProximo() != 0 &&
                   maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
@@ -303,7 +308,7 @@ class ListaEnc {
     void destroiLista() {
         Elemento<T> *atual;
         if (!listaVazia()) {
-            while (head != NULL) {
+            while (head != 0) {
                 atual = head;
                 head = atual->getProximo();
                 delete atual;
@@ -359,28 +364,6 @@ class ListaEnc {
     */
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
-    }
-    
-    void merge() {
-        if(size <= 1) {
-            return;
-        }
-        int meio = size / 2;
-        ListaEnc<T>* esquerda = new ListaEnc<T>();
-        for(int i = 0; i < meio -1; i++) {
-            esquerda->adicionaNaPosicao(this->retornaDado(i), i);
-        }
-        ListaEnc<T>* direita = new ListaEnc<T>();
-        for(int i = meio; i < size -1; i++) {
-            direita->adicionaNaPosicao(this->retornaDado(i), i);
-        }
-        esquerda = esquerda->merge();
-        direita = direita->merge();
-        ListaEnc<T>* resultado = new ListaEnc<T>();
-        for(int i = 0; i < size -1; i++) {
-            resultado->adicionaNaPosicao(this->retornaDado(i), i);
-        }
-        resultado->merge();
     }
 
 };

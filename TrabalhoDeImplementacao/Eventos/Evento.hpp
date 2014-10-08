@@ -1,16 +1,14 @@
-/*
-tipo   |     descricao do evento
-------------------------------------------------
-0      |    chegada de um novo carro
-1      |    mudança de estado do semáforo
-2      |    chegada de carro no semaforo
-3      |    eEventoclusao do carro 
-
-*/
 #ifndef EVENTO_HPP_
 #define EVENTO_HPP_
 /* Classe Evento
-* Esta classe será responsável por instanciar um evento,
+* Esta classe será responsável por instanciar um evento.
+
+  tipo   |     descricao do evento
+  ------------------------------------------------
+  0      |    chegada de um novo carro
+  1      |    mudança de estado do semáforo
+  2      |    chegada de carro no semaforo
+  3      |    eEventoclusao do carro 
 */
 #include "../Estruturas/ListaEnc.hpp"
 class Evento {

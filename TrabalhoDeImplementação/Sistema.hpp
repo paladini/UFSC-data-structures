@@ -130,10 +130,6 @@ class Sistema {
         semaforos->adiciona(sc1leste);
     }
 
-    /** Método iniciar()
-    * Este método é chamado para começar a execução do sistema de simulação.
-    * 
-    */
     int iniciar() {
         gerarEventos();
         return executarEventos();
@@ -194,6 +190,36 @@ class Sistema {
                 tempoInterno = tempoProximoEvento;
             }
         }
+        // Gera eventos que removem carro de sumidouros
+        // for(int i = 0; i < pistas->retornaTamanho(); i++) {
+        //     Pista* pistaAtual = pistas->retornaDado(i);
+        //     if (!pistaAtual->isFonte()) {
+        //         int tempoInterno = tempoAtual;
+        //         int tempoChegada = listaEventos->retornaDado(i)->getTempo();
+        //         while(tempoInterno < tempoDeExecucao) {
+        //             Carro* carro = new Carro();
+        //             Evento* evento = new Evento(pistaAtual->tempoDeChegada(tempoInterno), carro, pistaAtual, 3);
+        //             listaEventos->adicionaEmOrdem(evento);
+        //             tempoInterno = evento->getTempo();
+        //         }
+        //     }
+        // }
+        // std::cout << "zueira" << std::endl;
+        // ordenarVetorEventos();
+        // ordenarLista();
+
+        // for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
+        //     Evento* eventoAtual = listaEventos->retornaDado(i);
+        //     // if(listaEventos->retornaDado(i)->getTipo() == 2){
+        //         std::cout << "Evento numero: " << i << std::endl;
+        //         std::cout << "Tipo: " << eventoAtual->getTipo() << std::endl;
+        //         std::cout << "Tempo: " << eventoAtual->getTempo() << std::endl;
+        //         std::cout << "==============================" << std::endl;
+        //     // }
+        //     // std::cout << "Tempo do evento " << i << " é " << listaEventos->retornaDado(i)->getTempo() << std::endl;
+        // }
+
+        // std::cout << "Tamanho lista de eventos: " << listaEventos->retornaTamanho() << std::endl;
     }
 
     Semaforo* procurarPorSemaforo(Pista* pista) {
@@ -324,13 +350,100 @@ class Sistema {
         finalizarPrograma();
     }
 
+    // void ordenarLista() {
+    //     // Evento* um, dois, temp;
+    //     int tamanho = listaEventos->retornaTamanho();
+    //     for(int i = 0; i < tamanho; i++) {
+    //         std::cout << i << "vezes" << std::endl;
+    //         Evento* um = listaEventos->retornaDado(i);
+    //         for(int j = 1; i < tamanho; j++) {
+    //             Evento* dois = listaEventos->retornaDado(j);
+    //             if(um->getTempo() > dois->getTempo()) {
+    //                 Evento* temp = dois;
+    //                 listaEventos->retiraDaPosicao(j);
+    //                 listaEventos->adicionaNaPosicao(um, j);
+    //                 listaEventos->retiraDaPosicao(i);
+    //                 listaEventos->adicionaNaPosicao(temp, i);
+    //             }
+    //         }
+    //     }
+    // }
 
-    /** Método finalizarPrograma.
-    * Este método é o último chamado pelo sistema e serve para imprimir informações ao usuário.
-    * Chama o método "contarCarros" que serve para contar todos os carros que entraram e sairam
-    * das pistas, além de calcular a vazão do sistema e mostrar quantos segundos foram simulados. 
-    * @see contarCarros()
-    */
+    // void BubbleSort(apvector <int> &num){
+    // void BubbleSort(){
+    //     Evento* i, j;
+    //     int flag = 1;    // set flag to 1 to start first pass
+    //     Evento* temp;             // holding variable
+    //     int numLength = listaEventos->retornaTamanho(); 
+    //     for(i = 1; (i <= numLength) && flag; i++) {
+    //         flag = 0;
+    //         for (j=0; j < (numLength -1); j++) {
+    //             if (listaEventos->retornaDado(j+1)->getTempo() > num[j]) { 
+    //                 // temp = num[j];             // swap elements
+    //                 temp = listaEventos->retornaDado(j);
+    //                 listaEventos->retiraDaPosicao(j);
+    //                 listaEventos->adicionaNaPosicao(listaEventos->retornaDado(j+1), j);
+    //                 listaEventos->retiraDaPosicao(j+1);
+    //                 listaEventos->adicionaNaPosicao(temp, j+1);
+    //                 // num[j+1] = temp;
+    //                 flag = 1;               // indicates that a swap occurred.
+    //                 // num[j] = num[j+1];
+    //             }
+    //         }
+    //     }
+    // }
+
+    // void ordenarVetorEventos() {
+    //     // Evento x = NULL;
+    //     int i, j, k;
+    //     for(int i = 1; i < listaEventos->retornaTamanho() - 1; i++) {
+    //         k = i;
+    //         std::cout << "Passou no for interno 1." << std::endl;
+    //         Evento* x = listaEventos->retornaDado(i);
+    //         for (int j = i + 1; listaEventos->retornaTamanho(); j++) {
+    //             std::cout << "Passou no for interno 2." << std::endl;
+    //             if ((listaEventos->retornaDado(j))->getTempo() < x->getTempo()) {
+    //                 std::cout << "Passou no if, mas não foi maroto." << std::endl;
+    //                 k = j;
+    //                 x = listaEventos->retornaDado(k);
+    //                  std::cout << "Passou no if maroto." << std::endl;
+    //             }
+    //         }
+    //         std::cout << "Passou na porra toda." << std::endl;
+    //         Evento* t = listaEventos->retiraDaPosicao(k);
+    //         listaEventos->adicionaNaPosicao(listaEventos->retornaDado(i), k);
+    //         t = listaEventos->retiraDaPosicao(i);
+    //         listaEventos->adicionaNaPosicao(x, i);
+    //     }
+    // }
+
+    // void void quick_sort(int arr[20],int low,int high) {
+    //     int pivot,j,temp,i;
+    //     if(0 < listaEventos->retornaTamanho()) {
+    //         pivot = low;
+    //         i = low;
+    //         j = high;     
+    //         while(i<j) {
+    //             while((arr[i]<=arr[pivot])&&(i<high)) {
+    //                 i++;
+    //             }     
+    //             while(arr[j]>arr[pivot]) {
+    //                 j--;
+    //             }     
+    //             if(i<j) {
+    //                 temp=arr[i];
+    //                 arr[i]=arr[j];
+    //                 arr[j]=temp;
+    //             }
+    //         }
+    //         temp=arr[pivot];
+    //         arr[pivot]=arr[j];
+    //         arr[j]=temp;
+    //         quick_sort(arr,low,j-1);
+    //         quick_sort(arr,j+1,high);
+    //     }
+    // }
+
     void finalizarPrograma() {
 
         // Contando carros que foram e sairam das pistas;
@@ -343,12 +456,29 @@ class Sistema {
         std::cout << "\n=================================================" << std::endl;
     }
 
-    /** Método finalizarPrograma.
-    * Este método é o último chamado pelo sistema e serve para imprimir informações ao usuário.
-    * Chama o método "contarCarros" que serve para contar todos os carros que entraram e sairam
-    * das pistas, além de calcular a vazão do sistema e mostrar quantos segundos foram simulados. 
-    * @see contarCarros()
-    */
+    // void atualizarSistema() {
+
+    //     // TODO: FAZER A VERIFICACAO DENTRO DE CADA SEMAFORO->ATUALIZA
+    //     while (tempoAtual < tempoDeExecucao) {
+    //         for (int i = 0; i < 2; i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao); // 0 e 1 são os semaforos da  principal do sistema
+    //         }
+    //         tempoAtual += tempoSemaforo;
+    //         for (int i = 2; i < 4; i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+    //         }
+    //         tempoAtual += tempoSemaforo;
+    //         for (int i = 4; i < (semaforos->retornaTamanho() - 4); i++) {
+    //             semaforos->retornaDado(i)->atualiza(tempoAtual, tempoDeExecucao);
+    //             tempoAtual += tempoSemaforo;
+    //         }
+    //     }
+    //     //int carros = getCarrosLiberados();
+
+    //     int contarCarros = contarCarros();
+    //     std::cout << "Foram simulados " << tempoAtual << " segundos e " << " carros passaram pelo sistema." << std::endl; 
+    // }
+
     void contarCarros() {
         for (int i = 0; i < pistas->retornaTamanho(); i++) {
             Pista* pista = pistas->retornaDado(i);

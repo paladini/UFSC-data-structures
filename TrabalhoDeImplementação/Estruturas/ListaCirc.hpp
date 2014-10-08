@@ -15,9 +15,9 @@
 #include <cstdio>
 #include "Elemento.hpp"
 #include "ListaEnc.hpp"
-#include "Excecoes/ExcecaoErroPosicao.hpp"
-#include "Excecoes/ExcecaoListaCheia.hpp"
-#include "Excecoes/ExcecaoListaVazia.hpp"
+#include "../Excecoes/ExcecaoErroPosicao.hpp"
+#include "../Excecoes/ExcecaoListaCheia.hpp"
+#include "../Excecoes/ExcecaoListaVazia.hpp"
 
 template<typename T>
 class ListaCirc: public ListaEnc<T> {

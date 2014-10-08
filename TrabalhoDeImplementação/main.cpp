@@ -8,9 +8,6 @@ using std::string;
 
 // Variáveis
 int opcao = -1;
-// int tempoAberturaSemaforo = -1;
-// int tempoDeExecucao = -1;
-// int temporizacao = -1;
 string temporizacaoUtilizada;
 
 /** Método limparTela.

@@ -48,43 +48,22 @@ class Sistema {
     void instanciar() {
 
         // Criação de pistas
-        // int tam, int _velocidadeMedia, bool _fonte, bool _sumidouro, 
-        //          int _intervaloInvocacao, int _tempoDeInvocacao
-        // 
-        // TODO: apagar a passagem de parametros fonte/sumidouro, se intervaloInvocacao
-        // for zero 
-        Pista* n1sul    = new Pista(500, 60, true, false, 5, 20);
-        Pista* n1norte  = new Pista(500, 60, false, true, 0, 0);
-        Pista* n2sul    = new Pista(500, 40, true, false, 5, 20);
-        Pista* n2norte  = new Pista(500, 40, false, true, 0, 0);
-        Pista* o1oeste  = new Pista(2000, 80, false, true, 0, 0);
-        Pista* o1leste  = new Pista(2000, 80, true, false, 2, 10);
-        Pista* s1sul    = new Pista(500, 60, false, true, 0, 0);
-        Pista* s1norte  = new Pista(500, 60, true, false, 7, 30);
-        Pista* s2sul    = new Pista(500, 40, false, true, 0, 0);
-        Pista* s2norte  = new Pista(500, 40, true, false, 15, 60);
-        Pista* l1leste  = new Pista(400, 30, false, true, 0, 0);
-        Pista* l1oeste  = new Pista(400, 30, true, false, 2, 10);
-        Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0); 
-        Pista* c1leste  = new Pista(300, 60, false, false, 0, 0); 
-
-        // NÃO DELETAR ISSO, TÔ TESTANDO
-        // Pista* n1sul    = new Pista(500, 60, 5, 20);
-        // Pista* n1norte  = new Pista(500, 60, 0, 0);
-        // Pista* n2sul    = new Pista(500, 40, 5, 20);
-        // Pista* n2norte  = new Pista(500, 40, 0, 0);
-        // Pista* o1oeste  = new Pista(2000, 80, 0, 0);
-        // Pista* o1leste  = new Pista(2000, 80, 2, 10);
-        // Pista* s1sul    = new Pista(500, 60, 0, 0);
-        // Pista* s1norte  = new Pista(500, 60, 7, 30);
-        // Pista* s2sul    = new Pista(500, 40, 0, 0);
-        // Pista* s2norte  = new Pista(500, 40, 15, 60);
-        // Pista* l1leste  = new Pista(400, 30, 0, 0);
-        // Pista* l1oeste  = new Pista(400, 30, 2, 10);
-
+        Pista* n1sul    = new Pista(500, 60, 5, 20);
+        Pista* n1norte  = new Pista(500, 60, 0, 0);
+        Pista* n2sul    = new Pista(500, 40, 5, 20);
+        Pista* n2norte  = new Pista(500, 40, 0, 0);
+        Pista* o1oeste  = new Pista(2000, 80, 0, 0);
+        Pista* o1leste  = new Pista(2000, 80, 2, 10);
+        Pista* s1sul    = new Pista(500, 60, 0, 0);
+        Pista* s1norte  = new Pista(500, 60, 7, 30);
+        Pista* s2sul    = new Pista(500, 40, 0, 0);
+        Pista* s2norte  = new Pista(500, 40, 15, 60);
+        Pista* l1leste  = new Pista(400, 30, 0, 0);
+        Pista* l1oeste  = new Pista(400, 30, 2, 10);
+        
         // Passa 1 no último argumento pois não é uma fonte nem sumidouro.
-        // Pista* c1oeste  = new Pista(300, 60, 0, 1); 
-        // Pista* c1leste  = new Pista(300, 60, 0, 1); 
+        Pista* c1oeste  = new Pista(300, 60, 0, 1); 
+        Pista* c1leste  = new Pista(300, 60, 0, 1); 
 
         // Adicionando na lista
         pistas->adiciona(n1sul);
@@ -184,6 +163,10 @@ class Sistema {
     */
     void gerarEventos() {
 
+        system("clear");
+        std::cout << "=================================================\n" << std::endl;
+        std::cout << "\t      Criando eventos(1 / 3)" << std::endl;
+        std::cout << "\n=================================================\n\n" << std::endl;
         // Gera eventos de adicionar carros (tipo 0)
         for(int i = 0; i < pistas->retornaTamanho(); i++) {
             Pista* pistaAtual = pistas->retornaDado(i);
@@ -202,7 +185,11 @@ class Sistema {
                 }
             }
         }
-
+        
+        system("clear");
+        std::cout << "\r=================================================\n" << std::endl;
+        std::cout << "\r\t      Criando eventos(2 / 3)" << std::endl;
+        std::cout << "\r\n=================================================\n\n" << std::endl;
         // Gera eventos de carros no semaforo (tipo 2)
         Pista* atual;
         Semaforo* semaforo;
@@ -221,7 +208,11 @@ class Sistema {
                 }
             }
         }
-
+        
+        system("clear");    
+        std::cout << "\r=================================================\n" << std::endl;
+        std::cout << "\r\t      Criando eventos(3 / 3)" << std::endl;
+        std::cout << "\r\n=================================================\n\n" << std::endl;
         // Gera eventos de troca de semaforos (tipo 1)
         for(int i = 0; i < semaforos->retornaTamanho(); i+=2) {
             int tempoInterno = tempoAtual;
@@ -325,6 +316,7 @@ class Sistema {
     */
     int executarEventos() {
 
+        system("clear");
         std::cout << "=================================================\n" << std::endl;
         std::cout << "\t       Executando eventos..." << std::endl;
         std::cout << "\n=================================================\n\n" << std::endl;

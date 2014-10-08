@@ -14,9 +14,9 @@
 #define LISTAENC_HPP_
 #include <cstdio>
 #include "Elemento.hpp"
-#include "Excecoes/ExcecaoErroPosicao.hpp"
-#include "Excecoes/ExcecaoListaCheia.hpp"
-#include "Excecoes/ExcecaoListaVazia.hpp"
+#include "../Excecoes/ExcecaoErroPosicao.hpp"
+#include "../Excecoes/ExcecaoListaCheia.hpp"
+#include "../Excecoes/ExcecaoListaVazia.hpp"
 #include <iostream>
 template<typename T>
 class ListaEnc {

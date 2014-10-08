@@ -43,6 +43,8 @@ class Semaforo {
 * @see estaCheia
 * @see removeCarro
 * @see adicionaCarro
+* @exception ExcecaoSinalVermelho Se o sinal estiver vermelho o carro não poderá passar para outra pista.
+* @return proxima Retornará qual será a próxima pista em que o carro estará.
 */
 	Pista* passaCarro() {
 		Carro* c = pistaLocal->primeiro();
@@ -65,7 +67,7 @@ class Semaforo {
 /* Método trocarAberto
 * Será responsável por trocar o booleano do seḿáforo, ou seja, este método inverterá as situações de
 * semáforo aberto e fechado.
-* @see calculaProximoEvento
+* @see calculaProximoEvento 
 */
 	void trocarAberto(int tempoAtual) {
 		if (aberto) {
@@ -78,6 +80,7 @@ class Semaforo {
 /* Método calculeProximoEvento
 * Este método calculará qual será o próximo tempo em que o semáforo irá trocar o valor
 * de fechado ou aberto.
+* @return tempoQueVaiAbrir Este método retornará o tempo da próxima troca do semáforo.
 */
 	int calculeProximoEvento(int tempoAtual) {
 		tempoQueVaiAbrir = tempoAtual + tempoIntervalo;
@@ -88,6 +91,9 @@ class Semaforo {
 * gerado na classe Carro.
 * @see retornaTamanho
 * @see getProbabilidade
+* @return i retornará um valor entre 0 e o tamanho da lista de pistas, que representará qual foi a pista
+* que o carro escolheu.
+* @return -1 Caso, ocorra algo que de erro, poderá ser identificado para posterior solução.
 */
 	int calculaProbabilidade(Carro* c) {
 		int *prob = probabilidades;
@@ -106,20 +112,32 @@ class Semaforo {
 		return -1;
 	}
 /* Método retornaIntervalo
-* Este método retornará
+* Este método retornará o atributo tempoIntervalo, que contém o tempo de duração de um
+* estado do semáforo.
+* @return temppoIntervalo
 */
 	int retornaIntervalo() {
 		return tempoIntervalo;
 	}
-
+/* Método isAberto
+* Retorna se o semáforo está aberto ou não.
+* @return aberto Retornará um valor booleano, sendo true para semáforo que está aberto e false
+* para o contrário.
+*/
 	bool isAberto() {
 		return aberto;
 	}
-
+/* Método retornaPistaLocal
+* Retorna a pista em que o carro está.
+* @return pistaLocal Retornará um Pista* para a pista onde o carro está.
+*/
 	Pista* retornaPistaLocal() {
 		return pistaLocal;
 	}
-
+/* Método retornarTempoQueVaiAbrir
+* Retorna o tempo em que o semáforo abrir novamente, para o cálculo do próximo evento.
+* @return tempoQueVaiAbrir Retornará um int com o tempo em que o semáforo irá abri novamente.
+*/
 	int retornarTempoQueVaiAbrir() {
 		return tempoQueVaiAbrir;
 	}

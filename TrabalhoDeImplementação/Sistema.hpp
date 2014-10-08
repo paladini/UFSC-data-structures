@@ -1,3 +1,10 @@
+/**
+* File: Sistema.hpp
+* @author: Emmanuel Podestá, Fernando Paladini.
+* @since: Created on ∞ de Outubro de 2014, às ∞:∞.
+* Copyright 2014 Emmanuel Podestá, Fernando Paladini.
+* < Na verdade é Copyleft, MIT License \o/ >
+*/
 #ifndef SISTEMA_HPP_
 #define SISTEMA_HPP_
 #include "ListaCirc.hpp"
@@ -6,7 +13,11 @@
 #include "ListaDeEventos.hpp"
 #include <iostream>
 #include <cstdio>
-
+/** Classe Sistema.
+* A classe Sistema é a principal responsável pela execução do simulador de tráfego. Essa classe é 
+* responsável por instanciar e associar todas as pistas e semáforos do Sistema, além de cuidar da 
+* geração de eventos estáticos e dinâmicos, bem como a sua execução. 
+*/
 class Sistema {
  public:
     ListaCirc<Semaforo*>* semaforos;
@@ -16,6 +27,10 @@ class Sistema {
     int carrosQuePassaram = 0;
     int carrosQueEntraram = 0;
     
+    /** Construtor da classe Sistema.
+    * Esse construtor recebe dois argumentos que foram recebidos pelo usuário através do "main". 
+    * 
+    */
     Sistema(int _tempoSemaforo, int _tempoDeExecucao) {
         this->semaforos = new ListaCirc<Semaforo*>();  
         this->pistas = new ListaCirc<Pista*>();
@@ -26,6 +41,10 @@ class Sistema {
         instanciar();
     }
 
+    /** Método instanciar.
+    * Responsável por instanciar todas as pistas e semáforos do sistema, além de fazer as 
+    * "linkagens" entre os dois e adicioná-los nas listas de Pistas e Semáforos.
+    */
     void instanciar() {
 
         // Criação de pistas
@@ -296,8 +315,13 @@ class Sistema {
 
     /** Método executarEventos.
     * Esse método começa a executar todos os eventos estáticos criados pelo método "geraEventos".
-    * Ele pega cada evento da lista ordenada de eventos. 
+    * Ele pega cada evento da lista ordenada de eventos e realiza o evento. Utiliza um switch
+    * para identificar que evento que é e poder executar da forma correta. Depois, atualiza o 
+    * tempoAtual atribuindo-o o valor do tempo do evento executado. Em seguida, remove o 
+    * eventoAtual da lista de eventos e pega o próximo da lista, que está ordenada de forma
+    * ascendente.
     *
+    * @return int Inteiro indicando se a execução foi bem sucedida ou não.
     */
     int executarEventos() {
 
@@ -306,21 +330,9 @@ class Sistema {
         std::cout << "\n=================================================\n\n" << std::endl;
 
         for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
-
             Evento* eventoAtual = listaEventos->retornaDado(i);
-            // std::cout << "Lista de eventos: " << listaEventos->retornaTamanho() << std::endl;
-            // Evento* menorEvento = listaEventos->retornaDado(i);
-            // for (int j = 0; j < listaEventos->retornaTamanho(); j++) {
-            //     if (menorEvento->getTempo() > listaEventos->retornaDado(j)->getTempo()) {
-            //         menorEvento = listaEventos->retornaDado(j);
-            //     }
-            //     // std::cout << i << "zueira" << j << std::endl;
-            // // }
-            // Evento* eventoAtual = menorEvento;
-            // std::cout << "Tempo de evento atual: " << tempoAtual << "\n" << std::endl;
-            // std::cout << "Tipo Evento atual: " << eventoAtual->getTipo() << "\n" << std::endl;
+
             std::cout << "\r\t\t" << (tempoAtual * 100) / tempoDeExecucao << "% concluído(s).";
-            
             if(tempoAtual >= tempoDeExecucao){
                 break;
             }
@@ -354,12 +366,11 @@ class Sistema {
                     return -1;
                 }
             }
-            // std::cout << "Executando..." << tempoAtual << std::endl;
             listaEventos->retiraEspecifico(eventoAtual);
         }
         finalizarPrograma();
+        return 0;
     }
-
 
 
     /** Método finalizarPrograma.

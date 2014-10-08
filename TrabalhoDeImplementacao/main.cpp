@@ -98,6 +98,7 @@ int pedeTempoSemaforo() {
 
 int main() {
 	limparTela();
+	srand(time(NULL));
 	std::cout << "" << std::endl;
 	std::cout << "=====================================================" << std::endl;
 	std::cout << "#      S I M U L A D O R   D E   T R Á F E G O      #" << std::endl;

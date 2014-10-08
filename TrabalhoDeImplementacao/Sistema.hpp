@@ -269,7 +269,7 @@ class Sistema {
 
             // Se pista destino estiver lotada.
             if (proximaPista == semaforo->retornaPistaLocal()) {
-                tempoProximoEvento = tempoAtual + (semaforo->retornaIntervalo() * 2);
+                tempoProximoEvento = tempoAtual + (semaforo->retornarTempoQueVaiAbrir());
                 evento = new Evento(tempoProximoEvento, semaforo, NULL, 2); 
             } else {
                 

@@ -288,7 +288,13 @@ class Sistema {
     }
 
     int executarEventos() {
-        std::cout << "Começou a Executar os eventos..." << tempoDeExecucao << " segundo(s) restantes." << std::endl;
+
+        std::cout << "=================================================\n" << std::endl;
+        std::cout << "\t       Executando eventos..." << std::endl;
+        std::cout << "\n=================================================\n\n" << std::endl;
+
+
+        // std::cout << "Começou a Executar os eventos..." << tempoDeExecucao << " segundo(s) restantes." << std::endl;
         for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
 
             Evento* eventoAtual = listaEventos->retornaDado(i);
@@ -303,7 +309,7 @@ class Sistema {
             // Evento* eventoAtual = menorEvento;
             // std::cout << "Tempo de evento atual: " << tempoAtual << "\n" << std::endl;
             // std::cout << "Tipo Evento atual: " << eventoAtual->getTipo() << "\n" << std::endl;
-            std::cout << "\r\t\t" << (tempoAtual * 100) / tempoDeExecucao << "% concluido.";
+            std::cout << "\r\t\t" << (tempoAtual * 100) / tempoDeExecucao << "% concluído(s).";
             
             if(tempoAtual >= tempoDeExecucao){
                 break;
@@ -442,11 +448,11 @@ class Sistema {
 
         // Contando carros que foram e sairam das pistas;
         contarCarros(); 
-        std::cout << "\n\n============ R E S U L T A D O S ================\n\n";
+        std::cout << "\n\n\n============ R E S U L T A D O S ================\n\n";
         std::cout << "\tForam simulados " << tempoDeExecucao << " segundos." << std::endl;
         std::cout << "\t" << carrosQueEntraram << " carros entraram no sistema." << std::endl;
         std::cout << "\t" << carrosQuePassaram << " carros passaram pelo sistema." << std::endl;
-        std::cout << "Vazão do sistema: " << ((float)carrosQueEntraram)/((float)carrosQuePassaram) << " por segundo!" << std::endl;
+        std::cout << "\t       Vazão: " << (((float)carrosQuePassaram) * 100)/((float)carrosQueEntraram) << "%." << std::endl;
         std::cout << "\n=================================================" << std::endl;
     }
 

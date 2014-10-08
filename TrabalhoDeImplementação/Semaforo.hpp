@@ -35,7 +35,15 @@ class Semaforo {
 		pistas->adiciona(arranjo[2]);
 		pistas->adiciona(arranjo[3]);
 	}
-
+/* Método passaCarro.
+* Este método será responsável por fazer um carro passar pelo semáforo, adicionando-o em outra fila (outra pista) e
+* removendo o mesmo da fila atual.
+* @see FilaEnc::primeiro
+* @see calculaProbabilidade
+* @see estaCheia
+* @see removeCarro
+* @see adicionaCarro
+*/
 	Pista* passaCarro() {
 		Carro* c = pistaLocal->primeiro();
 
@@ -54,7 +62,11 @@ class Semaforo {
 		}
 		return proxima;
 	}
-	
+/* Método trocarAberto
+* Será responsável por trocar o booleano do seḿáforo, ou seja, este método inverterá as situações de
+* semáforo aberto e fechado.
+* @see calculaProximoEvento
+*/
 	void trocarAberto(int tempoAtual) {
 		if (aberto) {
 			aberto = false;
@@ -63,12 +75,20 @@ class Semaforo {
 			aberto = true;
 		}
 	}
-
+/* Método calculeProximoEvento
+* Este método calculará qual será o próximo tempo em que o semáforo irá trocar o valor
+* de fechado ou aberto.
+*/
 	int calculeProximoEvento(int tempoAtual) {
 		tempoQueVaiAbrir = tempoAtual + tempoIntervalo;
 		return tempoQueVaiAbrir;
 	}
-
+/* Método calculaProbabilidade
+* Irá calcular a probabilidade de um carro virar em uma pista, de acordo com um valor randômico
+* gerado na classe Carro.
+* @see retornaTamanho
+* @see getProbabilidade
+*/
 	int calculaProbabilidade(Carro* c) {
 		int *prob = probabilidades;
 		int numPistas = pistas->retornaTamanho();
@@ -85,7 +105,9 @@ class Semaforo {
 		}
 		return -1;
 	}
-
+/* Método retornaIntervalo
+* Este método retornará
+*/
 	int retornaIntervalo() {
 		return tempoIntervalo;
 	}

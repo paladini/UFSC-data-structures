@@ -49,6 +49,24 @@ class Sistema {
         Pista* c1oeste  = new Pista(300, 60, false, false, 0, 0); 
         Pista* c1leste  = new Pista(300, 60, false, false, 0, 0); 
 
+        // NÃO DELETAR ISSO, TÔ TESTANDO
+        // Pista* n1sul    = new Pista(500, 60, 5, 20);
+        // Pista* n1norte  = new Pista(500, 60, 0, 0);
+        // Pista* n2sul    = new Pista(500, 40, 5, 20);
+        // Pista* n2norte  = new Pista(500, 40, 0, 0);
+        // Pista* o1oeste  = new Pista(2000, 80, 0, 0);
+        // Pista* o1leste  = new Pista(2000, 80, 2, 10);
+        // Pista* s1sul    = new Pista(500, 60, 0, 0);
+        // Pista* s1norte  = new Pista(500, 60, 7, 30);
+        // Pista* s2sul    = new Pista(500, 40, 0, 0);
+        // Pista* s2norte  = new Pista(500, 40, 15, 60);
+        // Pista* l1leste  = new Pista(400, 30, 0, 0);
+        // Pista* l1oeste  = new Pista(400, 30, 2, 10);
+
+        // Passa 1 no último argumento pois não é uma fonte nem sumidouro.
+        // Pista* c1oeste  = new Pista(300, 60, 0, 1); 
+        // Pista* c1leste  = new Pista(300, 60, 0, 1); 
+
         // Adicionando na lista
         pistas->adiciona(n1sul);
         pistas->adiciona(n1norte);
@@ -118,7 +136,8 @@ class Sistema {
     }
 
     void gerarEventos() {
-        std::cout << "Começou a gerar os eventos..." << std::endl;
+        // std::cout << "Começou a gerar os eventos..." << std::endl;
+
         // Gera eventos de adicionar carros (tipo 0)
         for(int i = 0; i < pistas->retornaTamanho(); i++) {
             Pista* pistaAtual = pistas->retornaDado(i);
@@ -239,14 +258,22 @@ class Sistema {
             } else {
                 
                 // Verifica se próxima pista é semaforo ou sumidouro.
-                Semaforo* semaforo = procurarPorSemaforo(proximaPista);
-                if (semaforo == NULL) { // sumidouro
+                if (proximaPista->isSumidouro()) { // sumidouro
                     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
-                    evento = new Evento(tempoProximoEvento, proximaPista, NULL, 3); 
+                    evento = new Evento(tempoProximoEvento, proximaPista, NULL, 3);
                 } else { // semaforo
+                    Semaforo* semaforo = procurarPorSemaforo(proximaPista);
                     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
                     evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
                 }
+                // Semaforo* semaforo = procurarPorSemaforo(proximaPista);
+                // if (semaforo == NULL) { // sumidouro
+                //     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
+                //     evento = new Evento(tempoProximoEvento, proximaPista, NULL, 3); 
+                // } else { // semaforo
+                //     tempoProximoEvento = proximaPista->tempoDeChegada(tempoAtual);
+                //     evento = new Evento(tempoProximoEvento, semaforo, NULL, 2);
+                // }
             }
 
         } catch(std::exception& e) { // sinal vermelho
@@ -261,7 +288,7 @@ class Sistema {
     }
 
     int executarEventos() {
-        std::cout << "Começou a Executar os eventos..." << std::endl;
+        std::cout << "Começou a Executar os eventos..." << tempoDeExecucao << " segundo(s) restantes." << std::endl;
         for(int i = 0; i < listaEventos->retornaTamanho(); i++) {
 
             Evento* eventoAtual = listaEventos->retornaDado(i);
@@ -276,9 +303,12 @@ class Sistema {
             // Evento* eventoAtual = menorEvento;
             // std::cout << "Tempo de evento atual: " << tempoAtual << "\n" << std::endl;
             // std::cout << "Tipo Evento atual: " << eventoAtual->getTipo() << "\n" << std::endl;
+            std::cout << "\r\t\t" << (tempoAtual * 100) / tempoDeExecucao << "% concluido.";
+            
             if(tempoAtual >= tempoDeExecucao){
                 break;
             }
+
             switch (eventoAtual->getTipo()) {
                 case 0: { // adiciona carro
                     Pista* pista = (Pista*) eventoAtual->getRelacionado();
@@ -308,7 +338,7 @@ class Sistema {
                     return -1;
                 }
             }
-            std::cout << "Executando..." << tempoAtual << std::endl;
+            // std::cout << "Executando..." << tempoAtual << std::endl;
             listaEventos->retiraEspecifico(eventoAtual);
         }
         finalizarPrograma();
@@ -411,11 +441,13 @@ class Sistema {
     void finalizarPrograma() {
 
         // Contando carros que foram e sairam das pistas;
-        contarCarros();
-        std::cout << "Foram simulados " << tempoDeExecucao << " segundos." << std::endl;
-        std::cout << "Vazão do sistema: " << (float)carrosQueEntraram/(float)carrosQuePassaram << " por segundo!" << std::endl;
-        std::cout << carrosQueEntraram << " carros entraram no sistema." << std::endl;
-        std::cout << carrosQuePassaram << " carros passaram pelo sistema." << std::endl;
+        contarCarros(); 
+        std::cout << "\n\n============ R E S U L T A D O S ================\n\n";
+        std::cout << "\tForam simulados " << tempoDeExecucao << " segundos." << std::endl;
+        std::cout << "\t" << carrosQueEntraram << " carros entraram no sistema." << std::endl;
+        std::cout << "\t" << carrosQuePassaram << " carros passaram pelo sistema." << std::endl;
+        std::cout << "Vazão do sistema: " << ((float)carrosQueEntraram)/((float)carrosQuePassaram) << " por segundo!" << std::endl;
+        std::cout << "\n=================================================" << std::endl;
     }
 
     // void atualizarSistema() {
@@ -443,8 +475,14 @@ class Sistema {
 
     void contarCarros() {
         for (int i = 0; i < pistas->retornaTamanho(); i++) {
-            carrosQueEntraram = carrosQueEntraram + pistas->retornaDado(i)->retornaCarrosQueEntraram();
-            carrosQuePassaram = carrosQuePassaram + pistas->retornaDado(i)->retornaCarrosQuePassaram();
+            Pista* pista = pistas->retornaDado(i);
+            if (pista->isFonte()) {
+                carrosQueEntraram = carrosQueEntraram + pista->retornaCarrosQueEntraram();
+            } else {
+                if (pista->isSumidouro()) {
+                    carrosQuePassaram = carrosQuePassaram + pista->retornaCarrosQuePassaram();
+                }
+            }
         }
     }
 

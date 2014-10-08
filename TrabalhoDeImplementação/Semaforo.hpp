@@ -5,7 +5,12 @@
 #include "ExcecaoSinalVermelho.hpp"
 #include <iostream>
 #include <cstdio>
-
+/** Classe Semáforo
+* Esta classe será responsável por representar um semáforo no sistema. Será instanciado objetos dessa classe
+* para representar semáforos e métodos para executar suas funções que são, basicamente: passar o carro, trocar
+* o seu estado, calcular a próxima vez que o semáforo estará aberto e a probabilidade de um carro virar em uma
+* pista.
+*/
 class Semaforo {
  private:
 	Lista<Pista*>* pistas;
@@ -15,17 +20,13 @@ class Semaforo {
 	int tempoQueVaiAbrir; 
 	bool aberto;
  public:
- 	// ATUAL = 0;
- 	// FRENTE = 1;
- 	// ESQUERDA = 2;
- 	// DIREITA = 3;
- 	// 0 0 0 0 0 0 0 0 1 2
-
- 	// COLOCAR NO CONSTRUTOR SE SEMÁFORO ESTÁ ABERTO OU FECHADO.
-	Semaforo(bool _estaAberto, Pista* arranjo[], int *_probabilidades, int _tempoIntervalo /*, int _carroNoSistema*/) {
+/* Construtor Semáforo
+* Construirá um semáforo com o número de pistas ligadas à ele, a probabilidade de um carro virar e
+* o intervalo do semáforo. Note que elementos são adicionados na lista pistas dentro do construtor.
+*/
+	Semaforo(bool _estaAberto, Pista* arranjo[], int *_probabilidades, int _tempoIntervalo) {
 		pistas = new Lista<Pista*>(3);
 		probabilidades = _probabilidades;
-		// pistas.adiciona (pistaLocal);
 		tempoIntervalo = _tempoIntervalo;
 		tempoQueVaiAbrir = 0;
 		aberto = _estaAberto;
@@ -54,42 +55,6 @@ class Semaforo {
 		return proxima;
 	}
 	
-	// void atualiza(int tempoAtual, int tempoSemaforo) {
-	// 	if (tempoAtual <= tempoSemaforo) {
-	// 		std::cout << "A traffic light is green. Actual time is " << tempoAtual << std::endl;
-	//         passaCarro(tempoAtual);
-	//         // pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
-	// 	} else {
-	// 		// tinha um else aqui
-	// 		std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
-	//     	pistaLocal->atualizaPista(tempoAtual, tempoSemaforo);
- //    	}
- //    	std::cout << "A traffic light is red. Actual time is " << tempoAtual << std::endl;	
- //    }
-	
-	//listaCircular com todos as pistas e atualizar elas separadas dos semaforos.
-	// void passaCarro(int tempoAtual) {
-	// 	if (!pistaLocal->filaVazia()) {
-	// 		Carro carroAtual = pistaLocal->primeiro();
-	// 		bool possivel = true;
-	// 		Pista<Carro>* proxima;
-	// 		while (possivel) {
-	// 			if (pistaLocal->estaNoSemaforo(carroAtual, tempoAtual) 
-	// 				&& pistaLocal->getFonte() && !pistaLocal->filaVazia()) {
-	// 				carroAtual = pistaLocal->primeiro();
-	// 			  	int pistaEscolhida = calculaProbabilidade(carroAtual);
-	// 			    proxima = pistas->mostra(pistaEscolhida);
-	// 			    //this->proximaPista(carroAtual->getProbabilidade());
-	// 			    std::cout << "A car passed through a traffic light" << std::endl;
-	// 			   	proxima->adicionaCarro(carroAtual);
-	// 				pistaLocal->removeCarroSemMensagem(tempoAtual);
-	// 	    	} else {
-	// 	    		possivel = false;
-	// 	    	}
-	//     	}
-	// 	}
-	// }
-
 	void trocarAberto(int tempoAtual) {
 		if (aberto) {
 			aberto = false;
@@ -107,11 +72,11 @@ class Semaforo {
 	int calculaProbabilidade(Carro* c) {
 		int *prob = probabilidades;
 		int numPistas = pistas->retornaTamanho();
-		int probabilidadeDoCarro = c->getProbabilidade();					//sorteio de um nr inteiro entre 1 e 100
-		int valorComp[numPistas];						//vetor para valores de comparação do Método de Monte Carlo
-		valorComp[0] = prob[0];							//o primeiro valor de comparacao é a primeira probabilidade
+		int probabilidadeDoCarro = c->getProbabilidade();
+		int valorComp[numPistas];
+		valorComp[0] = prob[0];					
 		for (int i = 1; i < (numPistas - 1); i++) {
-			valorComp[i] = valorComp[i - 1] + prob[i];	//soma as faixas de comparação
+			valorComp[i] = valorComp[i - 1] + prob[i];
 		}
 		for (int i = 0; i < numPistas; i++) {
 			if (probabilidadeDoCarro <= valorComp[i]) {

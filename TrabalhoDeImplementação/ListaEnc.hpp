@@ -360,5 +360,28 @@ class ListaEnc {
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
     }
+    
+    void merge() {
+        if(size <= 1) {
+            return;
+        }
+        int meio = size / 2;
+        ListaEnc<T>* esquerda = new ListaEnc<T>();
+        for(int i = 0; i < meio -1; i++) {
+            esquerda->adicionaNaPosicao(this->retornaDado(i), i);
+        }
+        ListaEnc<T>* direita = new ListaEnc<T>();
+        for(int i = meio; i < size -1; i++) {
+            direita->adicionaNaPosicao(this->retornaDado(i), i);
+        }
+        esquerda = esquerda->merge();
+        direita = direita->merge();
+        ListaEnc<T>* resultado = new ListaEnc<T>();
+        for(int i = 0; i < size -1; i++) {
+            resultado->adicionaNaPosicao(this->retornaDado(i), i);
+        }
+        resultado->merge();
+    }
+
 };
 #endif

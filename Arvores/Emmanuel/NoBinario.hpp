@@ -4,7 +4,7 @@ template <typename T>
 class Arvore {
  private:
  public:
- 	Arvore() {}
+ 	~Arvore() {}
  	void insere(Node<T>* raiz, const T& info) {
  		Node<T>* novo;
  		if (info < raiz->getInfo()) {

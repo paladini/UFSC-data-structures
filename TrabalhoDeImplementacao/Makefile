@@ -3,7 +3,7 @@ TEST_SRC=$(shell find . -name '*.cpp *.hpp')
 DIRS= Estruturas Eventos Excecoes
 
 CXX=g++
-CXXFLAGS= -std=c++11
+CXXFLAGS= -ggdb -std=c++11
 
 EXEC=main
 

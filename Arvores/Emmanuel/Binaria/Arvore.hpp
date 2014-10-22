@@ -51,6 +51,7 @@ class NoBinario {
             } else {
                 inserir(_dado, raiz->esquerda);
             }
+            balanco_insere(raiz);
         } else {
             if (raiz->direita == NULL) {
                 novo = new NoBinario<T>(_dado);
@@ -58,6 +59,7 @@ class NoBinario {
             } else {
                 inserir(_dado, raiz->direita);
             }
+            balanco_insere(raiz);
         }
         return novo;
     }

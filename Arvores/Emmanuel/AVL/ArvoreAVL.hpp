@@ -1,43 +1,44 @@
+// identificar rotação dupla?
+#ifndef ARVOREAVL_HPP_ 
+#define ARVOREAVL_HPP_
 #include "Arvore.hpp"
-#include "NodeAVL.hpp"
 template <typename T>
-class ArvoreAVL: public Arvore {
- public:
- 	void insere(NodeAVL<T>* raiz, const T& info) {
- 		Node<T>* novo;
- 		if (info < raiz->getInfo()) {
- 			if (raiz->getEsquerda() == NULL) {
- 				novo = new Node<T>(0, NULL, NULL, info);
- 				raiz->setEsquerda(novo);
- 			} else {
- 				insere(raiz->getEsquerda(), info);
- 			}
-	 		if (!balanceado(raiz)) {
-	 			if (altura(raiz->getEsquerda()) > altura(raiz->getDireita())) {
-	 				//identificar situação para rotação dupla;
-	 				simp_roda_esq(raiz);
+class NoBinario: public Arvore {
+ private:
+
+ 	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
+ 		NoBinario<T>* novaRaiz, novaRaizDupla;
+ 		if (!arv->balanceado()) {
+ 			if (altura(arv->getEsquerda()) > altura(arv->getDireita())) {
+	 			if (altura((arv->getEsquerda())->getEsquerda()) > 
+	 					altura((arv->getEsquerda())->getDireita()) {
+	 				novaRaiz = simp_roda_esq(arv);
 	 			} else {
-	 				simp_roda_dir(raiz);
+	 				novaRaiz = simp_roda_esq(arv);
+	 				novaRaizDupla = simp_roda_dir(novaRaiz);
 	 			}
-	  		}
- 		} else if(raiz->getDireita() == NULL) {
- 			novo = new Node<T>(0, NULL, NULL, info);
- 			raiz->setDireita(novo);
- 			} else {
- 				insere(raiz->getDireita(), info);
- 			}
-	 		if (!balanceado(raiz)) {
-	 			if (altura(raiz->getEsquerda()) > altura(raiz->getDireita())) {
-	 				//identificar situação para rotação dupla;
-	 				simp_roda_esq(raiz);
+			} else {
+				if (altura((arv->getDireita())->getDireita()) > 
+					altura((arv->getDireita())->getEsquerda())) {
+	 				novaRaiz = simp_roda_dir(arv);
 				} else {
-	 				simp_roda_dir(raiz);
+					novaRaiz = simp_roda_dir(arv);
+					novaRaizDupla = simp_roda_esq(novaRaiz);
 				}
 			}
+		}
+ 		return arv;
+ 	}
+ 	NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
+
+ 	}
+ public:
+ 	NoBinario<T>* insere(NoBinario<T>* raiz, const T& info)  {
+ 		return Arvore<T>::inserir(info, raiz);
  	}
 
- 	NodeAVL<T>* deletar(NodeAVL<T>* raiz, const T& info) {
- 		Node<T>* filho, temp;
+ 	NoBinario<T>* remove(NoBinario<T>* raiz, const T& info) {
+ 		NoBinario<T>* filho, temp;
  		if (raiz == NULL) {
  			return raiz;
  		}
@@ -50,9 +51,10 @@ class ArvoreAVL: public Arvore {
  			return raiz;
  		}
  		if (raiz->getDireita() != NULL && raiz->getEsquerda() != NULL) {
- 			temp = minimo(raiz->getDireita()); // mínimo?
+ 			temp = minimo(raiz->getDireita());
  			raiz->setInfo(temp->getInfo());
  			raiz->setDireita(deletar(raiz->getDireita(), raiz->getInfo()));
+ 			balanceado_remove(raiz);
  			return raiz;
  		}
  		temp = raiz;
@@ -68,20 +70,20 @@ class ArvoreAVL: public Arvore {
  		return NULL;
  	}
 
- 	int altura(NodeAVL<T>* raiz) {
+ 	int altura(NoBinario<T>* raiz) {
  		if (raiz == NULL) {
  			return -1;
  		}
  		return raiz->getAltura();
  	}
 
- 	bool balanceado(NodeAVL<T>* raiz) {
+ 	bool balanceado(NoBinario<T>* raiz) {
  		double absolute = abs(altura(raiz->getDireita()) - altura(raiz->getEsquerda()));
  		return absolute < 2;
  	}
 
- 	NodeAVL<T>* simp_roda_esq(NodeAVL<T>* raiz) {
- 		NodeAVL<T>* novaRaiz;
+ 	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
+ 		NoBinario<T>* novaRaiz;
  		novaRaiz = raiz->getEsquerda();
  		raiz->setEsquerda(novaRaiz->getDireita());
  		novaRaiz->setDireita(raiz);
@@ -91,8 +93,8 @@ class ArvoreAVL: public Arvore {
  		return novaRaiz;
  	}
 
- 	NodeAVL<T>* simp_roda_dir(NodeAVL<T>* raiz) {
- 		NodeAVL<T>* novaRaiz;
+ 	NoBinario<T>* simp_roda_dir(NoBinario<T>* raiz) {
+ 		NoBinario<T>* novaRaiz;
  		novaRaiz = raiz->getDireita();
  		raiz->setDireita(novaRaiz->getEsquerda());
  		novaRaiz->setEsquerda(raiz);
@@ -101,4 +103,5 @@ class ArvoreAVL: public Arvore {
  		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), altura(raiz->getAltura())) + 1);
  		return novaRaiz;
  	}
-}
+};
+#endif

@@ -2,105 +2,114 @@
 #ifndef ARVOREAVL_HPP_ 
 #define ARVOREAVL_HPP_
 #include "Arvore.hpp"
+#include <algorithm>
 template <typename T>
 class NoBinario: public Arvore {
  private:
+ 	int altura;
 
  	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
  		NoBinario<T>* novaRaiz, novaRaizDupla;
  		if (!arv->balanceado()) {
- 			if (altura(arv->getEsquerda()) > altura(arv->getDireita())) {
-	 			if (altura((arv->getEsquerda())->getEsquerda()) > 
-	 					altura((arv->getEsquerda())->getDireita()) {
+ 			if (altura(arv->esquerda) > altura(arv->direita)) {
+	 			if (altura((arv->esquerda)->esquerda)) > 
+	 					altura((arv->esquerda)->direita) {
 	 				novaRaiz = simp_roda_esq(arv);
 	 			} else {
-	 				novaRaiz = simp_roda_esq(arv);
-	 				novaRaizDupla = simp_roda_dir(novaRaiz);
+	 				novaRaiz = dup_roda_esq(arv);
 	 			}
 			} else {
-				if (altura((arv->getDireita())->getDireita()) > 
-					altura((arv->getDireita())->getEsquerda())) {
+				if (altura((arv->direita)->direita) > 
+					altura((arv->direita)->esquerda)) {
 	 				novaRaiz = simp_roda_dir(arv);
 				} else {
-					novaRaiz = simp_roda_dir(arv);
-					novaRaizDupla = simp_roda_esq(novaRaiz);
+					novaRaiz = dup_roda_dir(arv)
 				}
 			}
 		}
  		return arv;
  	}
- 	NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
 
+ 	NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
+		NoBinario<T>* novaRaiz, novaRaizDupla;
+ 		if (!arv->balanceado()) {
+ 			if (altura(arv->esquerda) > altura(arv->direita)) {
+	 			if (altura((arv->esquerda)->esquerda)) > 
+	 					altura((arv->esquerda)->direita) {
+	 				novaRaiz = simp_roda_esq(arv);
+	 			} else {
+	 				novaRaiz = dup_roda_esq(arv);
+	 			}
+			} else {
+				if (altura((arv->direita)->direita) > 
+					altura((arv->direita)->esquerda)) {
+	 				novaRaiz = simp_roda_dir(arv);
+				} else {
+					novaRaiz = dup_roda_dir(arv)
+				}
+			}
+		}
+ 		return arv; 
  	}
+
  public:
  	NoBinario<T>* insere(NoBinario<T>* raiz, const T& info)  {
- 		return Arvore<T>::inserir(info, raiz);
+ 		NoBinario<T>* arv = NoBinario<T>::inserir(info, raiz);
+ 		arv->altura = std::max(altura(arv->esquerda), altura(arv->direita));
+ 		return arv;
  	}
 
  	NoBinario<T>* remove(NoBinario<T>* raiz, const T& info) {
- 		NoBinario<T>* filho, temp;
- 		if (raiz == NULL) {
- 			return raiz;
- 		}
- 		if (info < raiz->getInfo()) { // Vai para a esquerda
- 			raiz->setEsquerda(deletar(raiz->getEsquerda(), info));
- 			return raiz;
- 		}
- 		if (info > raiz->getInfo()) {
- 			raiz->setDireita(deletar(raiz->getDireita(), info));
- 			return raiz;
- 		}
- 		if (raiz->getDireita() != NULL && raiz->getEsquerda() != NULL) {
- 			temp = minimo(raiz->getDireita());
- 			raiz->setInfo(temp->getInfo());
- 			raiz->setDireita(deletar(raiz->getDireita(), raiz->getInfo()));
- 			balanceado_remove(raiz);
- 			return raiz;
- 		}
- 		temp = raiz;
- 		if (raiz->getDireita() != NULL) { // filho direita
- 			filho = raiz->getDireita();
- 			return filho;
- 		}
- 		if (raiz->getEsquerda() != NULL) {
- 			filho = raiz->getEsquerda();
- 			return filho;
- 		}
- 		delete raiz; // Folha.
- 		return NULL;
- 	}
+ 		NoBinario<T>* arv = NoBinario<T>::remover(raiz, info);
+ 		arv->altura = std::max(altura(arv->esquerda), altura(arv->direita));
+ 		return arv;
+    }
 
  	int altura(NoBinario<T>* raiz) {
  		if (raiz == NULL) {
  			return -1;
  		}
- 		return raiz->getAltura();
+ 		return raiz->altura;
  	}
 
  	bool balanceado(NoBinario<T>* raiz) {
- 		double absolute = abs(altura(raiz->getDireita()) - altura(raiz->getEsquerda()));
+ 		double absolute = abs(altura(raiz->direita) - altura(raiz->esquerda));
  		return absolute < 2;
+ 	}
+
+ 	NoBinario<T>* dup_roda_esq(NoBinario<T>* raiz) {
+ 		/*Rotacione entre k1 e k2*/
+ 		raiz->setEsquerda(simp_roda_dir(raiz->esquerda));
+ 		/*Rotacione entre k3 e k2*/
+ 		return simp_roda_esq(raiz);
+ 	}
+
+ 	NoBinario<T>* dup_roda_dir(NoBinario<T>* raiz) {
+ 		/*Rotacione entre k1 e k2*/
+ 		raiz->setDireita(simp_roda_esq(raiz->direita));
+ 		/*Rotacione entre k3 e k2*/
+ 		return simp_roda_dir(raiz);
  	}
 
  	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
  		NoBinario<T>* novaRaiz;
- 		novaRaiz = raiz->getEsquerda();
- 		raiz->setEsquerda(novaRaiz->getDireita());
- 		novaRaiz->setDireita(raiz);
+ 		novaRaiz = raiz->esquerda;
+ 		raiz->esquerda = novaRaiz->direita;
+ 		novaRaiz->direita = raiz;
  		//atualizar alturas
- 		raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita())) + 1);
- 		novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), altura(novaRaiz->getAltura())) + 1);
+ 		raiz->altura = std::max(altura(raiz->esquerda), altura(raiz->direita)) + 1;
+ 		novaRaiz->altura = std::max(altura(novaRaiz->esquerda), raiz->altura) + 1;
  		return novaRaiz;
  	}
 
  	NoBinario<T>* simp_roda_dir(NoBinario<T>* raiz) {
  		NoBinario<T>* novaRaiz;
- 		novaRaiz = raiz->getDireita();
- 		raiz->setDireita(novaRaiz->getEsquerda());
- 		novaRaiz->setEsquerda(raiz);
+ 		novaRaiz = raiz->direita;
+ 		raiz->direita = novaRaiz->esquerda;
+ 		novaRaiz->esquerda = raiz;
  		//atualizar alturas
- 		raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda())) + 1);
- 		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), altura(raiz->getAltura())) + 1);
+ 		raiz->altura = std::max(altura(raiz->direita), altura(raiz->esquerda)) + 1;
+ 		novaRaiz->altura = std::max(altura(novaRaiz->direita), raiz->altura)) + 1;
  		return novaRaiz;
  	}
 };

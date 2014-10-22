@@ -8,6 +8,7 @@
 template<typename T>
 class NoBinario {
  private:
+    int altura;
 	T* dado;
 	NoBinario<T>* esquerda;
 	NoBinario<T>* direita;
@@ -61,7 +62,7 @@ class NoBinario {
             }
             balanco_insere(raiz);
         }
-        return novo;
+        return raiz;
     }
     NoBinario<T>* remover(NoBinario<T>* raiz, const T& _dado) {
         NoBinario<T>* filho, temp;
@@ -69,17 +70,20 @@ class NoBinario {
             return raiz;
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
-            raiz->esquerda = deletar(raiz->esquerda, _dado);
+            raiz->esquerda = remover(raiz->esquerda, _dado);
+            balanco_remove(raiz->esquerda);
             return raiz;
         }
         if (_dado > *raiz->dado) {
-            raiz->direita = deletar(raiz->direita, _dado);
+            raiz->direita = remover(raiz->direita, _dado);
+            balanco_remove(raiz->direita);
             return raiz;
         }
         if (raiz->direita != NULL && raiz->esquerda != NULL) {
             temp = minimo(raiz->direita);  //  mínimo?
             raiz->dado = temp->dado;
-            raiz->direita = deletar(raiz->direita, *raiz->dado);
+            raiz->direita = remover(raiz->direita, *raiz->dado);
+
             return raiz;
         }
         temp = raiz;
@@ -100,6 +104,7 @@ class NoBinario {
 	   }
 	   return raiz;
 	}
+
 	void preOrdem(NoBinario<T>* raiz) {
 	    if (raiz != NULL) {
 	 			elementos.push_back(*raiz);

@@ -1,11 +1,9 @@
-/* Copyright [2014] <Jean Martina> 
- * Copyleft [2014] <Fernando Paladini, Emmanuel Podestá Junior>
+/* Copyleft [2014] <Fernando Paladini, Emmanuel Podestá Junior>
  * TestePilha.cpp
  */
 
 #include <gtest/gtest.h>
 #include "../Pilha.hpp"
-#include "Objeto.hpp"
 
 
 int main(int argc, char* argv[]) {
@@ -15,7 +13,23 @@ int main(int argc, char* argv[]) {
 }
 
 
+class Objeto{
+public:	
+	int a;
 
+	Objeto(){
+		
+	}
+
+	Objeto(int amerenda){
+		a = amerenda;
+	}
+
+	bool operator==(const Objeto& rhs) const {
+		return a == rhs.a;
+	}
+
+};
 class TestePilha: public ::testing::Test{
  protected:
     Pilha<int> p = Pilha<int>(10);
@@ -26,6 +40,10 @@ TEST_F(TestePilha, PilhaVazia) {
     ASSERT_TRUE(p.PilhaVazia());
 }
 
+TEST_F(TestePilha, PilhaVaziaNeg) {
+	p.empilha(0);
+	ASSERT_FALSE(p.PilhaVazia());
+}
 TEST_F(TestePilha, InsereElemento) {
 	p.empilha(0);
 	ASSERT_EQ(0, p.topo());

@@ -35,13 +35,16 @@ class NoBinario {
 	}
 	T* busca(const T& dado, NoBinario<T>* ptr) {
 	    while (ptr != NULL && *ptr->dado != dado) {
-            if (*ptr->dado < dado) {
+            if (*(ptr->getDado()) < dado) {
                 ptr = ptr->direita;
             } else {
                 ptr = ptr->esquerda;
             }
         }
-        return ptr->dado;
+        if (ptr == NULL) {
+            throw -1; // Throw para dizer que o dado não está presente
+        }
+        return ptr->getDado();
     }
 	NoBinario<T>* inserir(const T& _dado, NoBinario<T>* raiz) {
 	    NoBinario<T>* novo;
@@ -65,7 +68,8 @@ class NoBinario {
         return raiz;
     }
     NoBinario<T>* remover(NoBinario<T>* raiz, const T& _dado) {
-        NoBinario<T>* filho, temp;
+        NoBinario<T>* filho = new NoBinario<T>(0);
+        NoBinario<T>* temp = new NoBinario<T>(0);
         if (raiz == NULL) {
             return raiz;
         }
@@ -80,7 +84,7 @@ class NoBinario {
             return raiz;
         }
         if (raiz->direita != NULL && raiz->esquerda != NULL) {
-            temp = minimo(raiz->direita);  //  mínimo?
+            temp = minimo(raiz->direita); 
             raiz->dado = temp->dado;
             raiz->direita = remover(raiz->direita, *raiz->dado);
 
@@ -99,10 +103,13 @@ class NoBinario {
         return NULL;
     }
 	NoBinario<T>* minimo(NoBinario<T>* raiz) {
-	   if (raiz != NULL) {
-	        minimo(raiz->esquerda);
-	   }
-	   return raiz;
+        NoBinario<T>* root;
+	    if (raiz->esquerda != NULL) {
+	        root = minimo(raiz->esquerda);
+        } else {
+            root = raiz;
+        }
+	    return root;
 	}
 
 	void preOrdem(NoBinario<T>* raiz) {
@@ -126,6 +133,30 @@ class NoBinario {
 	        elementos.push_back(*raiz);
 	   }
 	}
+
+    NoBinario<T>* getEsquerda() {
+        return this->esquerda;
+    }
+
+    void setEsquerda(NoBinario<T>* novo) {
+        this->esquerda = novo;
+    }
+
+    NoBinario<T>* getDireita() {
+        return this->direita;
+    }
+
+    void setDireita(NoBinario<T>* novo) {
+        this->direita = novo;
+    }
+
+    int getAltura() {
+        return this->altura;       
+    }
+
+    void setAltura(int _altura) {
+        this->altura = _altura;
+    }
 };
 
 #endif /* NOBINARIO_HPP_ */

@@ -243,14 +243,14 @@ class Lista {
         ultimo = -1;
     }
     T mostra(int pos) {
-        verificaPosicaoInvalida(pos);
+       // verificaPosicaoInvalida(pos);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
             if (pos == 0) {
-                return dado[0];
+                return dados[0];
             }
-           	return dado[pos];
+           	return dados[pos];
         }
     }
 };

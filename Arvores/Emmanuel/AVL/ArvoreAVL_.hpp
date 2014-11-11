@@ -7,27 +7,44 @@ template <typename T>
 class ArvoreAVL: public NoBinario<T> {
  private:
 
+ 	int maximo(int a, const int b) {
+ 		if (a > b) {
+ 			return a;
+ 		}
+ 		if (a == b) {
+ 			return a;
+ 		}
+ 		return b;
+ 	}
+
     void atualiza(NoBinario<T>* arv) {
-    	arv->setAltura(std::max(altura(arv->getEsquerda()), altura(arv->getDireita())) + 1);
+    	if (arv->getEsquerda() == NULL && arv->getDireita() == 	NULL) {
+    		arv->setAltura(0);
+    	}
+    	arv->setAltura(maximo(altura(arv->getEsquerda()), altura(arv->getDireita())) + 1);
     }
 
  	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
  		NoBinario<T>* novaRaiz;
  		if (balanceado(arv)) {
- 			if (fator(arv) >= -2) {
+ 			if (altura(arv->getDireita()) > altura(arv->getEsquerda())) {
 	 			if (fator(arv->getDireita()) == 1) {
-	 				novaRaiz = simp_roda_dir(arv->getDireita());
+	 				novaRaiz = dup_roda_esq(arv);
+	 			} 
+	 			if (fator(arv->getDireita()) == -1) {
+	 				novaRaiz = simp_roda_esq(arv);
 	 			}
-	 			novaRaiz = simp_roda_esq(arv);
 			}
-			if (fator(arv) <= 2) {
+			if (altura(arv->getDireita()) < altura(arv->getEsquerda())) {
 				if (fator(arv->getEsquerda()) == -1) {
-	 				novaRaiz = simp_roda_esq(arv->getEsquerda());
+	 				novaRaiz = dup_roda_dir(arv);
 				} 
-				novaRaiz = simp_roda_dir(arv);
+				if (fator(arv->getEsquerda()) == 1) {
+					novaRaiz = simp_roda_dir(arv);
+				}
 			}
+			return arv;
 		}
-		atualiza(arv);
  		return arv;
  	}
 
@@ -54,7 +71,8 @@ class ArvoreAVL: public NoBinario<T> {
  	// }
 
  public:
- 	ArvoreAVL<T>(const T& dado): NoBinario<T>(dado){}
+ 	ArvoreAVL(const T& dado): NoBinario<T>(dado){}
+ 	~ArvoreAVL() {}
  	NoBinario<T>* insere(NoBinario<T>* raiz, const T& info)  {
  		NoBinario<T>* arv = NoBinario<T>::inserir(info, raiz);
  		return arv;
@@ -80,22 +98,23 @@ class ArvoreAVL: public NoBinario<T> {
  	}
 
  	bool balanceado(NoBinario<T>* raiz) {
- 		double absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
+ 		int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
  		return absolute > 1;
  	}
 
  	NoBinario<T>* dup_roda_esq(NoBinario<T>* raiz) {
+ 		
  		/*Rotacione entre k1 e k2*/
- 		raiz->setEsquerda(simp_roda_dir(raiz->getEsquerda()));
+ 		raiz->setDireita(simp_roda_dir(raiz->getDireita()));
  		/*Rotacione entre k3 e k2*/
  		return simp_roda_esq(raiz);
  	}
 
  	NoBinario<T>* dup_roda_dir(NoBinario<T>* raiz) {
  		/*Rotacione entre k1 e k2*/
- 		raiz->setDireita(simp_roda_esq(raiz->getDireita()));
+ 		raiz->setEsquerda(simp_roda_esq(raiz->getEsquerda()));
  		/*Rotacione entre k3 e k2*/
- 		return simp_roda_dir(raiz);
+ 		return simp_roda_dir(raiz);	
  	}
 
  	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
@@ -104,12 +123,9 @@ class ArvoreAVL: public NoBinario<T> {
  		novaRaiz = raiz->getDireita();
  		raiz->setDireita(novaRaiz->getEsquerda());
  		novaRaiz->setEsquerda(raiz);
- 		raiz = novaRaiz;
  		//atualizar alturas
- 		atualiza(raiz);
- 		atualiza(novaRaiz);
- 		// raiz->setAltura(std::max(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
- 		// novaRaiz->setAltura(std::max(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
+ 		raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
+ 		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
 
@@ -119,12 +135,9 @@ class ArvoreAVL: public NoBinario<T> {
  		novaRaiz = raiz->getEsquerda();
  		raiz->setEsquerda(novaRaiz->getDireita());
  		novaRaiz->setDireita(raiz);
- 		raiz = novaRaiz;
  		//atualizar alturas
- 		atualiza(raiz);
- 		atualiza(novaRaiz);
- 		// raiz->setAltura(std::max(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
- 		// novaRaiz->setAltura(std::max(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
+ 		raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
+ 		novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
 };

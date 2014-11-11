@@ -7,7 +7,7 @@
 
 template<typename T>
 class NoBinario {
- private:
+ protected:
     int altura;
     T* dado;
     NoBinario<T>* esquerda;
@@ -49,7 +49,7 @@ class NoBinario {
     }
     NoBinario<T>* inserir(const T& _dado, NoBinario<T>* raiz) {
         NoBinario<T>* novo;
-        if (_dado < *raiz->dado) {
+        if (_dado < *(raiz->dado)) {
             if (raiz->esquerda == NULL) {
                 novo = new NoBinario<T>(_dado);
                 raiz->esquerda = novo;
@@ -66,8 +66,9 @@ class NoBinario {
                 inserir(_dado, raiz->direita);
             }
             balanco_insere(raiz);
+
         }
-        atualiza(raiz);
+        //atualiza(raiz);
         return raiz;
     }
     NoBinario<T>* remover(NoBinario<T>* raiz, const T& _dado) {
@@ -78,12 +79,12 @@ class NoBinario {
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
             raiz->esquerda = remover(raiz->esquerda, _dado);
-            balanco_remove(raiz->esquerda);
+            balanco_insere(raiz);
             return raiz;
         }
         if (_dado > *raiz->dado) {
             raiz->direita = remover(raiz->direita, _dado);
-            balanco_remove(raiz->direita);
+            balanco_insere(raiz);
             return raiz;
         }
         if (raiz->direita != NULL && raiz->esquerda != NULL) {
@@ -101,7 +102,7 @@ class NoBinario {
             filho = raiz->esquerda;
             return filho;
         }
-        atualiza(raiz);
+       // atualiza(raiz);
         delete raiz;  //  Folha.
         return NULL;
     }

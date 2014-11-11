@@ -1,6 +1,6 @@
 // Copyright 2014 Caique Rodrigues Marques e Fernando Jorge Mota
 #include "gtest/gtest.h"
-#include "ArvoreAVL_.hpp"
+#include "ArvoreAVL.hpp"
 #include <cstdlib>
 #include <vector>
 
@@ -154,4 +154,150 @@ TEST_F(ArvoreAVLTest, getAltura) {
     ASSERT_NO_THROW(inteiro->inserir(7, inteiro));
     ASSERT_NO_THROW(inteiro->inserir(13, inteiro));
     // ASSERT_EQ(1, inteiro->getAltura());
+}
+
+TEST_F(ArvoreAVLTest, removerRotacaoSimplesDireita) {
+    ASSERT_NO_THROW(inteiro->inserir(5, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(15, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(14, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(16, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(6, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(13, inteiro));
+    ASSERT_NO_THROW(inteiro->remover(inteiro, 15));
+    // Rotação simples à direita
+    inteiro->emOrdem(inteiro);
+    
+    NoBinario<int>* elementos = inteiro->getElementos();
+    
+    //ASSERT_EQ(1, inteiro->getAltura());
+    ASSERT_EQ(5, *(elementos->getDado()));
+    elementos++; 
+
+    ASSERT_EQ(6, *(elementos->getDado()));
+    elementos++; 
+
+    ASSERT_EQ(10, *(elementos->getDado()));
+    elementos++; 
+
+    ASSERT_EQ(13, *(elementos->getDado()));
+    elementos++; 
+
+    ASSERT_EQ(14, *(elementos->getDado()));
+    elementos++; 
+
+    ASSERT_EQ(16, *(elementos->getDado()));
+}
+
+TEST_F(ArvoreAVLTest, removerRotacaoDuplaDireita) {
+    ASSERT_NO_THROW(inteiro->inserir(4, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(15, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(14, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(17, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(6, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(20, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(13, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(25, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(7, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(8, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(2, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(26, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(18, inteiro));
+    ASSERT_NO_THROW(inteiro->remover(inteiro, 26));
+    ASSERT_NO_THROW(inteiro->remover(inteiro, 25));
+    // Rotação dupla à direita
+    inteiro->emOrdem(inteiro);
+    
+    NoBinario<int>* elementos = inteiro->getElementos();
+    
+    ASSERT_EQ(2, *(elementos->getDado()));
+    elementos++;
+
+    ASSERT_EQ(4, *(elementos->getDado()));
+    elementos++;
+
+    ASSERT_EQ(6, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(7, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(8, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(10, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(13, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(14, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(15, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(17, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(18, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(20, *(elementos->getDado()));
+}
+
+TEST_F(ArvoreAVLTest, removerRotacaoDuplaEsquerda) {
+    ASSERT_NO_THROW(inteiro->inserir(4, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(15, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(14, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(17, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(6, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(20, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(13, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(25, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(7, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(8, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(2, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(26, inteiro));
+    ASSERT_NO_THROW(inteiro->inserir(16, inteiro));
+    ASSERT_NO_THROW(inteiro->remover(inteiro, 14));
+    ASSERT_NO_THROW(inteiro->remover(inteiro, 13));
+    // Rotação dupla à esquerda
+    inteiro->emOrdem(inteiro);
+    
+    NoBinario<int>* elementos = inteiro->getElementos();
+    
+    ASSERT_EQ(2, *(elementos->getDado()));
+    elementos++;
+
+    ASSERT_EQ(4, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(6, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(7, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(8, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(10, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(15, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(16, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(17, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(20, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(25, *(elementos->getDado()));
+    elementos++;
+    
+    ASSERT_EQ(26, *(elementos->getDado()));
 }

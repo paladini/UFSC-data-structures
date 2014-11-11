@@ -26,8 +26,8 @@ class ArvoreAVL: public NoBinario<T> {
 
  	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
  		NoBinario<T>* novaRaiz;
- 		if (balanceado(arv)) {
- 			if (altura(arv->getDireita()) > altura(arv->getEsquerda())) {
+ 		//if (balanceado(arv)) {
+ 			if (fator(arv) == 2/*altura(arv->getDireita()) > altura(arv->getEsquerda())*/) {
 	 			if (fator(arv->getDireita()) == 1) {
 	 				novaRaiz = dup_roda_esq(arv);
 	 			} 
@@ -35,7 +35,7 @@ class ArvoreAVL: public NoBinario<T> {
 	 				novaRaiz = simp_roda_esq(arv);
 	 			}
 			}
-			if (altura(arv->getDireita()) < altura(arv->getEsquerda())) {
+			if (fator(arv) == -2/*altura(arv->getDireita()) < altura(arv->getEsquerda())*/) {
 				if (fator(arv->getEsquerda()) == -1) {
 	 				novaRaiz = dup_roda_dir(arv);
 				} 
@@ -44,8 +44,8 @@ class ArvoreAVL: public NoBinario<T> {
 				}
 			}
 			return arv;
-		}
- 		return arv;
+		//}
+ 		//return arv;
  	}
 
  	// NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
@@ -104,32 +104,22 @@ class ArvoreAVL: public NoBinario<T> {
 
  	NoBinario<T>* dup_roda_esq(NoBinario<T>* raiz) {
  		
- 		/*Rotacione entre k1 e k2*/
- 		raiz->setDireita(simp_roda_dir(raiz->getDireita()));
- 		/*Rotacione entre k3 e k2*/
- 		return simp_roda_esq(raiz);
- 	}
-
- 	NoBinario<T>* dup_roda_dir(NoBinario<T>* raiz) {
+ 		
  		/*Rotacione entre k1 e k2*/
  		raiz->setEsquerda(simp_roda_esq(raiz->getEsquerda()));
  		/*Rotacione entre k3 e k2*/
  		return simp_roda_dir(raiz);	
  	}
 
- 	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
- 		
- 		NoBinario<T>* novaRaiz = raiz;
- 		novaRaiz = raiz->getDireita();
- 		raiz->setDireita(novaRaiz->getEsquerda());
- 		novaRaiz->setEsquerda(raiz);
- 		//atualizar alturas
- 		raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
- 		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
- 		return novaRaiz;
+ 	NoBinario<T>* dup_roda_dir(NoBinario<T>* raiz) {
+ 		/*Rotacione entre k1 e k2*/
+ 		raiz->setDireita(simp_roda_dir(raiz->getDireita()));
+ 		/*Rotacione entre k3 e k2*/
+ 		return simp_roda_esq(raiz);
  	}
 
- 	NoBinario<T>* simp_roda_dir(NoBinario<T>* raiz) {
+ 	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
+ 		
  		
  		NoBinario<T>* novaRaiz = raiz;
  		novaRaiz = raiz->getEsquerda();
@@ -139,6 +129,18 @@ class ArvoreAVL: public NoBinario<T> {
  		raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
  		novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
  		return novaRaiz;
+ 	}
+
+ 	NoBinario<T>* simp_roda_dir(NoBinario<T>* raiz) {
+ 		NoBinario<T>* novaRaiz = raiz;
+ 		novaRaiz = raiz->getDireita();
+ 		raiz->setDireita(novaRaiz->getEsquerda());
+ 		novaRaiz->setEsquerda(raiz);
+ 		//atualizar alturas
+ 		raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
+ 		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
+ 		return novaRaiz;
+ 		
  	}
 };
 #endif

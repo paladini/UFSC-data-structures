@@ -19,53 +19,57 @@
 
 template<typename T>
 class NoBinario {
- private:
+ protected:
     int altura;
-	T* dado;
-	NoBinario<T>* esquerda;
-	NoBinario<T>* direita;
+    T* dado;
+    NoBinario<T>* esquerda;
+    NoBinario<T>* direita;
 
     /** Método balanco_insere(NoBinario<T>* arv).
     * Método auxiliar para fazer a inserção balanceada, que será utilizada na árvore AVL. 
     * Na classe nó binário esse método não tem nenhuma utilidade prática, mas para fins
     * de facilidade na herança de métodos foi colocado aqui como virtual.
     */
-	virtual NoBinario<T>* balanco_insere(NoBinario<T>* arv) { return arv; }
+    virtual NoBinario<T>* balanco_insere(NoBinario<T>* arv) { return arv; }
 
     /** Método balanco_remove(NoBinario<T>* arv).
     * Método auxiliar para fazer a remoção balanceada, que será utilizada na árvore AVL. 
     * Na classe nó binário esse método não tem nenhuma utilidade prática, mas para fins
     * de facilidade na herança de métodos foi colocado aqui como virtual.
     */
-	virtual NoBinario<T>* balanco_remove(NoBinario<T>* arv) { return arv; }
+    virtual NoBinario<T>* balanco_remove(NoBinario<T>* arv) { return arv; }
+
+    virtual void atualiza(NoBinario<T>* arv) {}
 
     /* Armazenará o resultado do percorrimento em "preOrdem", "emOrdem" ou "posOrdem" da árvore binária. */
-	std::vector<NoBinario<T> > elementos;
+    std::vector<NoBinario<T> > elementos;
 
  public:
+
     /** Construtor do nó binário.
     * O construtor da nó binário constroi um nodo que contêm um dado
     * e faz com que as subárvores da direita e esquerda apontem para NULL.
     *
     * @param dado O dado T que esse nodo conterá.
     */
-	NoBinario<T>(const T& dado): dado(new T(dado)), esquerda(NULL), direita(NULL) {}
+    NoBinario<T>(const T& dado):
+                dado(new T(dado)), esquerda(NULL), direita(NULL), altura(0) {}
 
     /** Destrutor padrão da nó binário.
     * O destrutor padrão da nó binário limpa o vector "elementos", que aloca NoBinario<T> quando
     * a lista é percorida em preOrdem, posOrdem ou emOrdem. 
     */
-	virtual ~NoBinario<T>() {
-	    elementos.clear();
-	}
+    virtual ~NoBinario<T>() {
+        elementos.clear();
+    }
 
     /** Método getDado(). 
     * Retorna o dado armazenado neste nodo.
     * @return Retorna o dado T armazenado neste nodo.
     */
-	T* getDado() {
-	    return this->dado;
-	}
+    T* getDado() {
+        return this->dado;
+    }
 
     /** Método getElementos(). 
     * Retorna um vetor de NoBinario<T> que contém todos os nós binários dessa árvore (incluindo as 
@@ -73,9 +77,9 @@ class NoBinario {
     * com o método de percorrimento escolhido (preOrdem, emOrdem, posOrdem).
     * @return Vetor de NoBinario<T> na posição do método de percorrimento escolhio (preOrdem, emOrdem, posOrdem).   
     */
-	NoBinario<T>* getElementos() {
-	    return elementos.data();
-	}
+    NoBinario<T>* getElementos() {
+        return elementos.data();
+    }
 
     /** Método busca().
     * Busca por um dado T no nodo binário passado como argumento. Caso o 
@@ -87,8 +91,8 @@ class NoBinario {
     * @see getDado();
     * @return O dado T que foi procurado. 
     */
-	T* busca(const T& dado, NoBinario<T>* ptr) {
-	    while (ptr != NULL && *ptr->dado != dado) {
+    T* busca(const T& dado, NoBinario<T>* ptr) {
+        while (ptr != NULL && *ptr->dado != dado) {
             if (*(ptr->getDado()) < dado) {
                 ptr = ptr->direita;
             } else {
@@ -110,17 +114,18 @@ class NoBinario {
     * @see balanco_insere();
     * @return Retorna a própria raiz que foi passada como argumento. 
     */
-	NoBinario<T>* inserir(const T& _dado, NoBinario<T>* raiz) {
-	    NoBinario<T>* novo;
-	    if (_dado < *raiz->dado) {
-	        if (raiz->esquerda == NULL) {
+    NoBinario<T>* inserir(const T& _dado, NoBinario<T>* raiz) {
+        NoBinario<T>* novo;
+        if (_dado < *(raiz->dado)) {
+            if (raiz->esquerda == NULL) {
                 novo = new NoBinario<T>(_dado);
                 raiz->esquerda = novo;
             } else {
                 inserir(_dado, raiz->esquerda);
             }
             balanco_insere(raiz);
-        } else {
+        }
+        if (_dado > *raiz->dado) {
             if (raiz->direita == NULL) {
                 novo = new NoBinario<T>(_dado);
                 raiz->direita = novo;
@@ -128,7 +133,9 @@ class NoBinario {
                 inserir(_dado, raiz->direita);
             }
             balanco_insere(raiz);
+
         }
+        atualiza(raiz);
         return raiz;
     }
 
@@ -149,30 +156,35 @@ class NoBinario {
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
             raiz->esquerda = remover(raiz->esquerda, _dado);
-            balanco_remove(raiz->esquerda);
+            balanco_insere(raiz);
+            atualiza(raiz);
             return raiz;
         }
         if (_dado > *raiz->dado) {
             raiz->direita = remover(raiz->direita, _dado);
-            balanco_remove(raiz->direita);
+            balanco_insere(raiz);
+            atualiza(raiz);
             return raiz;
         }
         if (raiz->direita != NULL && raiz->esquerda != NULL) {
             temp = minimo(raiz->direita); 
             raiz->dado = temp->dado;
             raiz->direita = remover(raiz->direita, *raiz->dado);
-
+            atualiza(raiz);
             return raiz;
         }
         temp = raiz;
         if (raiz->direita != NULL) {  // filho direita
             filho = raiz->direita;
+            atualiza(raiz);
             return filho;
         }
         if (raiz->esquerda != NULL) {
             filho = raiz->esquerda;
+            atualiza(raiz);
             return filho;
         }
+        atualiza(raiz);
         delete raiz;  //  Folha.
         return NULL;
     }
@@ -184,58 +196,58 @@ class NoBinario {
     * @param raiz A raiz da árvore em que o menor nodo será procurado.
     * @return Retorna o menor nodo da árvore binária. 
     */
-	NoBinario<T>* minimo(NoBinario<T>* raiz) {
+    NoBinario<T>* minimo(NoBinario<T>* raiz) {
         NoBinario<T>* root;
-	    if (raiz->esquerda != NULL) {
-	        root = minimo(raiz->esquerda);
+        if (raiz->esquerda != NULL) {
+            root = minimo(raiz->esquerda);
         } else {
             root = raiz;
         }
-	    return root;
-	}
+        return root;
+    }
 
     /** Método preOrdem(NoBinario<T>* raiz).
     * Percorre toda a árvore em preOrdem e adiciona os nodos binários ao vector "elementos".
     * @param raiz A raiz da árvore em que o percorrimento será realizado.
     */
-	void preOrdem(NoBinario<T>* raiz) {
-	    if (raiz != NULL) {
-	 			elementos.push_back(*raiz);
-	 			preOrdem(raiz->esquerda);
-	 			preOrdem(raiz->direita);
-	 		}
-	}
+    void preOrdem(NoBinario<T>* raiz) {
+        if (raiz != NULL) {
+                elementos.push_back(*raiz);
+                preOrdem(raiz->esquerda);
+                preOrdem(raiz->direita);
+            }
+    }
 
     /** Método emOrdem(NoBinario<T>* raiz).
     * Percorre toda a árvore em emOrdem e adiciona os nodos binários ao vector "elementos".
     * @param raiz A raiz da árvore em que o percorrimento será realizado.
     */
-	void emOrdem(NoBinario<T>* raiz) {
-	    if (raiz != NULL) {
-	        emOrdem(raiz->esquerda);
-	        elementos.push_back(*raiz);
-	        emOrdem(raiz->direita);
-	   }
-	}
+    void emOrdem(NoBinario<T>* raiz) {
+        if (raiz != NULL) {
+            emOrdem(raiz->esquerda);
+            elementos.push_back(*raiz);
+            emOrdem(raiz->direita);
+       }
+    }
 
     /** Método posOrdem(NoBinario<T>* raiz).
     * Percorre toda a árvore em posOrdem e adiciona os nodos binários ao vector "elementos".
     * @param raiz A raiz da árvore em que o percorrimento será realizado.
     */
-	void posOrdem(NoBinario<T>* raiz) {
-	    if (raiz != NULL) {
-	        posOrdem(raiz->esquerda);
-	        posOrdem(raiz->direita);
-	        elementos.push_back(*raiz);
-	   }
-	}
+    void posOrdem(NoBinario<T>* raiz) {
+        if (raiz != NULL) {
+            posOrdem(raiz->esquerda);
+            posOrdem(raiz->direita);
+            elementos.push_back(*raiz);
+       }
+    }
 
     /** Método getEsquerda().
     * Método que retorna o filho à esquerda do nó binário atual.
     * @return Retorna o NoBinario<T> que é o filho à esquerda do nó binário atual.
     */
     NoBinario<T>* getEsquerda() {
-        return this->esquerda;
+        return esquerda;
     }
 
     /** Método setEsquerda(NoBinario<T>* novo).
@@ -251,7 +263,7 @@ class NoBinario {
     * @return Retorna o NoBinario<T> que é o filho à direita do nó binário atual.
     */
     NoBinario<T>* getDireita() {
-        return this->direita;
+        return direita;
     }
 
     /** Método setDireita(NoBinario<T>* novo).
@@ -259,7 +271,7 @@ class NoBinario {
     * @param novo O novo filho à direita do nó binário atual.
     */
     void setDireita(NoBinario<T>* novo) {
-        this->direita = novo;
+        direita = novo;
     }
 
     /** Método getAltura().

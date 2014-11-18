@@ -189,21 +189,21 @@ TEST_F(ArvoreAVLTest, removerRotacaoSimplesDireita) {
 }
 
 TEST_F(ArvoreAVLTest, removerRotacaoDuplaDireita) {
-    ASSERT_NO_THROW(inteiro->inserir(4, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(15, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(14, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(17, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(6, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(20, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(13, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(25, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(7, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(8, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(2, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(26, inteiro));
-    ASSERT_NO_THROW(inteiro->inserir(18, inteiro));
-    ASSERT_NO_THROW(inteiro->remover(inteiro, 26));
-    ASSERT_NO_THROW(inteiro->remover(inteiro, 25));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 4));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 15));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 14));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 17));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 6));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 20));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 13));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 25));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 7));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 8));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 2));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 26));
+    ASSERT_NO_THROW(inteiro->insere(inteiro, 18));
+    ASSERT_NO_THROW(inteiro->remove(inteiro, 26));
+    ASSERT_NO_THROW(inteiro->remove(inteiro, 25));
     // Rotação dupla à direita
     inteiro->emOrdem(inteiro);
     

@@ -156,13 +156,13 @@ class NoBinario {
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
             raiz->esquerda = remover(raiz->esquerda, _dado);
-            balanco_insere(raiz);
+            balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
         if (_dado > *raiz->dado) {
             raiz->direita = remover(raiz->direita, _dado);
-            balanco_insere(raiz);
+            balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }

@@ -173,7 +173,7 @@ class ListaCirc: public ListaEnc<T> {
         T volta;
         this->verificaPosicaoInvalida(pos);
         if (pos == 0) {
-            retiraDoInicio();
+            retiraDoInicio();// return;
         } else {
             Elemento<T> *anterior = sentinel->getProximo();
             for (int i = 0; i < pos - 2; i++) {

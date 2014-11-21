@@ -156,13 +156,13 @@ class NoBinario {
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
             raiz->esquerda = remover(raiz->esquerda, _dado);
-            balanco_insere(raiz);
+            balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
         if (_dado > *raiz->dado) {
             raiz->direita = remover(raiz->direita, _dado);
-            balanco_insere(raiz);
+            balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
@@ -170,20 +170,24 @@ class NoBinario {
             temp = minimo(raiz->direita); 
             raiz->dado = temp->dado;
             raiz->direita = remover(raiz->direita, *raiz->dado);
+            balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
         temp = raiz;
         if (raiz->direita != NULL) {  // filho direita
             filho = raiz->direita;
+            balanco_remove(raiz);
             atualiza(raiz);
             return filho;
         }
         if (raiz->esquerda != NULL) {
             filho = raiz->esquerda;
+            balanco_remove(raiz);            
             atualiza(raiz);
             return filho;
         }
+        balanco_remove(raiz);
         atualiza(raiz);
         delete raiz;  //  Folha.
         return NULL;

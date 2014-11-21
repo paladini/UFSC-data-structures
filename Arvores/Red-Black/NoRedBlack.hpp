@@ -1,15 +1,105 @@
 #ifndef NOREDBLACK_HPP_
 #define NOREDBLACK_HPP_
+#include "Arvore.hpp"
 template <typename T>
-class NoRedBlack {
+class NoRedBlack: public NoBinario<T>	 {
  private:
  	T* info;
  	NoRedBlack<T>* esquerda;
  	NoRedBlack<T>* direita;
  	NoRedBlack<T>* pai;
  	bool cor; // 1 = rubro; 0 = negro;
+ 	NoRedBlack<T>* balanco_insere(NoRedBlack<T>* raiz) {
 
+ 	}
  public:
+ 	NoRedBlack<T>(const T& dado) : cor(true), pai(0), esquerda(0), direita(0), info(new T(dado)) {}
+
+ 	void insereRB (NoRedBlack<T>* raiz, const T& info){
+ 		NoRedBlack<T>* atual, pai, avo, nodo;
+ 		nodo = InsereArvBusca(raiz, info);
+ 		nodo->cor = true;
+ 		atual = nodo;
+ 		while (atual != raiz && (atual->pai)->cor == true) {
+ 			pai = atual->pai;
+ 			avo = pai->pai;
+ 			if (avo->esquerda == pai) {
+ 				PassoCE_esq(atual, pai, avo);
+ 			} else {
+ 				PassoCE_dir(atual, pai, avo);
+ 			}
+ 		}
+ 		raiz->cor = false;
+ 	}
+ 	NoRedBlack<T>* InsereArvBusca(NoRedBlack<T>* raiz, const T& info) {
+ 		NoRedBlack<T>* nodo;
+ 		if (info < *(raiz->dado)) {
+            if (raiz->esquerda == NULL) {
+                nodo = new NoRedBlack<T>(info);
+                raiz->esquerda = nodo;
+            } else {
+                InsereArvBusca(raiz->esquerda, info);
+            }
+        }
+        if (info > *raiz->dado) {
+            if (raiz->direita == NULL) {
+                nodo = new NoRedBlack<T>(info);
+                raiz->direita = nodo;
+            } else {
+                InsereArvBusca(raiz->direita, info);
+            }
+        }
+        return nodo;
+    }
+
+    NoRedBlack<T>* remover(NoRedBlack<T>* raiz, const T& dado) {
+    	NoRedBlack<T>* filho = new NoRedBlack<T>*(0);
+        NoRedBlack<T>* temp = new NoRedBlack<T>*(0);
+        if (raiz == NULL) {
+            return raiz;
+        }
+        if (dado < *raiz->info) {
+            raiz->esquerda = remover(raiz->esquerda, dado);
+            temp = (raiz->esquerda)->pai;
+            passoCE_esq(raiz->esquerda, temp, temp->pai);
+            return raiz;
+        }
+        if (dado > *raiz->info) {
+            raiz->direita = remover(raiz->direita, dado);
+            temp = (raiz->direita)->pai;
+            passoCE_dir(raiz->direita, temp, temp->pai);
+            return raiz;
+        }
+        if (raiz->direita != NULL && raiz->esquerda != NULL) {
+            minimo = minimo(raiz->direita); 
+            substituto = passoCED(minimo, raiz);
+            raiz->info = substituto->info;
+            raiz->direita = remover(raiz->direita, *raiz->info);
+            return raiz;
+        }
+        temp = raiz;
+        if (raiz->direita != NULL) {
+            filho = raiz->direita;
+            return filho;
+        }
+        if (raiz->esquerda != NULL) {
+            filho = raiz->esquerda;
+            return filho;
+        }
+        delete raiz;
+        return NULL;
+    }
+
+	NoRedBlack<T>* passoCED(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
+		while(w != raiz) {
+			if (w == w->pai->esquerda) {
+				w = passoCED_esq(w, raiz);
+			} else {
+				w = passoCED_dir(w, raiz);
+			}
+		}
+		return w;
+	}
 
  	NoRedBlack<T>* roda_dir (NoRedBlack<T>* arv) {
  		NoRedBlack<T>* y, superior; // pai
@@ -54,24 +144,6 @@ class NoRedBlack {
  			superior->direita = y;
  		}
  		return y;
- 	}
- 	
- 	void insereRB (NoRedBlack<T>* raiz, const T& info, NoRedBlack<T>* nodo){
- 		NoRedBlack<T>* atual, pai, avo;
- 		InsereArvBusca(raiz, info, nodo); // ??
- 		nodo->cor = true;
- 		atual = nodo;
- 		while (atual != raiz && (atual->pai)->cor == true) {
- 			pai = atual->pai;
- 			avo = pai->pai;
- 			if (avo->esquerda == pai) {
- 				PassoCE_esq(atual, pai, avo);
- 			} else {
- 				PassoCE_dir(atual, pai, avo);
- 			}
- 			raiz->cor = false;
- 		}
-
  	}
 
  	void passoCE_esq(NoRedBlack<T>* atual, NoRedBlack<T>* pai, NoRedBlack<T>* avo){
@@ -121,17 +193,8 @@ class NoRedBlack {
 			roda_esq(avo);
 		}
 	}
-	NoRedBlack<T>* passoCED(NoRedBlack<T>* w, raiz) {
-		while(w != raiz) {
-			if (w == w->pai->esquerda) {
-				w = passoCED_esq(w, raiz);
-			} else {
-				w = passoCE_dir(w, raiz);
-			}
-		}
-		return w;
-	}
-	NoRedBlack<T>* passoCED_esq(NoRedBlack<T>* w, raiz) {
+
+	NoRedBlack<T>* passoCED_esq(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
 		NoRedBlack<T>* y;
 		y = w->pai->direita;
 		if (y->cor == true) {
@@ -158,5 +221,79 @@ class NoRedBlack {
 		}
 		return w;
 	}
+
+	NoRedBlack<T>* passoCED_dir(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
+		NoRedBlack<T>* y;
+		y = w->pai->esquerda;
+		if (y->cor == true) {
+			y->cor = false;
+			w->pai->cor = true;
+			roda_dir(w->pai);
+			y = w->pai->esquerda;
+		}
+		if (y->esquerda->cor == false && y->direita->cor == false) {
+			y->cor = true;
+			w = w->pai;
+		} else {
+			if (y->esquerda->cor == false) {
+				y->direita->cor = false;
+				y->cor = true;
+				roda_esq(y);
+				y = w->pai->esquerda;
+			}
+			y->cor = w->pai->cor;
+			w->pai->cor = false;
+			y->esquerda->cor = false;
+			roda_dir(w->pai);
+			w = raiz;
+		}
+		return w;
+	}
+
+	NoRedBlack<T>* minimo(NoRedBlack<T>* raiz) {
+        NoRedBlack<T>* root;
+        if (raiz->esquerda != NULL) {
+            root = minimo(raiz->esquerda);
+        } else {
+            root = raiz;
+        }
+        return root;
+    }
 };
+// NoRedBlack<T>* minimo;
+//     	NoRedBlack<T>* substituto;
+
+//     	NoRedBlack<T>* filho = new NoRedBlack<T>*(0);
+//         NoRedBlack<T>* temp = new NoRedBlack<T>*(0);
+//         if (raiz == NULL) {
+//             return raiz;
+//         }
+//         if (dado < *raiz->info) {  // Vai para a esquerda
+//             raiz->esquerda = remover(raiz->esquerda, dado);
+//             passoCE_esq(filho, filho->pai, filho->avo);
+//             return raiz;
+//         }
+//         if (dado > *raiz->info) {
+//             raiz->direita = remover(raiz->direita, dado);
+//             return raiz;
+//         }
+//         if (raiz->direita != NULL && raiz->esquerda != NULL) {
+//             minimo = minimo(raiz->direita); 
+//             substituto = passoCED(minimo, raiz);
+//             raiz->info = substituto->info;
+//             raiz->direita = remover(raiz->direita, *raiz->info);
+//             return raiz;
+//         }
+//         temp = raiz;
+//         if (raiz->direita != NULL) {  // filho direita
+//             filho = raiz->direita;
+//             return filho;
+//         }
+//         if (raiz->esquerda != NULL) {
+//             filho = raiz->esquerda;
+//             return filho;
+//         }
+//         delete raiz;  //  Folha.
+//         return NULL;
+
 #endif

@@ -249,7 +249,7 @@ class ListaEnc {
             adicionaNoInicio(data);
         } else {
             atual = head;
-            posicao = 1;
+            posicao = 0;
             while (atual->getProximo() != NULL &&
                   maior(data, atual->getInfo())) {
                 atual = atual->getProximo();

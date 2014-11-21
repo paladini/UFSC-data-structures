@@ -21,7 +21,7 @@ template<typename T>
 class Pilha : private EstruturaLinear<T> {
  public:
     /** Construtor da Pilha sem argumento.
-     * Este construtor tem o mesmo comportamento do contrutor da classe Estrutura Linear, pois a classe Pilha herda o seu construtor.
+     * Este construtor tem o mesmo comportamento do construtor da classe Estrutura Linear, pois a classe Pilha herda o seu construtor.
      * @see EstruturaLinear<T>()
      */
     Pilha() : EstruturaLinear<T>() {

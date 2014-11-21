@@ -49,7 +49,7 @@ class ListaDuplaCirc: public ListaDupla<T> {
     void adicionaNoInicioDuplo(const T& dado) {
         this->verificaMemoriaCheia();
         ElementoDuplo<T> *novo = new ElementoDuplo<T>(dado,
-        sentinel->getProximo(), sentinel->getAnterior());
+            sentinel->getProximo(), sentinel->getAnterior());
         sentinel->setAnterior(novo);
         sentinel->setProximo(novo);
         this->defineTamanho(this->retornaTamanho() + 1);

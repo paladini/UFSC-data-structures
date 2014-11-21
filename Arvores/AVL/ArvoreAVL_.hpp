@@ -26,8 +26,7 @@ class ArvoreAVL: public NoBinario<T> {
 
  	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
  		NoBinario<T>* novaRaiz;
- 		//if (balanceado(arv)) {
- 			if (fator(arv) == 2/*altura(arv->getDireita()) > altura(arv->getEsquerda())*/) {
+ 			if (fator(arv) == 2) {
 	 			if (fator(arv->getDireita()) == 1) {
 	 				novaRaiz = dup_roda_esq(arv);
 	 			} 
@@ -35,7 +34,7 @@ class ArvoreAVL: public NoBinario<T> {
 	 				novaRaiz = simp_roda_esq(arv);
 	 			}
 			}
-			if (fator(arv) == -2/*altura(arv->getDireita()) < altura(arv->getEsquerda())*/) {
+			if (fator(arv) == -2) {
 				if (fator(arv->getEsquerda()) == -1) {
 	 				novaRaiz = dup_roda_dir(arv);
 				} 
@@ -44,31 +43,28 @@ class ArvoreAVL: public NoBinario<T> {
 				}
 			}
 			return arv;
-		//}
- 		//return arv;
  	}
 
- 	// NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
-		// NoBinario<T>* novaRaiz, novaRaizDupla;
- 	// 	if (!arv->balanceado()) {
- 	// 		if (altura(arv->getEsquerda()) > altura(arv->getDireita())) {
-	 // 			if (altura((arv->getEsquerda())->getEsquerda())) > 
-	 // 					altura((arv->getEsquerda())->getDireita()) {
-	 // 				novaRaiz = simp_roda_esq(arv);
-	 // 			} else {
-	 // 				novaRaiz = dup_roda_esq(arv);
-	 // 			}
-		// 	} else {
-		// 		if (altura((arv->getDireita())->getDireita()) > 
-		// 			altura((arv->getDireita())->getEsquerda())) {
-	 // 				novaRaiz = simp_roda_dir(arv);
-		// 		} else {
-		// 			novaRaiz = dup_roda_dir(arv)
-		// 		}
-		// 	}
-		// }
- 	// 	return arv; 
- 	// }
+ 	NoBinario<T>* balanco_remove(NoBinario<T>* arv) {
+ 		NoBinario<T>* novaRaiz;
+ 			if (fator(arv) == 2) {
+	 			if (fator(arv->getDireita()) == 1) {
+	 				novaRaiz = dup_roda_esq(arv);
+	 			} 
+	 			if (fator(arv->getDireita()) == -1) {
+	 				novaRaiz = simp_roda_esq(arv);
+	 			}
+			}
+			if (fator(arv) == -2) {
+				if (fator(arv->getEsquerda()) == -1) {
+	 				novaRaiz = dup_roda_dir(arv);
+				} 
+				if (fator(arv->getEsquerda()) == 1) {
+					novaRaiz = simp_roda_dir(arv);
+				}
+			}
+			return arv;
+ 	}
 
  public:
  	ArvoreAVL(const T& dado): NoBinario<T>(dado){}
@@ -119,8 +115,6 @@ class ArvoreAVL: public NoBinario<T> {
  	}
 
  	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
- 		
- 		
  		NoBinario<T>* novaRaiz = raiz;
  		novaRaiz = raiz->getEsquerda();
  		raiz->setEsquerda(novaRaiz->getDireita());

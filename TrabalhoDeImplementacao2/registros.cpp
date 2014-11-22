@@ -8,7 +8,7 @@
 using namespace std;
 
 struct MyRecord {
-  char conteudo[10000];
+  string conteudo;
   char comando[80];
 };
 
@@ -22,10 +22,17 @@ void escreve(const char * filename) {
     cout << " -> Erro ao abrir arquivo." << endl;
     return;
   }
-
+  //fazer um while com getline em uma string, concatenar e armazenar
   MyRecord mr;
+  // ifstream infile;
+  // string aux; //homenagem.
+  // infile.open("/ManPages/a.out.4.txt");
+  // while (!infile.eof) {
+  // 	getline(infile, aux);
+  // 	strcat(mr.conteudo, aux);
+  // }
+  // puts(mr.conteudo);
   strcpy(mr.comando, "a.out.4");
-  strcpy(mr.conteudo, );
   output.write((char *) &mr, sizeof(struct MyRecord));
 
   output.close();

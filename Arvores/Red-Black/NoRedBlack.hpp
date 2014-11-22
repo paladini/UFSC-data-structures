@@ -63,7 +63,7 @@ class NoRedBlack: public NoBinario<T>	 {
             temp = (raiz->esquerda)->pai;
             passoCE_esq(raiz->esquerda, temp, temp->pai);
             return raiz;
-        }
+	        }
         if (dado > *raiz->info) {
             raiz->direita = remover(raiz->direita, dado);
             temp = (raiz->direita)->pai;

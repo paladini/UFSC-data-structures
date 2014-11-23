@@ -193,14 +193,40 @@ void adicionarPalavraConectivos(string palavra){
 			gravar = false;
 		}
 	}
-
 	if(gravar) {
 		palavras.push_back(palavra);
 	}
 }
 
 vector<string> remover_conectivos(string conteudo) {
+	
+	// Removendo caracteres especiais
+	// TERMINAR SÁ PORRA.
+	char caracteresEspeciais[] = "<>():'#;,.";
 	int pos = 0, comecoDaString = 0;
+	for(int i = 0; i < strlen(caracteresEspeciais); i++) {
+		bool teste = true;
+		while(teste) {
+			pos = conteudo.find(caracteresEspeciais[i], comecoDaString);
+			if(pos == -1){
+				teste = false;
+				break;
+			}
+			if (pos <= comecoDaString) {
+				comecoDaString++;
+				continue;
+			} else {
+			conteudo.replace(comecoDaString, pos-comecoDaString, " ");
+				comecoDaString = pos+1;
+			}
+			comecoDaString = pos + 1;
+		}
+		// conteudo.erase(std::remove(conteudo.begin(), conteudo.end(), caracteresEspeciais[i]), 
+			// conteudo.end());
+	}
+
+	// Separando em palavras
+	pos = 0, comecoDaString = 0;
 	while(true) {
 		pos = conteudo.find(" ", comecoDaString); // \x20
 		if(pos == -1) {

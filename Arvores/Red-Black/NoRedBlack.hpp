@@ -1,3 +1,16 @@
+/**
+* File: NoRedBlack.hpp
+* @author: Emmanuel Podestá, Fernando Paladini.
+* @since: Created on 23 de Novembro de 2014.
+* Copyright 2014 Emmanuel Podestá, Fernando Paladini.
+* < Na verdade é Copyleft, MIT License \o/ >
+*/
+/** Classe NoRedBlack.
+* A classe "nó red-black" implementa a estrutura de dados "árvore red-black", também conhecida como árvore rubro-negra.
+*  Pelas próprias características das árvores red-blacks, um nodo pode ter uma subárvore, por conseguinte
+*  precisamos apenas de uma classe nodo para formar uma árvore, uma vez que esta nada mais é do que 
+*  um conjunto de nodos relacionados. 
+*/
 #ifndef NOREDBLACK_HPP_
 #define NOREDBLACK_HPP_
 #include "Arvore.hpp"

@@ -1,109 +1,131 @@
-/*
- * @author max
-*/
+#include <algorithm>
+#include <sstream>
 #include <iostream> //cout
 #include <fstream> //fstream
 #include <cstring> //strcpy
 #include <dirent.h>
 #include <sys/stat.h>
 #include <cstdlib>
-#include "registro.cpp"
+#include "registro.hpp"
+#include "estruturas/avl_tree.h"
+#include "estruturas/doubly_linked_list.h"
+#include <strings.h>
+#include <vector>
 using namespace std;
 
+Registro ler_arquivo(string nomeDoArquivo) {
+    
+    // Abre o arquivo para leitura
+    ifstream arquivoLido(nomeDoArquivo.c_str());
 
-void escreve(const char * filename) {
-    ofstream output(filename,
-      ios::out //abre arquivo para escrita.
-      //ios::app //abre arquivo para escrita, adicionando ao fim do arquivo (append).
-      | ios::binary //arquivo binario.
-     );
+    // Verifica se o arquivo está mesmo aberto.
+    if (arquivoLido.is_open()) {
 
-    // Erro ao abrir o arquivo.
-    if (!output) {
-        cout << " -> Erro ao abrir arquivo." << endl;
-        return;
-    }
+        // O nome do arquivo é "ManPages/nomeDoComando.txt". Pega apenas o nomeDoComando.
+        int pos_barra = nomeDoArquivo.find_last_of("/") + 1;
+        int pos_ponto = nomeDoArquivo.find_last_of(".");
+        int quantidadeDeCaracteres = pos_ponto - pos_barra;
+        string nomeDoComando = nomeDoArquivo.substr(pos_barra, quantidadeDeCaracteres);
 
-    //
-    DIR *dir;
-    int i = 0;
-    struct dirent *ent;
+        // Copia todo o conteúdo do arquivo para o char "conteudo".
+        char conteudo[200000];
+        std::stringstream buffer;
+        buffer << arquivoLido.rdbuf(); // lê o arquivo inteiro e coloca na variável buffer
+        strcpy(conteudo, buffer.str().c_str());
 
-    string path = "/home/paladini/UFSC-estruturaDeDados-2014-02/TrabalhoDeImplementacao2/ManPages/";
-    if ((dir = opendir (path.c_str())) != NULL) {
-        int cont = 0;
-        while ((ent = readdir (dir)) != NULL) {
+        // Pega o nome do comando e armazena em uma variável.                
+        char comando[80];
+        strcpy(comando, nomeDoComando.c_str());
 
-            // Pega o nome de arquivo atual
-            char *filename = (char*) ent->d_name;
+        // Cria um registro.
+        Registro mr(comando, conteudo);
 
-            // Verifica se o nome do arquivo é diferente de "." (pasta ./)
-            if(filename[0] == '.') {
-                continue;
-            }
-            cont++;
-            
-            char *caminho = new char[path.size()+1000];
-            strcpy(caminho, path.c_str());
-            strcat(caminho, filename);
-            Registro mr;
-            char *extension = strstr(filename, ".txt");
-            strncpy(extension, "", 4);
-            strcpy(mr.comando, filename);
-            std::ifstream ifs(caminho);
+        // Fecha o arquivo.
+        arquivoLido.close();
 
-            struct stat propriedades;
+        // Retorna o registro criado.
+        return mr;
 
-            if (stat(caminho, &propriedades) == -1) {
-                break;
-            }
-
-            char* content = new char[propriedades.st_size];
-
-            ifs.read(content, propriedades.st_size);
-            strcpy(mr.conteudo, content);
-            output.write((char *) &mr, sizeof(Registro));
-            delete [] content;
-        }
-        printf("Readed %d files\n", cont);
-        output.close();
-        closedir (dir);
     } else {
-        /* could not open directory */
-        perror ("");
-        throw -1;
+        throw "Arquivo não pode ser lido. Método ler_arquivo.";
     }
 }
 
-void le(const char * filename, int pos) {
-    ifstream input(filename,
-       ios::in //abre arquivo para leitura.
-       | ios::binary //arquivo binario.
-      );
+int procurar(int argc, char **argv) {
 
-    // Erro ao abrir o arquivo
-    if(!input) {
-      cout << " -> Erro ao abrir arquivo." << endl;
-      return;
+    // Pegando nome da página que está sendo procurada.
+    string nomeDaPagina = argv[1];
+    bool encontrouComando = false;
+
+    // Carrega o arquivo de chaves primárias
+    ifstream chavesPrimarias("chavesPrimarias.dat");
+
+    // Enquanto não atingir o fim do arquivo vai procurando pelo comando
+    string nomeDoComandoAtual, conteudo;
+    while(!chavesPrimarias.eof()) {
+
+        // Armazena apenas a primeira palavra, que é justamente o nome do comando.
+        chavesPrimarias >> nomeDoComandoAtual;
+
+        // Verifica se o comandoAtual é o comando procurado pelo usuário.
+        if(strcasecmp(nomeDoComandoAtual.c_str(), argv[1]) == 0) {
+
+            // Pega o conteúdo e pára quando encontra o "end of text" (\3), armazenando tudo em "conteudo".
+            getline(chavesPrimarias, conteudo, '\3');
+
+            // Imprime o conteúdo e sai.
+            cout << conteudo;
+            encontrouComando = true;
+            break;
+        } else {
+
+            // Extrai todos os caracteres até o próximo \3 e ignora eles para o programa poder
+            // analisar a próxima manpage. 
+            chavesPrimarias.ignore(numeric_limits<streamsize>::max(), '\3');
+        }
     }
 
-    Registro mr;
-    input.seekg(sizeof(Registro)*pos, input.beg);
-    input.read((char *) &mr, sizeof(Registro));
-    input.close();
+    // Fecha o arquivo
+    chavesPrimarias.close();
 
-    cout << "Comando: " << mr.comando << endl;
-    cout << "Conteudo: " << mr.conteudo << endl;
+    if (!encontrouComando) {
+        cout << "Desculpe, não foi possível encontrar esse comando." << endl;
+    }
 }
 
-int main(int argc, char **argv) {
-    const char * file = "manpages.dat";
+int indexar(int argc, char **argv){
+    // Árvore AVL que armazena as chaves por indexação primária.
+    avl_tree<Registro> indicesPrimarios;
 
-    //Cria/Abre um arquivo e insere um registro no fim
-    escreve(file);
+    // Percorre todos os arquivos da pasta "ManPages/" (quando esta é passada como argumento utilizando "ManPages/*")
+    for(int i = 1; i < argc; i++) {
+        string nomeDoArquivo = argv[i];
+        Registro mr = ler_arquivo(nomeDoArquivo);
 
-    //Abre o arquivo criado e le o registro
-    le(file, atoi(argv[1]));
+        indicesPrimarios.insert(mr);
+    }
+
+    // Criando arquivo de saída
+    ofstream arquivoSaida { "chavesPrimarias.dat" };  
+
+    // Verificando se arquivo de saida foi aberto
+    if(arquivoSaida.is_open()) {
+
+        // Pega todos os registros da árvore AVL EM ORDEM e armazena no output.
+        doubly_linked_list<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();
+        for(int i = 0; i < registrosEmOrdem.size(); i++) {
+            arquivoSaida << registrosEmOrdem.at(i).retornarComando(); 
+            arquivoSaida << " ";
+            arquivoSaida << registrosEmOrdem.at(i).retornarConteudo();
+            arquivoSaida << "\3"; // termina a escrita com um caracter "end of text".
+        }
+
+        // Fecha o arquivo.
+        arquivoSaida.close();
+
+    } else{
+        return -1;
+    }
 
     return 0;
 }

@@ -10,9 +10,17 @@
 
 using namespace std;
 
+// Armazena todos os conectivos proibidos especificados pelo enunciado do problema
 vector<string> conectivosProibidos;
+
+// Armazena todas as palavras que serão indexadas como índice secundário.
+// Ou seja, armazena todas as palavras com os conectivos proibidos já excluídos.
 vector<string> palavras;
 
+/** Criar lista dos conectivos proibidos que são descritos no enunciado do problema.
+* Adiciona à variável "conectivosProibidos" todos os conectivos proibidos que são descritos
+* no enunciado do problema (artigos, conjunções, preposição e pronome). 
+*/
 void criar_lista_conectivos() {
 
 	// Artigos
@@ -186,46 +194,52 @@ void criar_lista_conectivos() {
 
 }
 
+/** Verifica se é possível adicionar a palavra fornecida no "vector<string> palavras".
+* Esse método recebe uma palavra (palavra, não o conteúdo inteiro) e analisa se ela tem mais de
+* 3 caracteres. Se tiver, pode prosseguir para os testes que verificam se essa palavra não é um
+* conectivo proibido. Se não for um conectivo proibido e tiver mais de 3 caracteres, será adicionado
+* na lista de "palavras" (que contém todas as palavras-chave que serão indexadas como chave secundária).
+*/
 void adicionarPalavraConectivos(string palavra){
-	bool gravar = true;
-	for(int i = 0; i < conectivosProibidos.size(); i++) {
-		if (strcasecmp(palavra.c_str(), conectivosProibidos.at(i).c_str()) == 0) {
-			gravar = false;
+	if (palavra.size() >= 3) {
+		bool gravar = true;
+		for(int i = 0; i < conectivosProibidos.size(); i++) {
+			if (strcasecmp(palavra.c_str(), conectivosProibidos.at(i).c_str()) == 0) {
+				gravar = false;
+			}
 		}
-	}
-	if(gravar) {
-		palavras.push_back(palavra);
+		if(gravar) {
+			palavras.push_back(palavra);
+		}
 	}
 }
 
+/** Método para remover todos os conectivos e retornar apenas as palavras-chave do conteúdo.
+* Este método separa o "conteúdo" em palavras, remove todos os conectivos especificados pelo enunciado 
+* do problema, além de remover os caracteres especiais e palavras com menos de 3 caracteres. No fim
+* retorna apenas as palavras chaves que precisam ser indexadas como chave-secundária.
+* 
+* @param string conteudo Recebe um conteúdo que será analisado e extraido.
+* @return vector<string> vetor de strings com palavras-chave.
+*/
 vector<string> remover_conectivos(string conteudo) {
 	
 	// Removendo caracteres especiais
-	// TERMINAR SÁ PORRA.
 	char caracteresEspeciais[] = "<>():'#;,.";
 	int pos = 0, comecoDaString = 0;
 	for(int i = 0; i < strlen(caracteresEspeciais); i++) {
-		bool teste = true;
-		while(teste) {
+		pos = 0, comecoDaString = 0;
+		while(true) {
 			pos = conteudo.find(caracteresEspeciais[i], comecoDaString);
 			if(pos == -1){
-				teste = false;
 				break;
 			}
-			if (pos <= comecoDaString) {
-				comecoDaString++;
-				continue;
-			} else {
-			conteudo.replace(comecoDaString, pos-comecoDaString, " ");
-				comecoDaString = pos+1;
-			}
-			comecoDaString = pos + 1;
+			conteudo.replace(pos, 1, " ");
+			comecoDaString = pos;
 		}
-		// conteudo.erase(std::remove(conteudo.begin(), conteudo.end(), caracteresEspeciais[i]), 
-			// conteudo.end());
 	}
 
-	// Separando em palavras
+	// Separando em palavras e removendo palavas proibidas
 	pos = 0, comecoDaString = 0;
 	while(true) {
 		pos = conteudo.find(" ", comecoDaString); // \x20
@@ -244,31 +258,31 @@ vector<string> remover_conectivos(string conteudo) {
 		}
 	}
 
-	for(int i = 0; i < palavras.size(); i++) {
-		// printf("%s", palavras.at(i));
-		cout << palavras.at(i) << endl;
-	}
-
+	// Imprimindo as palavras.
+	// for(int i = 0; i < palavras.size(); i++) {
+	// 	cout << palavras.at(i) << endl;
+	// }
 	return palavras;
 }
 
 int main() {
-  const char * file = "manpages.dat";
+  	const char * file = "manpages.dat";
 
-  // Cria a lista de conectivos proibidos
-  criar_lista_conectivos();
+  	// Cria a lista de conectivos proibidos
+  	criar_lista_conectivos();
 
-  string zoeira = "<beginning of page>"
-"alias <-> alias table file of encoding names"
-"/usr/lib/iconv/alias"
-"This file contains the alias table of encoding names for iconv_open(3C)."
-"The format of the alias table is as follows: <variant encoding name>, <canonical encoding name>"
-"The string specified for the variant encoding name is case-insensitive. A line beginning with '#' is treated as a com<hy>ment."
-"See attributes(5) for descriptions of the following attributes:"
-"tab() box; cw(2.75i) |cw(2.75i) lw(2.75i) |lw(2.75i) ATTRIBUTE TYPEATTRIBUTE VALUE _ Interface Stabili<hy>"
-"tyEvolving"
-"iconv(3C), iconv_close(3C), iconv_open(3C), attributes(5)";
-  remover_conectivos(zoeira);
-  
-  return 0;
+  	// String para testar.
+  	string zoeira = "<beginning of page>"
+					"alias <-> alias table file of encoding names"
+					"/usr/lib/iconv/alias"
+					"This file contains the alias table of encoding names for iconv_open(3C)."
+					"The format of the alias table is as follows: <variant encoding name>, <canonical encoding name>"
+					"The string specified for the variant encoding name is case-insensitive. A line beginning with '#' is treated as a com<hy>ment."
+					"See attributes(5) for descriptions of the following attributes:"
+					"tab() box; cw(2.75i) |cw(2.75i) lw(2.75i) |lw(2.75i) ATTRIBUTE TYPEATTRIBUTE VALUE _ Interface Stabili<hy>"
+					"tyEvolving"
+					"iconv(3C), iconv_close(3C), iconv_open(3C), attributes(5)";
+
+	remover_conectivos(zoeira);
+  	return 0;
 }

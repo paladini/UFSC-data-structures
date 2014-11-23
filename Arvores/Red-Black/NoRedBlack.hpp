@@ -17,17 +17,41 @@
 template <typename T>
 class NoRedBlack: public NoBinario<T>	 {
  private:
+ 	
+ 	/* Variável do tipo T que será armazenada nesse nodo. */
  	T* info;
- 	NoRedBlack<T>* esquerda;
- 	NoRedBlack<T>* direita;
- 	NoRedBlack<T>* pai;
- 	bool cor; // 1 = rubro; 0 = negro;
- 	NoRedBlack<T>* balanco_insere(NoRedBlack<T>* raiz) {
 
- 	}
+ 	/* Ponteiro para o filho à esquerda do nodo atual. */
+ 	NoRedBlack<T>* esquerda;
+
+ 	/* Ponteiro para o filho à direita do nodo atual. */
+ 	NoRedBlack<T>* direita;
+
+ 	/* Ponteiro para o nodo pai desse nó. */
+ 	NoRedBlack<T>* pai;
+
+ 	/* Atributo que diz a cor do nodo. Se for verdadeiro (1), cor é rubra, caso seja falso (0), é preta. */
+ 	bool cor; // 1 = rubro; 0 = negro;
+ 	NoRedBlack<T>* balanco_insere(NoRedBlack<T>* raiz) { }
  public:
+
+ 	/** Construtor de NoRebBlack.
+    * O construtor da nó red-black constroi um nodo que contêm um dado, uma cor (rubro)
+    * e faz com que as subárvores da direita, esquerda e pai apontem para NULL (NULL == 0).
+    *
+    * @param dado O dado T que esse nodo conterá.
+    */
  	NoRedBlack<T>(const T& dado) : cor(true), pai(0), esquerda(0), direita(0), info(new T(dado)) {}
 
+ 	/** Insere um novo elemento na árvore red-black e faz os rebalanceamentos necessários.
+    * Método que realiza a adição de novos elementos / nodos em uma árvore rubro-negra (RB). Utiliza
+    * o método "insereArvBusca"  que vai realizar todo o conjunto de instruções 
+    * necessárias para realizar a inserção do nodo. Depois faz os possíveis
+    * rebalanceamentos (rotações e recoloração).
+    * @param raiz A raiz da árvore red-black onde se pretende inserir o novo elemento / nodo.
+    * @param info A informação que será adicionada dentro do novo nodo inserido na árvore.
+    * @see NoRedBlack<T>::insereArvBusca(NoRedBlack<T>* raiz, const T& info)
+    */
  	void insereRB (NoRedBlack<T>* raiz, const T& info){
  		NoRedBlack<T>* atual, pai, avo, nodo;
  		nodo = InsereArvBusca(raiz, info);
@@ -44,6 +68,13 @@ class NoRedBlack: public NoBinario<T>	 {
  		}
  		raiz->cor = false;
  	}
+
+ 	/** Insere um novo elemento na árvore red-black.
+    * Método que realiza a adição de novos elementos / nodos em uma árvore rubro-negra (RB).
+    * @param raiz A raiz da árvore red-black onde se pretende inserir o novo elemento / nodo.
+    * @param info A informação que será adicionada dentro do novo nodo inserido na árvore.
+    * @return O nó que acabou de ser adicionado.
+    */
  	NoRedBlack<T>* InsereArvBusca(NoRedBlack<T>* raiz, const T& info) {
  		NoRedBlack<T>* nodo;
  		if (info < *(raiz->dado)) {
@@ -65,6 +96,13 @@ class NoRedBlack: public NoBinario<T>	 {
         return nodo;
     }
 
+    /** Remove um elemento da árvore red-black.
+    * Método que realiza a remoção de um elemento / nodo em uma árvore rubro-negra (RB).
+    * Após realizar a remoção do nodo, faz os rebalanceamentos necessários (rotações e recolorações).
+    * @param raiz A raiz da árvore RB onde se pretende remove o elemento / nodo.
+    * @param info A informação do dado que será removido da árvore.
+    * @return null.
+    */
     NoRedBlack<T>* remover(NoRedBlack<T>* raiz, const T& dado) {
     	NoRedBlack<T>* filho = new NoRedBlack<T>*(0);
         NoRedBlack<T>* temp = new NoRedBlack<T>*(0);
@@ -103,6 +141,12 @@ class NoRedBlack: public NoBinario<T>	 {
         return NULL;
     }
 
+    /** Método para realizar a correção e elevação da deleção.
+ 	* Determina qual será o passo de correção e elevação da deleção necessário e o faz
+ 	* para que a árvore seja corrigida.
+ 	* @param raiz O nodo que será rebalanceado.
+	* @return O nodo com a correção realizada.
+ 	*/
 	NoRedBlack<T>* passoCED(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
 		while(w != raiz) {
 			if (w == w->pai->esquerda) {
@@ -114,6 +158,11 @@ class NoRedBlack: public NoBinario<T>	 {
 		return w;
 	}
 
+	/** Método para realizar rotação à direita.
+ 	* Realiza um rebalanceamento na árvore red-black que é chamado de "rotação à direita".
+ 	* @param raiz O nodo que será rebalanceado.
+	* @return O nodo já com rotação à direita realizada (já balanceado).
+ 	*/
  	NoRedBlack<T>* roda_dir (NoRedBlack<T>* arv) {
  		NoRedBlack<T>* y, superior; // pai
  		bool lado = false; // 1 == esquerda; 0 == direita;
@@ -137,6 +186,11 @@ class NoRedBlack: public NoBinario<T>	 {
 
  	}
 
+ 	/** Método para realizar rotação à esquerda.
+ 	* Realiza um rebalanceamento na árvore red-black que é chamado de "rotação à esquerda".
+ 	* @param raiz O nodo que será rebalanceado.
+	* @return O nodo já com rotação à esquerda realizada (já balanceado).
+ 	*/
  	NoRedBlack<T>* roda_esq (NoRedBlack<T>* arv) {
  		NoRedBlack<T>* y, superior; // pai
  		bool lado = false; // 1 == esquerda; 0 == direita;
@@ -159,6 +213,11 @@ class NoRedBlack: public NoBinario<T>	 {
  		return y;
  	}
 
+ 	/** Método para realizar a correção e elevação à esquerda.
+ 	* Realiza o passo de correção e elevação à esquerda.
+ 	* @param raiz O nodo que será corrigido.
+	* @return O nodo com a correção realizada.
+ 	*/
  	void passoCE_esq(NoRedBlack<T>* atual, NoRedBlack<T>* pai, NoRedBlack<T>* avo){
 		NoRedBlack<T> *tio = avo->direita;
 		if(tio->cor == true) {
@@ -183,6 +242,11 @@ class NoRedBlack: public NoBinario<T>	 {
 		}
 	}
 
+	/** Método para realizar a correção e elevação à direita.
+ 	* Realiza o passo de correção e elevação à direita.
+ 	* @param raiz O nodo que será corrigido.
+	* @return O nodo com a correção realizada.
+ 	*/
 	void passoCE_dir(NoRedBlack<T>* atual, NoRedBlack<T>* pai, NoRedBlack<T>* avo){
 		NoRedBlack<T> *tio = avo->esquerda;
 		if(tio->cor == true) {
@@ -207,6 +271,11 @@ class NoRedBlack: public NoBinario<T>	 {
 		}
 	}
 
+	/** Método para realizar a correção e elevação da deleção à esquerda.
+ 	* Realiza o passo de correção e elevação da deleção à esquerda.
+ 	* @param raiz O nodo que será corrigido.
+	* @return O nodo com a correção realizada.
+ 	*/
 	NoRedBlack<T>* passoCED_esq(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
 		NoRedBlack<T>* y;
 		y = w->pai->direita;
@@ -235,6 +304,11 @@ class NoRedBlack: public NoBinario<T>	 {
 		return w;
 	}
 
+	/** Método para realizar a correção e elevação da deleção à direita.
+ 	* Realiza o passo de correção e elevação da deleção à direita.
+ 	* @param raiz O nodo que será corrigido.
+	* @return O nodo com a correção realizada.
+ 	*/
 	NoRedBlack<T>* passoCED_dir(NoRedBlack<T>* w, NoRedBlack<T>* raiz) {
 		NoRedBlack<T>* y;
 		y = w->pai->esquerda;
@@ -263,6 +337,13 @@ class NoRedBlack: public NoBinario<T>	 {
 		return w;
 	}
 
+	/** Método minimo(NoRebBlack<T>* raiz).
+    * Retorna o menor nó red-black desta árvore.
+    * Este método recebe a raiz de uma árvore red-black e procura recursivamente pelo menor
+    * nodo da árvore. 
+    * @param raiz A raiz da árvore em que o menor nodo será procurado.
+    * @return Retorna o menor nodo da árvore red-black. 
+    */
 	NoRedBlack<T>* minimo(NoRedBlack<T>* raiz) {
         NoRedBlack<T>* root;
         if (raiz->esquerda != NULL) {
@@ -273,40 +354,5 @@ class NoRedBlack: public NoBinario<T>	 {
         return root;
     }
 };
-// NoRedBlack<T>* minimo;
-//     	NoRedBlack<T>* substituto;
-
-//     	NoRedBlack<T>* filho = new NoRedBlack<T>*(0);
-//         NoRedBlack<T>* temp = new NoRedBlack<T>*(0);
-//         if (raiz == NULL) {
-//             return raiz;
-//         }
-//         if (dado < *raiz->info) {  // Vai para a esquerda
-//             raiz->esquerda = remover(raiz->esquerda, dado);
-//             passoCE_esq(filho, filho->pai, filho->avo);
-//             return raiz;
-//         }
-//         if (dado > *raiz->info) {
-//             raiz->direita = remover(raiz->direita, dado);
-//             return raiz;
-//         }
-//         if (raiz->direita != NULL && raiz->esquerda != NULL) {
-//             minimo = minimo(raiz->direita); 
-//             substituto = passoCED(minimo, raiz);
-//             raiz->info = substituto->info;
-//             raiz->direita = remover(raiz->direita, *raiz->info);
-//             return raiz;
-//         }
-//         temp = raiz;
-//         if (raiz->direita != NULL) {  // filho direita
-//             filho = raiz->direita;
-//             return filho;
-//         }
-//         if (raiz->esquerda != NULL) {
-//             filho = raiz->esquerda;
-//             return filho;
-//         }
-//         delete raiz;  //  Folha.
-//         return NULL;
 
 #endif

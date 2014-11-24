@@ -18,9 +18,9 @@ class ArvoreAVL: public NoBinario<T> {
  	}
 
     void atualiza(NoBinario<T>* arv) {
-    	if (arv->getEsquerda() == NULL && arv->getDireita() == 	NULL) {
-    		arv->setAltura(0);
-    	}
+    	// if (arv->getEsquerda() == NULL && arv->getDireita() == 	NULL) {
+    	// 	arv->setAltura(0);
+    	// }
     	arv->setAltura(maximo(altura(arv->getEsquerda()), altura(arv->getDireita())) + 1);
     }
 
@@ -71,11 +71,13 @@ class ArvoreAVL: public NoBinario<T> {
  	~ArvoreAVL() {}
  	NoBinario<T>* insere(NoBinario<T>* raiz, const T& info)  {
  		NoBinario<T>* arv = NoBinario<T>::inserir(info, raiz);
+ 		atualiza(arv);
  		return arv;
  	}
 
  	NoBinario<T>* remove(NoBinario<T>* raiz, const T& info) {
  		NoBinario<T>* arv = NoBinario<T>::remover(raiz, info);
+ 		atualiza(raiz);
  		return arv;
     }
 
@@ -93,10 +95,10 @@ class ArvoreAVL: public NoBinario<T> {
  		return (altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
  	}
 
- 	bool balanceado(NoBinario<T>* raiz) {
- 		int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
- 		return absolute > 1;
- 	}
+ 	// bool balanceado(NoBinario<T>* raiz) {
+ 	// 	int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
+ 	// 	return absolute > 1;
+ 	// }
 
  	NoBinario<T>* dup_roda_esq(NoBinario<T>* raiz) {
  		

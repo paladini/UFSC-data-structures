@@ -16,33 +16,35 @@
 template <typename T>
 class ArvoreAVL: public NoBinario<T> {
  private:
-
+    int altura;
  	/** Calcula o máximo entre dois número.s
 	* Calcula e retorna o número máximo entre dois números dados.
 	* @param a primeiro número a ser comparado.
 	* @param o segundo número a ser comparado.
 	* @return O maior número entre os dois fornecidos (o máximo).
 	*/
- 	int maximo(int a, const int b) {
- 		if (a > b) {
- 			return a;
- 		}
- 		if (a == b) {
- 			return a;
- 		}
- 		return b;
- 	}
+ 	int maximo(ArvoreAVL<T>* a, ArvoreAVL<T>* b) {
+ 		if (a == NULL && b == NULL) {
+            return -1;
+        } else if (a == NULL) {
+            return b->getAltura();
+        } else if (b == NULL) {
+            return a->getAltura();
+        }
+        if (a->getAltura() > b->getAltura()) {
+            return a->getAltura();
+        } else {
+            return b->getAltura();
+        }
+    }
 
  	/** Atualiza o nodo corrente.
  	* Método que verifica a altura do nodo dado (corrente) e o atualiza de acordo
  	* com os valores da altura dos seus filhos da esquerda e da direita. 
  	* @Param arv o nodo que terá sua altura atualizada.
  	*/
-    void atualiza(NoBinario<T>* arv) {
-    	if (arv->getEsquerda() == NULL && arv->getDireita() == 	NULL) {
-    		arv->setAltura(0);
-    	}
-    	arv->setAltura(maximo(altura(arv->getEsquerda()), altura(arv->getDireita())) + 1);
+    void atualiza(ArvoreAVL<T>* arv) {
+    	arv->altura = maximo(arv->getEsquerda(), arv->getDireita()) + 1;
     }
 
     /** Faz o rebalanceamento da árvore AVL, caso necessário.
@@ -58,26 +60,63 @@ class ArvoreAVL: public NoBinario<T> {
  	* @see NoBinario::setEsquerda()
  	* @return a raiz da árvore AVL rebalanceada já rotacionada e corrigida.
  	*/
- 	NoBinario<T>* balanco_insere(NoBinario<T>* arv) {
- 		NoBinario<T>* novaRaiz;
-		if (fator(arv) == 2/*altura(arv->getDireita()) > altura(arv->getEsquerda())*/) {
- 			if (fator(arv->getDireita()) == 1) {
+ 	ArvoreAVL<T>* balanco_insere(NoBinario<T>* arv_b) {
+ 		ArvoreAVL<T>* novaRaiz;
+        ArvoreAVL<T>* arv = converterAVL(arv_b);
+		if (fator(arv) == 2) {
+ 			if (fator(arv->getEsquerda()) == -1) {
  				novaRaiz = dup_roda_esq(arv);
+                arv = novaRaiz;
  			} 
- 			if (fator(arv->getDireita()) == -1) {
+ 			if (fator(arv->getEsquerda()) == 1) {
  				novaRaiz = simp_roda_esq(arv);
+                arv = novaRaiz;
  			}
 		}
-		if (fator(arv) == -2/*altura(arv->getDireita()) < altura(arv->getEsquerda())*/) {
-			if (fator(arv->getEsquerda()) == -1) {
+		if (fator(arv) == -2) {
+			if (fator(arv->getDireita()) == 1) {
  				novaRaiz = dup_roda_dir(arv);
+                arv = novaRaiz;
 			} 
-			if (fator(arv->getEsquerda()) == 1) {
+			if (fator(arv->getDireita()) == -1) {
 				novaRaiz = simp_roda_dir(arv);
+                arv = novaRaiz;
 			}
 		}
+        atualiza(arv);
 		return arv;
  	}
+    /**Método balanco_remove
+    *Este método é uma copia do balanco_insere, porém possuimos este método para
+    *a posterior estrutura de dados a ser feita, que seria a Red-Black.
+    *@see balanco_insere.
+    */
+    ArvoreAVL<T>* balanco_remove(NoBinario<T>* arv_b) {
+        ArvoreAVL<T>* novaRaiz;
+        ArvoreAVL<T>* arv = converterAVL(arv_b);
+        if (fator(arv) == 2) {
+            if (fator(arv->getEsquerda()) == -1) {
+                novaRaiz = dup_roda_esq(arv);
+                arv = novaRaiz;
+            } 
+            if (fator(arv->getEsquerda()) == 1) {
+                novaRaiz = simp_roda_esq(arv);
+                arv = novaRaiz;
+            }
+        }
+        if (fator(arv) == -2) {
+            if (fator(arv->getDireita()) == 1) {
+                novaRaiz = dup_roda_dir(arv);
+                arv = novaRaiz;
+            } 
+            if (fator(arv->getDireita()) == -1) {
+                novaRaiz = simp_roda_dir(arv);
+                arv = novaRaiz;
+            }
+        }
+        atualiza(arv);
+        return arv;
+    }
 
  public:
 
@@ -87,7 +126,9 @@ class ArvoreAVL: public NoBinario<T> {
     * chamando o seu construtor para realizar essas funções.
     * @param dado O dado T que esse nodo conterá.
     */
- 	ArvoreAVL(const T& dado): NoBinario<T>(dado){}
+ 	ArvoreAVL(const T& dado): NoBinario<T>(dado){
+        this->altura = 0;
+    }
 
  	/** Destrutor padrão de ArvoreAVL.
     * O destrutor padrão da árvore avl não tem o que destruir antes de ser eliminado, pois
@@ -104,9 +145,9 @@ class ArvoreAVL: public NoBinario<T> {
     * @see NoBinario<T>::inserir(T& dado, NoBinario<T>* raiz)
     * @return O nó que acabou de ser adicionado.
     */
- 	NoBinario<T>* insere(NoBinario<T>* raiz, const T& info)  {
- 		NoBinario<T>* arv = NoBinario<T>::inserir(info, raiz);
- 		return arv;
+ 	ArvoreAVL<T>* inserir(const T& info, ArvoreAVL<T>* raiz)  {
+ 		NoBinario<T>* arv_b = NoBinario<T>::inserir(info, raiz);
+        return converterAVL(arv_b);
  	}
 
  	/** Remove um elemento da árvore AVL.
@@ -118,21 +159,10 @@ class ArvoreAVL: public NoBinario<T> {
     * @see NoBinario<T>::remover(NoBinario<T>* raiz, T& dado)
     * @return O nó que acabou de ser removido.
     */
- 	NoBinario<T>* remove(NoBinario<T>* raiz, const T& info) {
- 		NoBinario<T>* arv = NoBinario<T>::remover(raiz, info);
- 		return arv;
+ 	ArvoreAVL<T>* remover(NoBinario<T>* raiz, const T& info) {
+ 		NoBinario<T>* arv_b = NoBinario<T>::remover(raiz, info);
+ 		return converterAVL(arv_b);
     }
-
-    /** Método altura().
-    * Método que retorna a altura da raiz da árvore AVL dada.
-    * @return Retorna a altura da árvore AVL dada.
-    */
- 	int altura(NoBinario<T>* raiz) {
- 		if (raiz == NULL) {
- 			return -1;
- 		}
- 		return raiz->getAltura();
- 	}
 
  	/** Retorna o "fator" de desbalanceamento da árvre.
  	* Esse método calcula o "fator de desbalanceamento" de uma árvore, ou seja, calcula
@@ -142,11 +172,11 @@ class ArvoreAVL: public NoBinario<T> {
  	* @param raiz A raiz da árvore que será analisada.
  	* @return O "fator" de desbalanceamento da árvore ou zero, caso a raiz da mesma seja null.
  	*/
- 	int fator(NoBinario<T>* raiz) {
+ 	int fator(ArvoreAVL<T>* raiz) {
  		if (raiz == NULL) {
  			return 0;
  		}
- 		return (altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
+        return (raiz->getEsquerda() != NULL ? raiz->getEsquerda()->altura : -1) - (raiz->getDireita() != NULL ? raiz->getDireita()->altura : -1);
  	}
 
  	/** Verifica se determinada raiz tem uma árvore balanceada.
@@ -157,10 +187,10 @@ class ArvoreAVL: public NoBinario<T> {
  	* @param raiz A raiz da árvore que será analisada.
  	* @return Verdadeiro, caso a AVL NÃO ESTEJA DESBALANCEADA e FALSO CASO A AVL ESTEJA BALANCEADA.
  	*/
- 	bool balanceado(NoBinario<T>* raiz) {
- 		int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
- 		return absolute > 1;
- 	}
+ 	// bool balanceado(NoBinario<T>* raiz) {
+ 	// 	int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
+ 	// 	return absolute > 1;
+ 	// }
 
  	/** Método para realizar rotação dupla à esquerda.
  	* Realiza um rebalanceamento na árvore AVL que é chamado de "rotação dupla à esquerda".
@@ -175,11 +205,11 @@ class ArvoreAVL: public NoBinario<T> {
 	* @see maximo(int a, int b)
 	* @return O nodo já com rotação dupla à esquerda realizada (já balanceado).
  	*/
- 	NoBinario<T>* dup_roda_esq(NoBinario<T>* raiz) {
+ 	ArvoreAVL<T>* dup_roda_esq(ArvoreAVL<T>* raiz) {
  		/*Rotacione entre k1 e k2*/
- 		raiz->setEsquerda(simp_roda_esq(raiz->getEsquerda()));
+ 		raiz->setEsquerda(simp_roda_dir(raiz->getEsquerda()));
  		/*Rotacione entre k3 e k2*/
- 		return simp_roda_dir(raiz);	
+ 		return simp_roda_esq(raiz);	
  	}
 
  	/** Método para realizar rotação dupla à direita.
@@ -195,11 +225,11 @@ class ArvoreAVL: public NoBinario<T> {
 	* @see maximo(int a, int b)
 	* @return O nodo já com rotação dupla à direita realizada (já balanceado).
  	*/
- 	NoBinario<T>* dup_roda_dir(NoBinario<T>* raiz) {
+ 	ArvoreAVL<T>* dup_roda_dir(ArvoreAVL<T>* raiz) {
  		/*Rotacione entre k1 e k2*/
- 		raiz->setDireita(simp_roda_dir(raiz->getDireita()));
+ 		raiz->setDireita(simp_roda_esq(raiz->getDireita()));
  		/*Rotacione entre k3 e k2*/
- 		return simp_roda_esq(raiz);
+ 		return simp_roda_dir(raiz);
  	}
 
  	/** Método para realizar rotação simples à esquerda.
@@ -215,14 +245,16 @@ class ArvoreAVL: public NoBinario<T> {
 	* @see maximo(int a, int b)
 	* @return O nodo já com rotação simples à esquerda realizada (já balanceado).
  	*/
- 	NoBinario<T>* simp_roda_esq(NoBinario<T>* raiz) {
- 		NoBinario<T>* novaRaiz = raiz;
+ 	ArvoreAVL<T>* simp_roda_esq(ArvoreAVL<T>* raiz) {
+ 		ArvoreAVL<T>* novaRaiz;
  		novaRaiz = raiz->getEsquerda();
  		raiz->setEsquerda(novaRaiz->getDireita());
- 		novaRaiz->setDireita(raiz);
- 		//atualizar alturas
- 		raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
- 		novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
+        novaRaiz->setDireita(raiz);
+        //atualizar alturas
+        atualiza(raiz);
+        atualiza(novaRaiz);
+ 		// raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
+ 		// novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
 
@@ -239,15 +271,75 @@ class ArvoreAVL: public NoBinario<T> {
 	* @see maximo(int a, int b)
 	* @return O nodo já com rotação simples à direita realizada (já balanceado).
  	*/
- 	NoBinario<T>* simp_roda_dir(NoBinario<T>* raiz) {
- 		NoBinario<T>* novaRaiz = raiz;
+ 	ArvoreAVL<T>* simp_roda_dir(ArvoreAVL<T>* raiz) {
+ 		ArvoreAVL<T>* novaRaiz;
  		novaRaiz = raiz->getDireita();
  		raiz->setDireita(novaRaiz->getEsquerda());
  		novaRaiz->setEsquerda(raiz);
- 		//atualizar alturas
- 		raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
- 		novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
+ 		// //atualizar alturas
+        atualiza(raiz);
+        atualiza(novaRaiz);
+ 		// raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
+ 		// novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
+    /**Método converterAVL
+    *Este método é responsável por converter o Nó Binario para AVL. Com este método
+    *poderemos adaptar os métodos do NoBinario para a ArvoreAVL, sem obstáculos gerados
+    *pelos atributos.
+    *@return raiz, retornará a raiz convertida para ArvoreAVL.
+    */
+    ArvoreAVL<T>* converterAVL(NoBinario<T> *binario) {
+        ArvoreAVL<T> *raiz = static_cast<ArvoreAVL<T>*>(binario);
+        if (raiz != NULL) {
+            raiz->esquerda = this->converterAVL(binario->getEsquerda());
+            raiz->direita = this->converterAVL(binario->getDireita());
+        }
+        return raiz;
+    }
+    /**Método getAltura
+    *Será responsável por coletar a altura da árvore ou sub-árvore.
+    *@return altura.
+    */
+    int getAltura() {
+        return altura;
+    }
+    /**Método getEsquerda.
+    *Este método irá retornar o elemento à esquerda do elemento executando o método.
+    *Contudo, este elemento à esquerda será convertido para um elemento de ÁrvoreAVL,
+    *para posterior utilização.
+    */
+    ArvoreAVL<T>* getEsquerda() {
+        NoBinario<T>* esq = NoBinario<T>::getEsquerda();
+        return converterAVL(esq);
+    }
+    /**Método getDireita.
+    *Este método irá retornar o elemento à direita do elemento executando o método.
+    *Contudo, este elemento à direita será convertido para um elemento de ÁrvoreAVL,
+    *para posterior utilização.
+    */
+    ArvoreAVL<T>* getDireita() {
+        NoBinario<T>* dir = NoBinario<T>::getDireita();
+        return converterAVL(dir);
+    }
+    /**Método getElementos
+    *Para utilizarmos melhor a Árvore AVL com herança, foi feita uma converção do vetor
+    *presente na classe NoBinario para que não ocasione problemas com a herança dessa classe
+    *para Árvore AVL.
+    */
+    std::vector<ArvoreAVL<T>* > getElementos() {
+        std::vector<ArvoreAVL<T>* > vetorAVL;
+        std::vector<NoBinario<T>* > vetor = NoBinario<T>::getElementos();
+        for (int i = 0; i< vetor.size(); i++) {
+            vetorAVL.push_back(converterAVL(vetor[i]));
+        }
+        return vetorAVL;
+    }
+    /**Método novoNo
+    * Este método retorna um novo Nó que será adicionando na Árvore AVL.
+    */
+    ArvoreAVL<T>* novoNo(const T& dado) {
+        return new ArvoreAVL<T>(dado);
+    }
 };
 #endif

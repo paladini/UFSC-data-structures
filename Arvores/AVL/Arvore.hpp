@@ -16,11 +16,11 @@
 #include <stdio.h>
 #include <cstdio>
 #include <vector>
+#include <iostream>
 
 template<typename T>
 class NoBinario {
  protected:
-    int altura;
     T* dado;
     NoBinario<T>* esquerda;
     NoBinario<T>* direita;
@@ -42,7 +42,7 @@ class NoBinario {
     virtual void atualiza(NoBinario<T>* arv) {}
 
     /* Armazenará o resultado do percorrimento em "preOrdem", "emOrdem" ou "posOrdem" da árvore binária. */
-    std::vector<NoBinario<T> > elementos;
+    std::vector<NoBinario<T>* > elementos;
 
  public:
 
@@ -53,7 +53,7 @@ class NoBinario {
     * @param dado O dado T que esse nodo conterá.
     */
     NoBinario<T>(const T& dado):
-                dado(new T(dado)), esquerda(NULL), direita(NULL), altura(0) {}
+                dado(new T(dado)), esquerda(NULL), direita(NULL) {}
 
     /** Destrutor padrão da nó binário.
     * O destrutor padrão da nó binário limpa o vector "elementos", que aloca NoBinario<T> quando
@@ -77,8 +77,8 @@ class NoBinario {
     * com o método de percorrimento escolhido (preOrdem, emOrdem, posOrdem).
     * @return Vetor de NoBinario<T> na posição do método de percorrimento escolhio (preOrdem, emOrdem, posOrdem).   
     */
-    NoBinario<T>* getElementos() {
-        return elementos.data();
+    std::vector<NoBinario<T>*> getElementos() {
+        return elementos;
     }
 
     /** Método busca().
@@ -92,11 +92,12 @@ class NoBinario {
     * @return O dado T que foi procurado. 
     */
     T* busca(const T& dado, NoBinario<T>* ptr) {
-        while (ptr != NULL && *ptr->dado != dado) {
+        while (ptr != NULL && *(ptr->dado) != dado) {
             if (*(ptr->getDado()) < dado) {
-                ptr = ptr->direita;
-            } else {
-                ptr = ptr->esquerda;
+                ptr = ptr->getDireita();
+            } 
+           else {
+                 ptr = ptr->getEsquerda();
             }
         }
         if (ptr == NULL) {
@@ -116,23 +117,32 @@ class NoBinario {
     */
     NoBinario<T>* inserir(const T& _dado, NoBinario<T>* raiz) {
         NoBinario<T>* novo;
+        NoBinario<T>* novaRaiz;
         if (_dado < *(raiz->dado)) {
             if (raiz->esquerda == NULL) {
-                novo = new NoBinario<T>(_dado);
+                novo = novoNo(_dado);
                 raiz->esquerda = novo;
+                novaRaiz = balanco_insere(raiz);
+                raiz = novaRaiz;
             } else {
-                inserir(_dado, raiz->esquerda);
+                raiz->esquerda = inserir(_dado, raiz->esquerda);
+                novaRaiz = balanco_insere(raiz);
+                raiz = novaRaiz;
             }
-            balanco_insere(raiz);
+            atualiza(raiz);
         }
         if (_dado > *raiz->dado) {
             if (raiz->direita == NULL) {
-                novo = new NoBinario<T>(_dado);
+                novo = novoNo(_dado);
                 raiz->direita = novo;
+                novaRaiz = balanco_insere(raiz);
+                raiz = novaRaiz;
             } else {
-                inserir(_dado, raiz->direita);
+                raiz->direita = inserir(_dado, raiz->direita);
+                novaRaiz = balanco_insere(raiz);
+                raiz = novaRaiz;
             }
-            balanco_insere(raiz);
+            atualiza(raiz);
 
         }
         atualiza(raiz);
@@ -156,13 +166,13 @@ class NoBinario {
         }
         if (_dado < *raiz->dado) {  // Vai para a esquerda
             raiz->esquerda = remover(raiz->esquerda, _dado);
-            balanco_remove(raiz);
+            raiz = balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
         if (_dado > *raiz->dado) {
             raiz->direita = remover(raiz->direita, _dado);
-            balanco_remove(raiz);
+            raiz = balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
@@ -170,25 +180,23 @@ class NoBinario {
             temp = minimo(raiz->direita); 
             raiz->dado = temp->dado;
             raiz->direita = remover(raiz->direita, *raiz->dado);
-            balanco_remove(raiz);
+            raiz = balanco_remove(raiz);
             atualiza(raiz);
             return raiz;
         }
         temp = raiz;
         if (raiz->direita != NULL) {  // filho direita
             filho = raiz->direita;
-            balanco_remove(raiz);
+            raiz = balanco_remove(raiz);
             atualiza(raiz);
             return filho;
         }
         if (raiz->esquerda != NULL) {
             filho = raiz->esquerda;
-            balanco_remove(raiz);            
+            raiz = balanco_remove(raiz);            
             atualiza(raiz);
             return filho;
         }
-        balanco_remove(raiz);
-        atualiza(raiz);
         delete raiz;  //  Folha.
         return NULL;
     }
@@ -216,7 +224,7 @@ class NoBinario {
     */
     void preOrdem(NoBinario<T>* raiz) {
         if (raiz != NULL) {
-                elementos.push_back(*raiz);
+                elementos.push_back(raiz);
                 preOrdem(raiz->esquerda);
                 preOrdem(raiz->direita);
             }
@@ -229,7 +237,7 @@ class NoBinario {
     void emOrdem(NoBinario<T>* raiz) {
         if (raiz != NULL) {
             emOrdem(raiz->esquerda);
-            elementos.push_back(*raiz);
+            elementos.push_back(raiz);
             emOrdem(raiz->direita);
        }
     }
@@ -242,7 +250,7 @@ class NoBinario {
         if (raiz != NULL) {
             posOrdem(raiz->esquerda);
             posOrdem(raiz->direita);
-            elementos.push_back(*raiz);
+            elementos.push_back(raiz);
        }
     }
 
@@ -277,21 +285,11 @@ class NoBinario {
     void setDireita(NoBinario<T>* novo) {
         direita = novo;
     }
-
-    /** Método getAltura().
-    * Método que retorna a altura do nó binário atual.
-    * @return Retorna a altura do nó binário atual.
+    /**Método novoNo
+    * Este método retorna um novo Nó que será adicionando na Árvore Binária.
     */
-    int getAltura() {
-        return this->altura;       
-    }
-
-    /** Método setAltura(int altura).
-    * Sobreescreve a altura anterior da árvore binária colocando um novo valor.
-    * @param _altura A nova altura da árvore binária / nodo binário.
-    */
-    void setAltura(int _altura) {
-        this->altura = _altura;
+    virtual NoBinario<T>* novoNo(const T& dado) {
+        return new NoBinario<T>(dado);
     }
 };
 

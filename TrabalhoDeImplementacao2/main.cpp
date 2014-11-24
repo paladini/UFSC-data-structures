@@ -117,7 +117,7 @@ int menuPrincipal() {
 * de acordo com as entradas do usuário. 
 */
 int main(int argc, char **argv) {
-	Indexar *index;
+	Indexar *index = new Indexar(argc, argv);
 	while(executar) {
 
 		// Pede ao usuário
@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
 			case 1: {
 				limparTela();
 				cout << "Comecando indexacao dos arquivos da manpages..." << endl;
-				index = new Indexar(argc, argv);
+				index->criarIndexacao();
 				cout << "Indexado com sucesso!" << endl;
 				sleep(2);
 				break;

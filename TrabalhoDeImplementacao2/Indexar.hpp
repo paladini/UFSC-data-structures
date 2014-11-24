@@ -30,15 +30,20 @@ class Indexar {
 
         // Árvore AVL que armazena as chaves por indexação secundária.
         avl_tree<Palavra> indicesSecundarios;
+        int argc;
+        char **argv;
 
  public:
-    Indexar(int argc, char **argv) {
-        gerarIndex(argc, argv);
+    Indexar(int _argc, char **_argv) {
+        argc = _argc;
+        argv = _argv;
+    }
+   
+    void criarIndexacao() {
+        gerarIndex();
         gerarPrimarias();
         gerarSecundarias();
     }
-   
-
     /**Método Indexar.
     * Indexa todas as manpages por chave primária e chave secundária.
     * Método responsável por indexar todas as manpages por chave primária e chave secundária.
@@ -54,7 +59,7 @@ class Indexar {
     * @param argv Parâmetro passado como argumento ao programa na hora da execução.
     * @return int retorna 0 se o processo de indexação ocorreu como o esperado e retorna -1 caso algo tenha dado errado.
     */
-    void gerarIndex(int argc, char **argv){
+    void gerarIndex(){
         // Percorre todos os arquivos da pasta "ManPages/" (quando esta é passada como argumento utilizando "ManPages/*")
         funcoes_strings conectivos;
         cout << "Criou a lista dos conectivos a serem removidos..." << endl;

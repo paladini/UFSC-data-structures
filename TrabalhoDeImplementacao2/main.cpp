@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits>
-#include "indexar.hpp"
+#include "Indexar.hpp"
+#include "Buscador.hpp"
+//#include "leitor.hpp"
 
 using std::string;
 using namespace std;
@@ -99,7 +101,7 @@ int menuPrincipal() {
 		}
 		limparTela();
 		cout << "O que você deseja fazer?" << status << "\n" << endl;
-		cout << "1 - Indexar" << endl;
+		cout << "1 - Começar a execução" << endl;
 		cout << "2 - Procurar" << endl;
 		cout << "3 - Sair\n" << endl;
 		cout << "Opção: ";
@@ -115,17 +117,17 @@ int menuPrincipal() {
 * de acordo com as entradas do usuário. 
 */
 int main(int argc, char **argv) {
+	Indexar *index;
 	while(executar) {
 
 		// Pede ao usuário
 		int opcaoDoUsuario = menuPrincipal();
-
 		// Detecta o que o usuário fez.
 		switch(opcaoDoUsuario) {
 			case 1: {
 				limparTela();
 				cout << "Comecando indexacao dos arquivos da manpages..." << endl;
-				Indexar index = Indexar(argc, argv);
+				index = new Indexar(argc, argv);
 				cout << "Indexado com sucesso!" << endl;
 				sleep(2);
 				break;
@@ -133,20 +135,20 @@ int main(int argc, char **argv) {
 			case 2: {
 				limparTela();
 				int opcao = especificarBusca();
-				
 				if(opcao == 3){
 					break;
 				}
 
 				string busca = pegarTermosBusca(opcao);
+				Buscador *buscar = new Buscador(busca);
 				limparTela();
 				if (opcao == 1) {
 					cout << "COMANDO: " << busca << "\n" << endl;
-					procurar_chave_primaria(busca);
+					buscar->procurar_chave_primaria();
 				}
 				if (opcao == 2) {
 					cout << "TERMOS: " << busca << "\n" << endl;
-					procurar_chave_secundaria(busca);
+					buscar->procurar_chave_secundaria();
 				}
 
 				// Esperando pelo input do usuário para avançar / voltar ao menu principal.

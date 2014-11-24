@@ -2,6 +2,8 @@
 // Este índice indexará o conjuntode todas as palavras contidas em todas as manpages que não caiam 
 // nas seguintes categorias léxicas: artigo, conjunção, preposição e pronome (chamadas em seu conjunto 
 // de conetivos).
+#ifndef FUNCOES_STRINGS_HPP_
+#define FUNCOES_STRINGS_HPP_
 #include <iostream> //cout
 #include <fstream> //fstream
 #include <cstring> //strcpy
@@ -38,8 +40,6 @@ class funcoes_strings {
 
 		// Pronomes
 		criarPronomes();
-		
-
 	}
 
 	/** Remove os conectivos de uma palavra.
@@ -254,3 +254,4 @@ class funcoes_strings {
 		conectivosProibidos->push_back("no");
 	}
 };
+#endif

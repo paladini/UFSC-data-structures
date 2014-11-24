@@ -287,9 +287,12 @@ int indexar(int argc, char **argv){
             chavesSecundarias << palavrasEmOrdem.at(i).retornarPalavra();
 
             // Armazena todos os comandos que contem essa palavra
-            doubly_linked_list<string> todosOsComandosQueContem = palavrasEmOrdem.at(i).retornarComandosQueContem();
-            for(int j = 0; j < todosOsComandosQueContem.size(); j++) {
-                chavesSecundarias << ' ' << todosOsComandosQueContem.at(j);
+            vector<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
+            // for (list<int>::const_iterator i = comandos.begin(), end = comandos.end(); i != end; ++i) {
+            //     chavesSecundarias << ' ' << *i;
+            // }    
+            for(int j = 0; j < comandos.size(); j++) {
+                chavesSecundarias << ' ' << comandos.at(j);
             }
 
             // Armazena um final de linha

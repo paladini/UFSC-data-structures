@@ -1,3 +1,7 @@
+/** Classe Registro.
+* Essa classe armazenará os dados das manpages para realizar a indexação por chave primária.
+* 
+*/
 class Registro {
  public:
 	char conteudo[100000];

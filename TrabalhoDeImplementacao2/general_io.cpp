@@ -81,13 +81,14 @@ Registro ler_arquivo(string nomeDoArquivo) {
 * @param busca os termos de busca que o usuário inseriu.
 */
 void procurar_chave_secundaria(string busca) {
-    ifstream chavesSecundarias("chavesSecundarias.dat");
 
     doubly_linked_list<string> resultados;
-    string temp;
 
     vector<string> termos = separar_em_palavras(busca);
     for(int i = 0; i < termos.size(); i++) {
+
+        ifstream chavesSecundarias("chavesSecundarias.dat");
+        string temp;
 
         // Enquanto não atingir o fim do arquivo, continua procurando.
         while(!chavesSecundarias.eof()) {
@@ -96,7 +97,7 @@ void procurar_chave_secundaria(string busca) {
             chavesSecundarias >> temp;
 
             // Se a palavra for igual ao termo buscado pelo usuário
-            if (temp == termos.at(i)) {
+            if (strcasecmp(temp.c_str(),termos.at(i).c_str()) == 0) {
 
                 string linhaInteira;
                 

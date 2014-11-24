@@ -1,8 +1,7 @@
 /** Classe Palavra.
 * Essa clase servirá para armazenar as palavras que fazem a indexação por chaves secundárias 
 * do problema proposto. Serão armazenadas todas as palavras-chave do conteúdo das manpages e
-* também todos
-*
+* também todos os comandos associados à essas palavras-chave.
 */
 #include <string>
 #include "estruturas/doubly_linked_list.h"

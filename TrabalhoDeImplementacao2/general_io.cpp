@@ -20,7 +20,8 @@
 
 using namespace std;
 
-/** Lê um arquivo do disco e armazena o seu conteúdo em um objeto Registro.
+/**Método ler_arquivo.
+* Lê um arquivo do disco e armazena o seu conteúdo em um objeto Registro.
 * Esse método lê um arquivo com disco com diretório fornecido como argumento e realiza duas coisas:
 *
 *   1 - Extrai o nome do comando do diretório fornecido e armazena.
@@ -70,7 +71,8 @@ Registro ler_arquivo(string nomeDoArquivo) {
     }
 }
 
-/** Pesquisa no arquivo de indexação por chaves secundárias de acordo com os termos de busca do usuário. 
+/**Método procurar_chave_secundaria.
+* Pesquisa no arquivo de indexação por chaves secundárias de acordo com os termos de busca do usuário. 
 * Esse método serve para fazer uma pesquisa por chaves secundárias de acordo com os critérios
 * de busca do usuário.
 *
@@ -137,7 +139,8 @@ void procurar_chave_secundaria(string busca) {
     }
 }
 
-/** Pesquisa no arquivo de indexação por chave primária o comando buscado pelo usuário.
+/**Método procurar_chave_primaria.
+* Pesquisa no arquivo de indexação por chave primária o comando buscado pelo usuário.
 * Este método verifica todo o arquivo "chavesPrimarias.dat" em busca do comando
 * que está sendo pesquisado pelo usuário. Caso o comando procurado seja encontrado, é impresso
 * na tela o "help" desse comando. Caso o comando não seja encontrado, imprime uma mensagem 
@@ -185,7 +188,8 @@ void procurar_chave_primaria(string busca) {
     }
 }
 
-/** Indexa todas as manpages por chave primária e chave secundária.
+/**Método Indexar.
+* Indexa todas as manpages por chave primária e chave secundária.
 * Método responsável por indexar todas as manpages por chave primária e chave secundária.
 * Percorre as manpages dadas de acordo com o primeiro parâmetro do argv, lê cada arquivo e
 * armazena em um Registro. Esse registro é adicionado como um índice primária e depois

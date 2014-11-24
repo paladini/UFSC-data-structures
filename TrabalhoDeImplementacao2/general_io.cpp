@@ -251,17 +251,27 @@ int indexar(int argc, char **argv){
     // Chaves secundárias
     ofstream chavesSecundarias("chavesSecundarias.dat");
     if (chavesSecundarias.is_open()) {
+        
+        // Pega todos os índices secundários
         vector<Palavra> palavrasEmOrdem = indicesSecundarios.breadth_first();
         for(int i = 0; i < palavrasEmOrdem.size(); i++) {
+            
+            // Armazena a palavra no arquivo (ou a "key")
             chavesSecundarias << palavrasEmOrdem.at(i).retornarPalavra();
 
-            doubly_linked_list<string> todasAsPalavrasQueContem = palavrasEmOrdem.at(i).retornarComandosQueContem();
-            for(int j = 0; j < todasAsPalavrasQueContem.size(); j++) {
-                chavesSecundarias << ' ' << todasAsPalavrasQueContem.at(j);
+            // Armazena todos os comandos que contem essa palavra
+            doubly_linked_list<string> todosOsComandosQueContem = palavrasEmOrdem.at(i).retornarComandosQueContem();
+            for(int j = 0; j < todosOsComandosQueContem.size(); j++) {
+                chavesSecundarias << ' ' << todosOsComandosQueContem.at(j);
             }
+
+            // Armazena um final de linha
             chavesSecundarias << endl;
         }
+
+        // Fecha o arquivo.
         chavesSecundarias.close();
+        
     } else {
         return -1;
     }

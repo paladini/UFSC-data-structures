@@ -288,9 +288,6 @@ int indexar(int argc, char **argv){
 
             // Armazena todos os comandos que contem essa palavra
             vector<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
-            // for (list<int>::const_iterator i = comandos.begin(), end = comandos.end(); i != end; ++i) {
-            //     chavesSecundarias << ' ' << *i;
-            // }    
             for(int j = 0; j < comandos.size(); j++) {
                 chavesSecundarias << ' ' << comandos.at(j);
             }

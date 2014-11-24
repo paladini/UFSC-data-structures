@@ -4,8 +4,6 @@
 * também todos os comandos associados à essas palavras-chave.
 */
 #include <string>
-// #include "estruturas/doubly_linked_list.h"
-// #include <list>
 #include <vector>
 #include <algorithm>
 
@@ -16,10 +14,7 @@ private:
 	string palavra;
 
 	// Lista duplamente encadeada que contém todos os comandos que estão associados à essa palavra.
-	// doubly_linked_list<string> comandosQueContem;
-	// std::list<string> comandosQueContem;
 	std::vector<string> comandosQueContem;
-
 
 public:
 
@@ -38,25 +33,15 @@ public:
 	* @param string comando que vai ser associado com essa palavra.
 	*/
 	void adicionarComandosQueContem(string comando) {
-
 		// Se comando NÃO existe na lista.
 		if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
 			comandosQueContem.push_back(comando);
 		}
-		// Se comando NÃO existe na lista.
-		// if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
-		// 	comandosQueContem.push_back(comando);
-		// }
-		// if(!comandosQueContem.has(comando)) {
-			// comandosQueContem.push_back(comando);
-		// }
 	}
 
 	/** 
 	* Retorna a lista duplamente encadeada de comandos que estão associados à essa palavra.
 	*/
-	// doubly_linked_list<string> retornarComandosQueContem() {
-	// std::list<string> retornarComandosQueContem() {
 	std::vector<string> retornarComandosQueContem() {
 		return comandosQueContem;
 	}

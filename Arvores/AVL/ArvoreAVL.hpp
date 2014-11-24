@@ -179,19 +179,6 @@ class ArvoreAVL: public NoBinario<T> {
         return (raiz->getEsquerda() != NULL ? raiz->getEsquerda()->altura : -1) - (raiz->getDireita() != NULL ? raiz->getDireita()->altura : -1);
  	}
 
- 	/** Verifica se determinada raiz tem uma árvore balanceada.
- 	* [Tomar cuidado] Os dois retornos possíveis desse método são:
- 	* 		Está balanceada -> retorna FALSE
- 	*		Está desbalanceada -> retorna TRUE
- 	*
- 	* @param raiz A raiz da árvore que será analisada.
- 	* @return Verdadeiro, caso a AVL NÃO ESTEJA DESBALANCEADA e FALSO CASO A AVL ESTEJA BALANCEADA.
- 	*/
- 	// bool balanceado(NoBinario<T>* raiz) {
- 	// 	int absolute = std::abs(altura(raiz->getEsquerda()) - altura(raiz->getDireita()));
- 	// 	return absolute > 1;
- 	// }
-
  	/** Método para realizar rotação dupla à esquerda.
  	* Realiza um rebalanceamento na árvore AVL que é chamado de "rotação dupla à esquerda".
  	* @param raiz O nodo que será rebalanceado.
@@ -250,11 +237,8 @@ class ArvoreAVL: public NoBinario<T> {
  		novaRaiz = raiz->getEsquerda();
  		raiz->setEsquerda(novaRaiz->getDireita());
         novaRaiz->setDireita(raiz);
-        //atualizar alturas
         atualiza(raiz);
         atualiza(novaRaiz);
- 		// raiz->setAltura(maximo(altura(raiz->getEsquerda()), altura(raiz->getDireita()) + 1));
- 		// novaRaiz->setAltura(maximo(altura(novaRaiz->getEsquerda()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
 
@@ -276,11 +260,8 @@ class ArvoreAVL: public NoBinario<T> {
  		novaRaiz = raiz->getDireita();
  		raiz->setDireita(novaRaiz->getEsquerda());
  		novaRaiz->setEsquerda(raiz);
- 		// //atualizar alturas
         atualiza(raiz);
         atualiza(novaRaiz);
- 		// raiz->setAltura(maximo(altura(raiz->getDireita()), altura(raiz->getEsquerda()) + 1));
- 		// novaRaiz->setAltura(maximo(altura(novaRaiz->getDireita()), raiz->getAltura()) + 1);
  		return novaRaiz;
  	}
     /**Método converterAVL

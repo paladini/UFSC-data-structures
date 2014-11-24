@@ -11,7 +11,7 @@
 #include <list>
 #include <limits>
 #include <string>
-#include "utils/funcoes_strings.cpp"
+#include "utils/funcoes_strings.hpp"
 #include "registro.hpp"
 #include "palavra.hpp"
 #include "estruturas/avl_tree.h"
@@ -85,8 +85,9 @@ Registro ler_arquivo(string nomeDoArquivo) {
 void procurar_chave_secundaria(string busca) {
 
     doubly_linked_list<string> resultados;
+    funcoes_strings func;
 
-    vector<string> termos = separar_em_palavras(busca);
+    vector<string> termos = func.separar_em_palavras(busca);
     for(int i = 0; i < termos.size(); i++) {
 
         ifstream chavesSecundarias("chavesSecundarias.dat");
@@ -212,7 +213,7 @@ int indexar(int argc, char **argv){
     avl_tree<Palavra> indicesSecundarios;
 
     // Percorre todos os arquivos da pasta "ManPages/" (quando esta é passada como argumento utilizando "ManPages/*")
-    criar_lista_conectivos();
+    funcoes_strings conectivos;
     cout << "Criou a lista dos conectivos a serem removidos..." << endl;
 
     for(int i = 1; i < argc; i++) {
@@ -233,7 +234,7 @@ int indexar(int argc, char **argv){
             transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 
             // Limpa a palavra
-            string limpa = remover_conectivo_unica_palavra(temp);
+            string limpa = conectivos.remover_conectivo_unica_palavra(temp);
             if(limpa.size() > 2) {
 
                 // Verifica se palavra já está nos índices secundários, se já estiver adiciona

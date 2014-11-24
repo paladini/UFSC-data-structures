@@ -8,6 +8,7 @@
 #include <strings.h>
 #include <vector>
 #include <cstdlib>
+#include <list>
 #include "utils/removedor_conectivos.cpp"
 #include "registro.hpp"
 #include "palavra.hpp"
@@ -115,6 +116,33 @@ void procurar_chave_primaria(string busca) {
     }
 }
 
+// Não funciona por algum motivo bizarro.
+// void escrever_chaves_primarias(avl_tree<Registro> indicesPrimarios) {
+//     cout << "testando" << endl;
+
+//     // Criando arquivo de saída
+//     ofstream arquivoSaida("chavesPrimarias.dat");  
+
+//     // Verificando se arquivo de saida foi aberto
+//     if (arquivoSaida.is_open()) {
+
+//         // Pega todos os registros da árvore AVL EM ORDEM e armazena no output.
+//         vector<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();
+//         for(int i = 0; i < registrosEmOrdem.size(); i++) {
+//             arquivoSaida << registrosEmOrdem.at(i).retornarComando(); 
+//             arquivoSaida << " ";
+//             arquivoSaida << registrosEmOrdem.at(i).retornarConteudo();
+//             arquivoSaida << "\3"; // termina a escrita com um caracter "end of text".
+//         }
+
+//         // Fecha o arquivo.
+//         arquivoSaida.close();
+
+//     } else {
+//         throw "[ERRO] Problema na hora de escrever o arquivo de chaves primárias!";
+//     }
+// }
+
 /** Indexa todas as manpages por chave primária e chave secundária.
 * Método responsável por indexar todas as manpages por chave primária e chave secundária.
 * Percorre as manpages dadas de acordo com o primeiro parâmetro do argv, lê cada arquivo e
@@ -138,34 +166,63 @@ int indexar(int argc, char **argv){
     avl_tree<Palavra> indicesSecundarios;
 
     // Percorre todos os arquivos da pasta "ManPages/" (quando esta é passada como argumento utilizando "ManPages/*")
-    for(int i = 1; i < argc; i++) {
+    criar_lista_conectivos();
+    cout << "Criou a lista dos conectivos a serem removidos..." << endl;
+
+    for(int i = 1; i < 256; i++) {
+        cout << "Indexando manpages [ " << i << " de " << argc << " ]" << endl;
 
         // Lê o arquivo manpage atual.
-        string nomeDoArquivo = argv[i];
-        Registro mr = ler_arquivo(nomeDoArquivo);
+        Registro mr = ler_arquivo(argv[i]);
 
         // Adiciona na lista de índices primários
         indicesPrimarios.insert(mr);
 
-        // Cria lista de conectivos proibidos e remove todas as palavras inválidas
-        criar_lista_conectivos();
-        vector<string> palavras_limpas = removedor_conectivos(mr.retornarConteudo());
+        // Verifica palavra por palavra.
+        string temp, comando = mr.retornarComando();
+        stringstream stream { mr.retornarConteudo() };
+        while(stream >> temp) {
 
-        // Cria o índice das palavras inválidas
-        for (int j = 0; j < palavras_limpas.size(); j++) {
-            
-            // Verifica se palavra já está nos índices secundários, se já estiver adiciona
-            // o comando recém descoberto que possui essa palavra. Caso não exista no índice
-            // secundário, adiciona.
-            try{
-                Palavra tentativa = indicesSecundarios.find(palavras_limpas.at(i))
-                tentativa.adicionarComandosQueContem(mr.retornarComando());
-            } catch (std::range_error& e) {
-                Palavra p(palavras_limpas.at(i));
-                p.adicionarComandosQueContem(mr.retornarComando());
-                indicesSecundarios.insert(p);
+            // Coloca string em minúsculo
+            transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+
+            // Limpa a palavra
+            string limpa = remover_conectivo_unica_palavra(temp);
+            if(limpa.size() > 2) {
+
+                // Verifica se palavra já está nos índices secundários, se já estiver adiciona
+                // o comando recém descoberto que possui essa palavra. Caso não exista no índice
+                // secundário, adiciona.
+                try{
+                    indicesSecundarios.find(limpa).adicionarComandosQueContem(comando);
+                } catch (std::range_error& e) {
+                    Palavra p(limpa);
+                    p.adicionarComandosQueContem(comando);
+                    indicesSecundarios.insert(p);
+                }
             }
+
+            // Limpa a string para a próxima palavra.
+            temp.clear();
         }
+        // vector<string> palavras_limpas = remover_conectivos(mr.retornarConteudo());
+
+        // // cout << "Removeu conectivos!" << endl;
+        // // Cria o índice das palavras inválidas
+        // for (int j = 0; j < palavras_limpas.size(); j++) {
+            
+        //     // Verifica se palavra já está nos índices secundários, se já estiver adiciona
+        //     // o comando recém descoberto que possui essa palavra. Caso não exista no índice
+        //     // secundário, adiciona.
+        //     try{
+        //         Palavra tentativa = indicesSecundarios.find(palavras_limpas.at(i));
+        //         tentativa.adicionarComandosQueContem(mr.retornarComando());
+        //     } catch (std::range_error& e) {
+        //         Palavra p(palavras_limpas.at(i));
+        //         p.adicionarComandosQueContem(mr.retornarComando());
+        //         indicesSecundarios.insert(p);
+        //     }
+        // }
 
     }
 
@@ -175,7 +232,7 @@ int indexar(int argc, char **argv){
     // Verificando se arquivo de saida foi aberto
     if (arquivoSaida.is_open()) {
 
-        // Pega todos os registros da árvore AVL EM ORDEM e armazena no output.
+        // Pega todos os registros da árvore AVL EM ORDEM e armazena no arquivoSaida.
         vector<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();
         for(int i = 0; i < registrosEmOrdem.size(); i++) {
             arquivoSaida << registrosEmOrdem.at(i).retornarComando(); 
@@ -187,7 +244,25 @@ int indexar(int argc, char **argv){
         // Fecha o arquivo.
         arquivoSaida.close();
 
-    } else{
+    } else {
+        return -1;
+    }
+
+    // Chaves secundárias
+    ofstream chavesSecundarias("chavesSecundarias.dat");
+    if (chavesSecundarias.is_open()) {
+        vector<Palavra> palavrasEmOrdem = indicesSecundarios.breadth_first();
+        for(int i = 0; i < palavrasEmOrdem.size(); i++) {
+            chavesSecundarias << palavrasEmOrdem.at(i).retornarPalavra();
+
+            doubly_linked_list<string> todasAsPalavrasQueContem = palavrasEmOrdem.at(i).retornarComandosQueContem();
+            for(int j = 0; j < todasAsPalavrasQueContem.size(); j++) {
+                chavesSecundarias << ' ' << todasAsPalavrasQueContem.at(j);
+            }
+            chavesSecundarias << endl;
+        }
+        chavesSecundarias.close();
+    } else {
         return -1;
     }
 

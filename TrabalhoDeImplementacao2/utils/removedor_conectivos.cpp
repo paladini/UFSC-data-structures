@@ -7,11 +7,12 @@
 #include <cstring> //strcpy
 #include <vector>
 #include <strings.h>
+#include "../estruturas/doubly_linked_list.h"
 
 using namespace std;
 
 // Armazena todos os conectivos proibidos especificados pelo enunciado do problema
-vector<string> conectivosProibidos;
+doubly_linked_list<string> conectivosProibidos;
 
 // Armazena todas as palavras que serão indexadas como índice secundário.
 // Ou seja, armazena todas as palavras com os conectivos proibidos já excluídos.
@@ -200,18 +201,27 @@ void criar_lista_conectivos() {
 * conectivo proibido. Se não for um conectivo proibido e tiver mais de 3 caracteres, será adicionado
 * na lista de "palavras" (que contém todas as palavras-chave que serão indexadas como chave secundária).
 */
-void adicionarPalavraConectivos(string palavra){
+// void adicionarPalavraConectivos(string palavra){
+// 	if (palavra.size() >= 3) {
+// 		bool gravar = true;
+// 		for(int i = 0; i < conectivosProibidos.size(); i++) {
+// 			if (strcasecmp(palavra.c_str(), conectivosProibidos.at(i).c_str()) == 0) {
+// 				gravar = false;
+// 			}
+// 		}
+// 		if(gravar) {
+// 			palavras.push_back(palavra);
+// 		}
+// 	}
+// }
+
+string remover_conectivo_unica_palavra(string palavra) {
 	if (palavra.size() >= 3) {
-		bool gravar = true;
-		for(int i = 0; i < conectivosProibidos.size(); i++) {
-			if (strcasecmp(palavra.c_str(), conectivosProibidos.at(i).c_str()) == 0) {
-				gravar = false;
-			}
-		}
-		if(gravar) {
-			palavras.push_back(palavra);
+		if(!conectivosProibidos.has(palavra)) {
+			return palavra;
 		}
 	}
+	return "";
 }
 
 /** Método para remover todos os conectivos e retornar apenas as palavras-chave do conteúdo.
@@ -222,48 +232,48 @@ void adicionarPalavraConectivos(string palavra){
 * @param string conteudo Recebe um conteúdo que será analisado e extraido.
 * @return vector<string> vetor de strings com palavras-chave.
 */
-vector<string> remover_conectivos(string conteudo) {
+// vector<string> remover_conectivos(string conteudo) {
 	
-	// Removendo caracteres especiais
-	char caracteresEspeciais[] = "<>():'#;,.";
-	int pos = 0, comecoDaString = 0;
-	for(int i = 0; i < strlen(caracteresEspeciais); i++) {
-		pos = 0, comecoDaString = 0;
-		while(true) {
-			pos = conteudo.find(caracteresEspeciais[i], comecoDaString);
-			if(pos == -1){
-				break;
-			}
-			conteudo.replace(pos, 1, " ");
-			comecoDaString = pos;
-		}
-	}
+// 	// Removendo caracteres especiais
+// 	char caracteresEspeciais[] = "<>():'#;,.";
+// 	int pos = 0, comecoDaString = 0;
+// 	for(int i = 0; i < strlen(caracteresEspeciais); i++) {
+// 		pos = 0, comecoDaString = 0;
+// 		while(true) {
+// 			pos = conteudo.find(caracteresEspeciais[i], comecoDaString);
+// 			if(pos == -1){
+// 				break;
+// 			}
+// 			conteudo.replace(pos, 1, " ");
+// 			comecoDaString = pos;
+// 		}
+// 	}
 
-	// Separando em palavras e removendo palavas proibidas
-	pos = 0, comecoDaString = 0;
-	while(true) {
-		pos = conteudo.find(" ", comecoDaString); // \x20
-		if(pos == -1) {
-			string myFavoriteString = conteudo.substr(comecoDaString, conteudo.size()-comecoDaString);
-			adicionarPalavraConectivos(myFavoriteString);
-			break;
-		}
-		if (pos <= comecoDaString) {
-			comecoDaString++;
-			continue;
-		} else {
-			string myFavoriteString = conteudo.substr(comecoDaString, pos-comecoDaString);
-			adicionarPalavraConectivos(myFavoriteString);
-			comecoDaString = pos+1;
-		}
-	}
+// 	// Separando em palavras e removendo palavas proibidas
+// 	pos = 0, comecoDaString = 0;
+// 	while(true) {
+// 		pos = conteudo.find(" ", comecoDaString); // \x20
+// 		if(pos == -1) {
+// 			string myFavoriteString = conteudo.substr(comecoDaString, conteudo.size()-comecoDaString);
+// 			adicionarPalavraConectivos(myFavoriteString);
+// 			break;
+// 		}
+// 		if (pos <= comecoDaString) {
+// 			comecoDaString++;
+// 			continue;
+// 		} else {
+// 			string myFavoriteString = conteudo.substr(comecoDaString, pos-comecoDaString);
+// 			adicionarPalavraConectivos(myFavoriteString);
+// 			comecoDaString = pos+1;
+// 		}
+// 	}
 
-	// Imprimindo as palavras.
-	// for(int i = 0; i < palavras.size(); i++) {
-	// 	cout << palavras.at(i) << endl;
-	// }
-	return palavras;
-}
+// 	// Imprimindo as palavras.
+// 	// for(int i = 0; i < palavras.size(); i++) {
+// 	// 	cout << palavras.at(i) << endl;
+// 	// }
+// 	return palavras;
+// }
 
 // int main() {
 //   	const char * file = "manpages.dat";

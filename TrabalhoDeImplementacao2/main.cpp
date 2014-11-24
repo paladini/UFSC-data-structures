@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 			default: {
 				limparTela();
 				cout << "Saindo..." << endl;
-				sleep(2)
+				sleep(2);
 				executar = false;
 				limparTela();
 				break;

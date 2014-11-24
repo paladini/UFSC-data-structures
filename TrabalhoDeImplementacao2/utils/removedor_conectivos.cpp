@@ -265,24 +265,24 @@ vector<string> remover_conectivos(string conteudo) {
 	return palavras;
 }
 
-int main() {
-  	const char * file = "manpages.dat";
+// int main() {
+//   	const char * file = "manpages.dat";
 
-  	// Cria a lista de conectivos proibidos
-  	criar_lista_conectivos();
+//   	// Cria a lista de conectivos proibidos
+//   	criar_lista_conectivos();
 
-  	// String para testar.
-  	string zoeira = "<beginning of page>"
-					"alias <-> alias table file of encoding names"
-					"/usr/lib/iconv/alias"
-					"This file contains the alias table of encoding names for iconv_open(3C)."
-					"The format of the alias table is as follows: <variant encoding name>, <canonical encoding name>"
-					"The string specified for the variant encoding name is case-insensitive. A line beginning with '#' is treated as a com<hy>ment."
-					"See attributes(5) for descriptions of the following attributes:"
-					"tab() box; cw(2.75i) |cw(2.75i) lw(2.75i) |lw(2.75i) ATTRIBUTE TYPEATTRIBUTE VALUE _ Interface Stabili<hy>"
-					"tyEvolving"
-					"iconv(3C), iconv_close(3C), iconv_open(3C), attributes(5)";
+//   	// String para testar.
+//   	string zoeira = "<beginning of page>"
+// 					"alias <-> alias table file of encoding names"
+// 					"/usr/lib/iconv/alias"
+// 					"This file contains the alias table of encoding names for iconv_open(3C)."
+// 					"The format of the alias table is as follows: <variant encoding name>, <canonical encoding name>"
+// 					"The string specified for the variant encoding name is case-insensitive. A line beginning with '#' is treated as a com<hy>ment."
+// 					"See attributes(5) for descriptions of the following attributes:"
+// 					"tab() box; cw(2.75i) |cw(2.75i) lw(2.75i) |lw(2.75i) ATTRIBUTE TYPEATTRIBUTE VALUE _ Interface Stabili<hy>"
+// 					"tyEvolving"
+// 					"iconv(3C), iconv_close(3C), iconv_open(3C), attributes(5)";
 
-	remover_conectivos(zoeira);
-  	return 0;
-}
+// 	remover_conectivos(zoeira);
+//   	return 0;
+// }

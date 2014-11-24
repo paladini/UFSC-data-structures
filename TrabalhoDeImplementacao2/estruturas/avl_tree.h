@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <list>
 #include <stdexcept>
+#include <vector>
 #include "doubly_linked_list.h"
 
 template<typename T, template<typename > class Container = doubly_linked_list>
@@ -274,9 +275,9 @@ public:
 		return container;
 	}
 	
-	Container<T> breadth_first() const {
+	std::vector<T> breadth_first() const {
 		Container<node*> nodes;
-		Container<T> items;
+		std::vector<T> items;
 		if (_root != nullptr) {
 			nodes.push_back(_root);
 			
@@ -292,6 +293,24 @@ public:
 		}
 		return items;
 	}
+	// Container<T> breadth_first() const {
+	// 	Container<node*> nodes;
+	// 	Container<T> items;
+	// 	if (_root != nullptr) {
+	// 		nodes.push_back(_root);
+			
+	// 		for (auto node : nodes) {
+	// 			if (node->_left != nullptr) {
+	// 				nodes.push_back(node->_left);
+	// 			}
+	// 			if (node->_right != nullptr) {
+	// 				nodes.push_back(node->_right);
+	// 			}
+	// 			items.push_back(node->_item);
+	// 		}
+	// 	}
+	// 	return items;
+	// }
 
 /*	T** to_array() const {
 		T** items = nullptr;

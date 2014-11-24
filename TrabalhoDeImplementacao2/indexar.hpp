@@ -12,9 +12,9 @@
 #include <limits>
 #include <string>
 #include "utils/funcoes_strings.hpp"
-#include "registro.hpp"
+#include "modelos/registro.hpp"
 #include "buscador.hpp"
-#include "palavra.hpp"
+#include "modelos/palavra.hpp"
 #include "estruturas/avl_tree.h"
 #include "estruturas/doubly_linked_list.h"
 // #include "estruturas/NoAVL.hpp"

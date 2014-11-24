@@ -26,33 +26,39 @@ string pegarTermosBusca(int opcao) {
 	string tipoDeBusca;
 	if (opcao == 1) {
 		tipoDeBusca = "[ PESQUISA POR COMANDO ]";
+		while (busca.size() < 3) {
+			limparTela();
+			cout << tipoDeBusca << endl;
+			cout << "Digite a busca que deseja realizar: "; // << endl;
+			cin >> busca;		
+		}
 	} else {
 		if (opcao == 2) {
 			tipoDeBusca = "[ PESQUISA POR PALAVRAS ]";
+			while (busca.size() < 3) {
+				limparTela();
+				cout << tipoDeBusca << endl;
+				cout << "Digite a busca que deseja realizar: "; // << endl;
+				getline(cin, busca);		
+			}
 		}
 	}
 
-	// Tentando pegar input do usuário
-	while (busca.size() < 3) {
-		limparTela();
-		cout << tipoDeBusca << endl;
-		cout << "Digite a busca que deseja realizar: "; // << endl;
-		cin >> busca;		
-	}
 	return busca;
 }
 
 int especificarBusca() {
 	int opcao = -1, tentativas = 0;
 	string dica = "";
-	while (opcao < 1 || opcao > 2) {
+	while (opcao < 1 || opcao > 3) {
 		if (tentativas == 1) {
 			dica = "[ COMANDO INVÁLIDO ]";
 		}
 		limparTela();
 		cout << "Por favor, seleciona uma opção. " << dica << endl;
 		cout << "1 - Comando" << endl;
-		cout << "2 - Palavra\n" << endl;
+		cout << "2 - Palavra" << endl;
+		cout << "3 - Voltar\n" << endl;
 		cout << "Procurar por: "; //<< dica << endl;
 		cin >> opcao;
 		tentativas++;
@@ -101,27 +107,34 @@ int main(int argc, char **argv) {
 			case 2: {
 				limparTela();
 				int opcao = especificarBusca();
+				
+				if(opcao == 3){
+					break;
+				}
+
 				string busca = pegarTermosBusca(opcao);
 				limparTela();
-
-				cout << "COMANDO: " << busca << "\n" << endl;
 				if (opcao == 1) {
+					cout << "COMANDO: " << busca << "\n" << endl;
 					procurar_chave_primaria(busca);
 				}
 				if (opcao == 2) {
-					cout << "De boa!" << endl;
+					cout << "TERMOS: " << busca << "\n" << endl;
+					procurar_chave_secundaria(busca);
 				}
 
 				// Esperando pelo input do usuário para avançar / voltar ao menu principal.
-				string variavelQualquer;
-				cout << "[ Para continuar pressione QUALQUER TECLA e depois ENTER ]" << endl;
-				cin >> variavelQualquer;
+				string variavelQualquer = "";
+				cout << "\n[ Para continuar pressione QUALQUER TECLA e depois ENTER ]" << endl;
+				while(variavelQualquer.size() < 1) {
+					cin >> variavelQualquer;
+				}
 				break;
 			}
 			default: {
 				limparTela();
 				cout << "Saindo..." << endl;
-				sleep(2);
+				sleep(1);
 				executar = false;
 				limparTela();
 				break;
@@ -129,6 +142,5 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-
 	return 0;
 }

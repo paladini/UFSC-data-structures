@@ -9,6 +9,8 @@
 #include <vector>
 #include <cstdlib>
 #include <list>
+#include <limits>
+#include <string>
 #include "utils/removedor_conectivos.cpp"
 #include "registro.hpp"
 #include "palavra.hpp"
@@ -68,6 +70,62 @@ Registro ler_arquivo(string nomeDoArquivo) {
     }
 }
 
+void procurar_chave_secundaria(string busca) {
+    ifstream chavesSecundarias("chavesSecundarias.dat");
+
+    doubly_linked_list<string> resultados;
+    string temp;
+
+    vector<string> termos = separar_em_palavras(busca);
+    for(int i = 0; i < termos.size(); i++) {
+
+        // Enquanto não atingir o fim do arquivo, continua procurando.
+        while(!chavesSecundarias.eof()) {
+
+            // Pega a primeira palavra e armazena em temp.
+            chavesSecundarias >> temp;
+
+            // Se a palavra for igual ao termo buscado pelo usuário
+            if (temp == termos.at(i)) {
+
+                string linhaInteira;
+                
+                // Armazena a linha inteira (ou seja, todos os Comandos que contém essa palavra).
+                getline(chavesSecundarias, linhaInteira, '\n');
+                temp.clear();
+
+                // Armazena todos os comandos que contém essa palavra.
+                stringstream line(linhaInteira);
+                doubly_linked_list<string> comandosQueContemPalavra;
+
+                // Pega um comando por vêz e adiciona na lista encadeada "comandosQueContemPalavra".
+                while(line >> temp) {
+                    comandosQueContemPalavra.push_back(temp);
+                    temp.clear();
+                }
+
+                // Faz a intersecção entre duas listas encadeadas, de acordo com algoritmo do professor.
+                if (resultados.size() > 0) {
+                    resultados.intersect(comandosQueContemPalavra);
+                } else {
+                    swap(resultados, comandosQueContemPalavra);
+                }
+
+            }
+        }
+    }
+
+    // Printa os valores
+    if (resultados.size() > 0) {
+        cout << "Essas são as páginas que contém os termos pesquisados:" << endl;
+        for (string comando : resultados) {
+            cout << comando << endl;
+        }
+    } else {
+        cout << "Os termos não foram encontrados, por favor, faça outra busca." << endl;
+    }
+}
+
 /** Pesquisa no arquivo de indexação por chave primária o comando buscado pelo usuário.
 * Este método verifica todo o arquivo "chavesPrimarias.dat" em busca do comando
 * que está sendo pesquisado pelo usuário. Caso o comando procurado seja encontrado, é impresso
@@ -116,33 +174,6 @@ void procurar_chave_primaria(string busca) {
     }
 }
 
-// Não funciona por algum motivo bizarro.
-// void escrever_chaves_primarias(avl_tree<Registro> indicesPrimarios) {
-//     cout << "testando" << endl;
-
-//     // Criando arquivo de saída
-//     ofstream arquivoSaida("chavesPrimarias.dat");  
-
-//     // Verificando se arquivo de saida foi aberto
-//     if (arquivoSaida.is_open()) {
-
-//         // Pega todos os registros da árvore AVL EM ORDEM e armazena no output.
-//         vector<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();
-//         for(int i = 0; i < registrosEmOrdem.size(); i++) {
-//             arquivoSaida << registrosEmOrdem.at(i).retornarComando(); 
-//             arquivoSaida << " ";
-//             arquivoSaida << registrosEmOrdem.at(i).retornarConteudo();
-//             arquivoSaida << "\3"; // termina a escrita com um caracter "end of text".
-//         }
-
-//         // Fecha o arquivo.
-//         arquivoSaida.close();
-
-//     } else {
-//         throw "[ERRO] Problema na hora de escrever o arquivo de chaves primárias!";
-//     }
-// }
-
 /** Indexa todas as manpages por chave primária e chave secundária.
 * Método responsável por indexar todas as manpages por chave primária e chave secundária.
 * Percorre as manpages dadas de acordo com o primeiro parâmetro do argv, lê cada arquivo e
@@ -169,7 +200,7 @@ int indexar(int argc, char **argv){
     criar_lista_conectivos();
     cout << "Criou a lista dos conectivos a serem removidos..." << endl;
 
-    for(int i = 1; i < 256; i++) {
+    for(int i = 1; i < argc; i++) {
         cout << "Indexando manpages [ " << i << " de " << argc << " ]" << endl;
 
         // Lê o arquivo manpage atual.
@@ -205,25 +236,6 @@ int indexar(int argc, char **argv){
             // Limpa a string para a próxima palavra.
             temp.clear();
         }
-        // vector<string> palavras_limpas = remover_conectivos(mr.retornarConteudo());
-
-        // // cout << "Removeu conectivos!" << endl;
-        // // Cria o índice das palavras inválidas
-        // for (int j = 0; j < palavras_limpas.size(); j++) {
-            
-        //     // Verifica se palavra já está nos índices secundários, se já estiver adiciona
-        //     // o comando recém descoberto que possui essa palavra. Caso não exista no índice
-        //     // secundário, adiciona.
-        //     try{
-        //         Palavra tentativa = indicesSecundarios.find(palavras_limpas.at(i));
-        //         tentativa.adicionarComandosQueContem(mr.retornarComando());
-        //     } catch (std::range_error& e) {
-        //         Palavra p(palavras_limpas.at(i));
-        //         p.adicionarComandosQueContem(mr.retornarComando());
-        //         indicesSecundarios.insert(p);
-        //     }
-        // }
-
     }
 
     // Criando arquivo de saída
@@ -271,7 +283,7 @@ int indexar(int argc, char **argv){
 
         // Fecha o arquivo.
         chavesSecundarias.close();
-        
+
     } else {
         return -1;
     }

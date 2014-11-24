@@ -14,8 +14,8 @@
 #include <limits>
 #include <string>
 #include "utils/funcoes_strings.hpp"
-#include "Registro.hpp"
-#include "Palavra.hpp"
+#include "modelos/Registro.hpp"
+#include "modelos/Palavra.hpp"
 #include "Leitor.hpp"
 #include "estruturas/avl_tree.h"
 #include "estruturas/doubly_linked_list.h"

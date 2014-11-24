@@ -1,6 +1,6 @@
 #ifndef AVL_TREE_H_
 #define AVL_TREE_H_
-
+#include <string>
 #include <algorithm>
 #include <list>
 #include <stdexcept>

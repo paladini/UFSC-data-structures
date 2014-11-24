@@ -1,3 +1,5 @@
+#ifndef PALAVRA_HPP_
+#define PALAVRA_HPP_
 /** Classe Palavra.
 * Essa clase servirá para armazenar as palavras que fazem a indexação por chaves secundárias 
 * do problema proposto. Serão armazenadas todas as palavras-chave do conteúdo das manpages e
@@ -6,15 +8,15 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-
+using namespace std;
 class Palavra {
 private:
 
 	// Atributo palavra.
-	string palavra;
+	std::string palavra;
 
 	// Lista duplamente encadeada que contém todos os comandos que estão associados à essa palavra.
-	std::vector<string> comandosQueContem;
+	std::vector<std::string> comandosQueContem;
 
 public:
 
@@ -22,7 +24,7 @@ public:
 	* Recebe apenas uma palavra como argumento.
 	* @param string a palavra que está sendo criada.
 	*/
-	Palavra(string _palavra) {
+	Palavra(std::string _palavra) {
 		palavra = _palavra;
 	}
 
@@ -32,7 +34,7 @@ public:
 	* 
 	* @param string comando que vai ser associado com essa palavra.
 	*/
-	void adicionarComandosQueContem(string comando) {
+	void adicionarComandosQueContem(std::string comando) {
 		// Se comando NÃO existe na lista.
 		if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
 			comandosQueContem.push_back(comando);
@@ -42,14 +44,14 @@ public:
 	/** 
 	* Retorna a lista duplamente encadeada de comandos que estão associados à essa palavra.
 	*/
-	std::vector<string> retornarComandosQueContem() {
+	std::vector<std::string> retornarComandosQueContem() {
 		return comandosQueContem;
 	}
 
 	/** 
 	* Retorna o atributo palavra.
 	*/
-	string retornarPalavra() {
+	std::string retornarPalavra() {
 		return palavra;
 	}
 	
@@ -61,3 +63,4 @@ public:
 	}
 
 };
+#endif

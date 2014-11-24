@@ -1,88 +1,26 @@
-// Testando criar método para remover o seguinte:
-// Este índice indexará o conjuntode todas as palavras contidas em todas as manpages que não caiam 
-// nas seguintes categorias léxicas: artigo, conjunção, preposição e pronome (chamadas em seu conjunto 
-// de conetivos).
 #include <iostream> //cout
 #include <fstream> //fstream
 #include <cstring> //strcpy
 #include <vector>
 #include <strings.h>
-#include "../estruturas/doubly_linked_list.h"
-
 using namespace std;
 
+/** Classe funcao_strings.
+* Essa classe fornece diversas funções úteis para manipulação e criação de strings, char pointers
+* e similares. 
+*
+* Contém métodos para separar textos em vetores de palavras, remover conectivos proibidos,
+* e muitas outras funções e procedimentos úteis para o programa.
+*/
 class funcoes_strings {
-
  private:
- 	doubly_linked_list<string>* conectivosProibidos;
 
- public:
-	/** Criar lista dos conectivos proibidos que são descritos no enunciado do problema.
-	* Adiciona à variável "conectivosProibidos" todos os conectivos proibidos que são descritos
-	* no enunciado do problema (artigos, conjunções, preposição e pronome). 
-	*/
-	funcoes_strings() {
-		// Armazena todos os conectivos proibidos especificados pelo enunciado do problema
-		conectivosProibidos = new doubly_linked_list<string>();
+ 	// Armazena todos os conectivos proibidos especificados pelo enunciado do problema.
+ 	vector<string>* conectivosProibidos;
 
-		// Artigos
-		criarArtigos();
-
-		// Conjunções
-		criarConjuncoes();
-		
-
-		// Preposições
-		criarPreposicoes();
-		
-
-		// Pronomes
-		criarPronomes();
-		
-
-	}
-
-	/** Remove os conectivos de uma palavra.
-	* Esse método é responsável por verificar se essa é uma das palavras "proibidas" do programa
-	* e caso seja deve tratar de alguma forma. As palavras "proibidas" são todas com menos de 
-	* 3 caracteres e que estejam na lista dos conectivos proibidos. Todas as palavras restantes
-	* poderão ser indexadas como chave secundária.
-	*
-	* @param string palavra a ser limpada / ter os conectivos removidos. 
-	* @return string Retorna a própria palavra caso ela seja permitida ou retorna "" caso não seja.
-	*/
-	string remover_conectivo_unica_palavra(string palavra) {
-		if (palavra.size() >= 3) {
-			if(!conectivosProibidos->has(palavra)) {
-				return palavra;
-			}
-		}
-		return "";
-	}
-
-	/** Método que separa os termos de busca em um vetor de strings.
-	* Esse método serve para separar os termos de busca inseridos pelo usuário (no formato "termo1 termo2 termo3")
-	* em um vetor de strings contendo 1 termo por posição. Isso será útil para poder fazer a 
-	* busca disjuntiva por chave secundária depois.
-	*
-	* @param string o argumento com todos os termos de busca separados por espaços em branco.
-	* @return vector<string> Um vetor contendo todas os termos conjuntivos de busca.
-	*/
-	vector<string> separar_em_palavras(string busca) {
-
-		// Atributo para armazenar todos as palavras da busca.
-		vector<string> termos;
-
-		// Forma mais fácil de buscar palavra por palavra de um texto.
-		string temp;
-		stringstream stream(busca);
-		while(stream >> temp) {
-			termos.push_back(temp);
-		}
-		
-		return termos;
-	}
-
+ 	/** 
+ 	 * Adiciona pronomes em inglês à lista de conectivos proibidos.
+ 	 */
 	void criarPronomes() {
 		conectivosProibidos->push_back("I");
 		conectivosProibidos->push_back("me");
@@ -156,6 +94,9 @@ class funcoes_strings {
 		conectivosProibidos->push_back("yours");
 		conectivosProibidos->push_back("theirs");
 	}
+	/** 
+ 	 * Adiciona preposições em inglês à lista de conectivos proibidos.
+ 	 */
 	void criarPreposicoes() {
 		conectivosProibidos->push_back("aboard");
 		conectivosProibidos->push_back("about");
@@ -237,6 +178,9 @@ class funcoes_strings {
 		conectivosProibidos->push_back("within");
 		conectivosProibidos->push_back("without");
 	}
+	/** 
+ 	 * Adiciona conjunções em inglês à lista de conectivos proibidos.
+ 	 */
 	void criarConjuncoes() {
 		conectivosProibidos->push_back("for");
 		conectivosProibidos->push_back("and");
@@ -246,11 +190,80 @@ class funcoes_strings {
 		conectivosProibidos->push_back("yet");
 		conectivosProibidos->push_back("so");
 	}
+	/** 
+ 	 * Adiciona artigos em inglês à lista de conectivos proibidos.
+ 	 */
 	void criarArtigos() {
-
 		conectivosProibidos->push_back("a");
 		conectivosProibidos->push_back("an");
 		conectivosProibidos->push_back("the");
 		conectivosProibidos->push_back("no");
 	}
+
+ public:
+	/** Criar lista dos conectivos proibidos que são descritos no enunciado do problema.
+	* Adiciona à variável "conectivosProibidos" todos os conectivos proibidos que são descritos
+	* no enunciado do problema (artigos, conjunções, preposição e pronome). 
+	*/
+	funcoes_strings() {
+		// Armazena todos os conectivos proibidos especificados pelo enunciado do problema
+		conectivosProibidos = new vector<string>();
+
+		// Adiciona artigos à lista de conectivos proibidos.
+		criarArtigos();
+
+		// Adiciona conjunções à lista de conectivos proibidos.
+		criarConjuncoes();
+		
+		// Adiciona preposições à lista de conectivos proibidos.
+		criarPreposicoes();
+		
+		// Adiciona pronomes à lista de conectivos proibidos.
+		criarPronomes();
+
+	}
+
+	/** Remove os conectivos de uma palavra.
+	* Esse método é responsável por verificar se essa é uma das palavras "proibidas" do programa
+	* e caso seja deve tratar de alguma forma. As palavras "proibidas" são todas com menos de 
+	* 3 caracteres e que estejam na lista dos conectivos proibidos. Todas as palavras restantes
+	* poderão ser indexadas como chave secundária.
+	*
+	* @param string palavra a ser limpada / ter os conectivos removidos. 
+	* @return string Retorna a própria palavra caso ela seja permitida ou retorna "" caso não seja.
+	*/
+	string remover_conectivo_unica_palavra(string palavra) {
+		if (palavra.size() >= 3) {
+			for(int i = 0; i < conectivosProibidos->size(); i++) {
+				if(conectivosProibidos->at(i) == palavra) {
+					return "";
+				}
+			}
+		}
+		return palavra;
+	}
+
+	/** Método que separa os termos de busca em um vetor de strings.
+	* Esse método serve para separar os termos de busca inseridos pelo usuário (no formato "termo1 termo2 termo3")
+	* em um vetor de strings contendo 1 termo por posição. Isso será útil para poder fazer a 
+	* busca disjuntiva por chave secundária depois.
+	*
+	* @param string o argumento com todos os termos de busca separados por espaços em branco.
+	* @return vector<string> Um vetor contendo todas os termos conjuntivos de busca.
+	*/
+	vector<string> separar_em_palavras(string busca) {
+
+		// Atributo para armazenar todos as palavras da busca.
+		vector<string> termos;
+
+		// Forma mais fácil de buscar palavra por palavra de um texto.
+		string temp;
+		stringstream stream(busca);
+		while(stream >> temp) {
+			termos.push_back(temp);
+		}
+		
+		return termos;
+	}
+
 };

@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits>
-#include "Indexar.hpp"
-#include "Buscador.hpp"
+#include "modelos/Indexador.hpp"
+#include "modelos/Buscador.hpp"
 //#include "leitor.hpp"
 
 using std::string;
@@ -117,7 +117,10 @@ int menuPrincipal() {
 * de acordo com as entradas do usuário. 
 */
 int main(int argc, char **argv) {
-	Indexar *index = new Indexar(argc, argv);
+
+	// Cria objeto indexador.
+	Indexador *index = new Indexador(argc, argv);
+
 	while(executar) {
 
 		// Pede ao usuário

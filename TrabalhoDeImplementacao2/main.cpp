@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits>
-#include "general_io.cpp"
+#include "indexar.hpp"
 
 using std::string;
 using namespace std;
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 			case 1: {
 				limparTela();
 				cout << "Comecando indexacao dos arquivos da manpages..." << endl;
-				indexar(argc, argv);
+				Indexar index = Indexar(argc, argv);
 				cout << "Indexado com sucesso!" << endl;
 				sleep(2);
 				break;

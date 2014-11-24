@@ -13,16 +13,17 @@
 #include <list>
 #include <limits>
 #include <string>
-#include "../utils/funcoes_strings.hpp"
 #include "Registro.hpp"
 #include "Palavra.hpp"
 #include "Leitor.hpp"
 #include "../estruturas/avl_tree.h"
-// #include "estruturas/doubly_linked_list.h"
-// #include "estruturas/NoAVL.hpp"
+#include "../utils/funcoes_strings.hpp"
 
 using namespace std;
-
+/** Classe Indexador.
+* Essa classe servirá para indexar todas as manpages fornecidas como argumento ao programa.
+* É responsável por criar os arquivos de índice por chave primária e por chave secundária.
+*/
 class Indexador {
  private:
         // Árvore AVL que armazena as chaves por indexação primária.
@@ -30,15 +31,26 @@ class Indexador {
 
         // Árvore AVL que armazena as chaves por indexação secundária.
         avl_tree<Palavra> indicesSecundarios;
+
+        // Armazena o argc passado como programa para o programa.
         int argc;
+
+        // Armazena o argv passado como argumento para o programa.
         char **argv;
 
  public:
+    /** Construtor padrão do Indexador.
+    * Recebe como argumentos o argc e o argv passados para o programa. Os armazena em suas variáveis
+    * privadas para uso futuro.
+    */
     Indexador(int _argc, char **_argv) {
         argc = _argc;
         argv = _argv;
     }
-   
+    
+    /**
+    * Método que inicia o processo de indexação das manpages.
+    */
     void criarIndexacao() {
         gerarIndex();
         gerarPrimarias();
@@ -105,11 +117,18 @@ class Indexador {
         }
     }
 
+    /**
+    * Método que gera o arquivo de indexação das chaves primárias.
+    * O arquivo escrito tem o nome de chavesPrimarias.dat e contém todas as 
+    * chaves primárias em um protocolo criado exclusivamente para essa aplicação.
+    */
     void gerarPrimarias() {
         // Criando arquivo de saída
         ofstream arquivoSaida("chavesPrimarias.dat");  
+
         // Verificando se arquivo de saida foi aberto
         if (arquivoSaida.is_open()) {
+
             // Pega todos os registros da árvore AVL EM ORDEM e armazena no arquivoSaida.
             vector<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();
             for(int i = 0; i < registrosEmOrdem.size(); i++) {
@@ -123,6 +142,12 @@ class Indexador {
 
         }
     }
+
+    /**
+    * Método que gera o arquivo de indexação das chaves secundárias.
+    * O arquivo escrito tem o nome de chavesSecundarias.dat e contém todas as 
+    * chaves secundárias em um protocolo criado exclusivamente para essa aplicação.
+    */
     void gerarSecundarias(){
         // Chaves secundárias
         ofstream chavesSecundarias("chavesSecundarias.dat");

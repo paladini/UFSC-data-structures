@@ -51,10 +51,9 @@ Registro ler_arquivo(string nomeDoArquivo) {
     }
 }
 
-int procurar(int argc, char **argv) {
+int procurar_chave_primaria(string busca) {
 
     // Pegando nome da página que está sendo procurada.
-    string nomeDaPagina = argv[1];
     bool encontrouComando = false;
 
     // Carrega o arquivo de chaves primárias
@@ -68,13 +67,13 @@ int procurar(int argc, char **argv) {
         chavesPrimarias >> nomeDoComandoAtual;
 
         // Verifica se o comandoAtual é o comando procurado pelo usuário.
-        if(strcasecmp(nomeDoComandoAtual.c_str(), argv[1]) == 0) {
+        if(strcasecmp(nomeDoComandoAtual.c_str(), busca.c_str()) == 0) {
 
             // Pega o conteúdo e pára quando encontra o "end of text" (\3), armazenando tudo em "conteudo".
             getline(chavesPrimarias, conteudo, '\3');
 
             // Imprime o conteúdo e sai.
-            cout << conteudo;
+            cout << conteudo << endl;
             encontrouComando = true;
             break;
         } else {
@@ -109,7 +108,7 @@ int indexar(int argc, char **argv){
     ofstream arquivoSaida { "chavesPrimarias.dat" };  
 
     // Verificando se arquivo de saida foi aberto
-    if(arquivoSaida.is_open()) {
+    if (arquivoSaida.is_open()) {
 
         // Pega todos os registros da árvore AVL EM ORDEM e armazena no output.
         doubly_linked_list<Registro> registrosEmOrdem = indicesPrimarios.breadth_first();

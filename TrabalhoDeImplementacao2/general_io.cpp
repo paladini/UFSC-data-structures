@@ -11,7 +11,7 @@
 #include <list>
 #include <limits>
 #include <string>
-#include "utils/removedor_conectivos.cpp"
+#include "utils/funcoes_strings.cpp"
 #include "registro.hpp"
 #include "palavra.hpp"
 #include "estruturas/avl_tree.h"
@@ -70,6 +70,16 @@ Registro ler_arquivo(string nomeDoArquivo) {
     }
 }
 
+/** Pesquisa no arquivo de indexação por chaves secundárias de acordo com os termos de busca do usuário. 
+* Esse método serve para fazer uma pesquisa por chaves secundárias de acordo com os critérios
+* de busca do usuário.
+*
+* Essa busca é exclusivamente conjuntiva, ou seja, os termos pesquisados pelo usuário serão 
+* utilizados de forma conjuntiva (E / and), mostrando apenas os comandos que possuem TERMO1 e
+* TERMO2 ao mesmo tempo.  
+*
+* @param busca os termos de busca que o usuário inseriu.
+*/
 void procurar_chave_secundaria(string busca) {
     ifstream chavesSecundarias("chavesSecundarias.dat");
 

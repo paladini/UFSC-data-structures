@@ -9,7 +9,9 @@
 using std::string;
 using namespace std;
 
+// Variável auxiliar para determinar se o loop do programa continua.
 bool executar = true;
+
 /** Método limparTela.
 * Método que "limpa a tela" (basicamente dando vários clear na tela).
 */
@@ -19,6 +21,12 @@ void limparTela() {
 	}
 }
 
+/** Pede ao usuário os termos para busca nos arquivos de índice.
+* Este método pede ao usuário os termos de busca que ele deseja utilizar na pesquisa
+* por chaves primárias ou secundárias. 
+* @param int opcao A opcao de busca que o usuário informou anteriormente. (1 = pesquisa por comando | 2 = pesquisa por palavras)
+* @return os termos de busca inseridos pelo usuário.
+*/
 string pegarTermosBusca(int opcao) {
 	string busca = "";
 
@@ -29,7 +37,7 @@ string pegarTermosBusca(int opcao) {
 		while (busca.size() < 3) {
 			limparTela();
 			cout << tipoDeBusca << endl;
-			cout << "Digite a busca que deseja realizar: "; // << endl;
+			cout << "Digite a busca que deseja realizar: ";
 			cin >> busca;		
 		}
 	} else {
@@ -38,7 +46,9 @@ string pegarTermosBusca(int opcao) {
 			while (busca.size() < 3) {
 				limparTela();
 				cout << tipoDeBusca << endl;
-				cout << "Digite a busca que deseja realizar: "; // << endl;
+				cout << "Digite a busca que deseja realizar: ";
+
+				// Precisa ser getline para poder pegar todos os termos e não somente os termos até o primeiro espaço.
 				getline(cin, busca);		
 			}
 		}
@@ -47,6 +57,12 @@ string pegarTermosBusca(int opcao) {
 	return busca;
 }
 
+/** Tela que pede para o usuário que tipo de busca ele quer fazer.
+* Essa tela pergunta ao usuário se ele deseja fazer uma busca por Comando (opção "1"),
+* por Palavra (opção "2") ou se ele deseja voltar ao menu principal (opção "3").
+*
+* @return int a opção do usuário.
+*/
 int especificarBusca() {
 	int opcao = -1, tentativas = 0;
 	string dica = "";
@@ -66,6 +82,12 @@ int especificarBusca() {
 	return opcao;
 }
 
+/** Tela que imprime para o usuário o menu principal do programa.
+* Essa tela é a tela principal do programa. Ela pergunta ao usuário qual ação este deseja
+* tomar e retorna um inteiro indicando para o main() do programa qual é a ação desejada.
+*
+* @return int a opção do usuário.
+*/
 int menuPrincipal() {
 	int opcaoDoUsuario = -1, tentativas = 0;
 	string status = "";
@@ -88,6 +110,10 @@ int menuPrincipal() {
 	return opcaoDoUsuario;
 }
 
+/** Rotina principal do programa.
+* Esse método é responsável por gerenciar o programa, manter o fluxo de execução e tomar as decisões
+* de acordo com as entradas do usuário. 
+*/
 int main(int argc, char **argv) {
 	while(executar) {
 

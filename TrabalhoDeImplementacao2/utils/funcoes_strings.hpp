@@ -18,7 +18,7 @@ class funcoes_strings {
  	// Armazena todos os conectivos proibidos especificados pelo enunciado do problema.
  	vector<string>* conectivosProibidos;
 
- 	/** 
+ 	/**Método criarPronomes.
  	 * Adiciona pronomes em inglês à lista de conectivos proibidos.
  	 */
 	void criarPronomes() {
@@ -94,7 +94,7 @@ class funcoes_strings {
 		conectivosProibidos->push_back("yours");
 		conectivosProibidos->push_back("theirs");
 	}
-	/** 
+	/**Método criarPreposicoes.
  	 * Adiciona preposições em inglês à lista de conectivos proibidos.
  	 */
 	void criarPreposicoes() {
@@ -178,7 +178,7 @@ class funcoes_strings {
 		conectivosProibidos->push_back("within");
 		conectivosProibidos->push_back("without");
 	}
-	/** 
+	/**Método criarConjuncoes.
  	 * Adiciona conjunções em inglês à lista de conectivos proibidos.
  	 */
 	void criarConjuncoes() {
@@ -190,7 +190,7 @@ class funcoes_strings {
 		conectivosProibidos->push_back("yet");
 		conectivosProibidos->push_back("so");
 	}
-	/** 
+	/**Método criarArtigos.
  	 * Adiciona artigos em inglês à lista de conectivos proibidos.
  	 */
 	void criarArtigos() {

@@ -4,6 +4,11 @@ class Leitor {
  private:
  	string arquivo;
  public:
+    /**Construtor Leitor
+    *Construtor para um Leitor, possuindo um atributo arquivo que será necessário para a leitura
+    *do mesmo.
+    *@param archive Será o nome do arquivo que se quer ler.
+    */
  	Leitor(string archive) {
  		arquivo = archive;
  	}
@@ -18,7 +23,6 @@ class Leitor {
     * Esses dados são armazenados em um objeto do tipo "Registro", que logo em seguida é 
     * retornado para o método que o chamou.
     *
-    * @param nomeDoArquivo o nome do arquivo que se deseja ler.
     * @return Registro um registro que foi criado a partir do dado lido.
     */
     Registro ler_arquivo() {

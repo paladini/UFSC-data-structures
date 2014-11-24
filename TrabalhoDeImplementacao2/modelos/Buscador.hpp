@@ -1,11 +1,20 @@
 #ifndef BUSCADOR_HPP_
 #define BUSCADOR_HPP_
 #include "../utils/funcoes_strings.hpp"
+/**Classe Buscador
+*Esta classe será responsável por buscar uma chave primária ou secundária nos arquivos .dat.
+*Imprimindo o que foi encontrado na tela.
+*/
 class Buscador {
  private:
  	string busca;
 
  public:
+    /**Construtor do Buscador
+    *Este contrutor receberá como parâmetro uma string com o nome do que o usuário quer buscar.
+    *@param _busca Será o nome que o usuário quer procurar. Sendo armazenado na variável privada
+    *busca da classe.
+    */
 	Buscador(string _busca) {
 		busca = _busca;
 	}
@@ -18,7 +27,6 @@ class Buscador {
     * utilizados de forma conjuntiva (E / and), mostrando apenas os comandos que possuem TERMO1 e
     * TERMO2 ao mesmo tempo.  
     *
-    * @param busca os termos de busca que o usuário inseriu.
     */
     void procurar_chave_secundaria() {
 
@@ -62,7 +70,6 @@ class Buscador {
                     } else {
                         swap(resultados, comandosQueContemPalavra);
                     }
-
                 }
             }
         }
@@ -84,7 +91,6 @@ class Buscador {
     * que está sendo pesquisado pelo usuário. Caso o comando procurado seja encontrado, é impresso
     * na tela o "help" desse comando. Caso o comando não seja encontrado, imprime uma mensagem 
     * informando o usuário do erro.
-    * @param busca O termo ou comando pesquisado pelo usuário.
     */
     void procurar_chave_primaria() {
 

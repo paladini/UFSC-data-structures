@@ -64,6 +64,8 @@ int main(int argc, char **argv) {
 			}
 			case 2: {
 				limparTela();
+
+				// TERMINAR ISSO.
 				// int tipoBusca = pedirParaEspecificarBusca();
 
 				// switch(tipoBusca) {

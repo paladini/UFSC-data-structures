@@ -4,6 +4,7 @@
 #include <fstream> //fstream
 #include <cstring> //strcpy
 #include <vector>
+#include <algorithm>	
 #include <strings.h>
 using namespace std;
 
@@ -233,12 +234,29 @@ class funcoes_strings {
 	* @return string Retorna a própria palavra caso ela seja permitida ou retorna "" caso não seja.
 	*/
 	string remover_conectivo_unica_palavra(string palavra) {
+
+		palavra = remover_caracteres_especiais(palavra);
 		if (palavra.size() >= 3) {
 			for(int i = 0; i < conectivosProibidos->size(); i++) {
 				if(conectivosProibidos->at(i) == palavra) {
 					return "";
 				}
 			}
+		}
+		return palavra;
+	}
+
+	/** Método que remove caracteres especiais de uma string dada.
+	* Este método recebe uma string e deleta alguns caracteres especiais pré-definidos com o
+	* intuíto de uma indexação por chave secundária ser melhor.
+	* @param string palavra A palavra que terá seus caracteres especiais removidos. 
+	* @return a string com os caracteres especiais removidos.
+	*/
+	string remover_caracteres_especiais(string palavra) {
+		// Removendo caracteres especiais
+		char caracteres[] = "<>():'#;,.";
+		for (int i = 0; i < strlen(caracteres); ++i) {
+			palavra.erase(remove(palavra.begin(), palavra.end(), caracteres[i]), palavra.end());
 		}
 		return palavra;
 	}

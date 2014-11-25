@@ -127,6 +127,8 @@ int main(int argc, char **argv) {
 		int opcaoDoUsuario = menuPrincipal();
 		// Detecta o que o usuário fez.
 		switch(opcaoDoUsuario) {
+
+			// Indexar arquivos
 			case 1: {
 				limparTela();
 				cout << "Comecando indexacao dos arquivos da manpages..." << endl;
@@ -135,9 +137,13 @@ int main(int argc, char **argv) {
 				sleep(2);
 				break;
 			}
+
+			// Pesquisar
 			case 2: {
 				limparTela();
 				int opcao = especificarBusca();
+				
+				// Voltar ao menu principal
 				if(opcao == 3){
 					break;
 				}
@@ -145,10 +151,13 @@ int main(int argc, char **argv) {
 				string busca = pegarTermosBusca(opcao);
 				Buscador *buscar = new Buscador(busca);
 				limparTela();
+
+				// Pesquisar por comando
 				if (opcao == 1) {
 					cout << "COMANDO: " << busca << "\n" << endl;
 					buscar->procurar_chave_primaria();
 				}
+				// Pesquisar por termos
 				if (opcao == 2) {
 					cout << "TERMOS: " << busca << "\n" << endl;
 					buscar->procurar_chave_secundaria();

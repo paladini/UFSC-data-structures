@@ -78,7 +78,7 @@ class Indexador {
         cout << "Criou a lista dos conectivos a serem removidos..." << endl;
 
         for(int i = 1; i < argc; i++) {
-            cout << "Indexando manpages [ " << i << " de " << argc << " ]" << endl;
+            cout << "Indexando manpages [ " << i << " de " << argc - 1 << " ]" << endl;
 
             // Lê o arquivo manpage atual.
             Leitor *read = new Leitor(argv[i]);
@@ -149,6 +149,7 @@ class Indexador {
     * chaves secundárias em um protocolo criado exclusivamente para essa aplicação.
     */
     void gerarSecundarias(){
+        
         // Chaves secundárias
         ofstream chavesSecundarias("chavesSecundarias.dat");
         if (chavesSecundarias.is_open()) {

@@ -1,6 +1,8 @@
 #ifndef BUSCADOR_HPP_
 #define BUSCADOR_HPP_
+#include <strings.h>
 #include "../utils/funcoes_strings.hpp"
+#include "../estruturas/ListaEncadeada.hpp"
 /**Classe Buscador
 *Esta classe será responsável por buscar uma chave primária ou secundária nos arquivos .dat.
 *Imprimindo o que foi encontrado na tela.
@@ -30,7 +32,9 @@ class Buscador {
     */
     void procurar_chave_secundaria() {
 
-        doubly_linked_list<string> resultados;
+        // doubly_linked_list<string> resultados;
+        ListaEncadeada<string> resultados;
+
         funcoes_strings *func = new funcoes_strings();
 
         vector<string> termos = func->separar_em_palavras(busca);
@@ -56,17 +60,18 @@ class Buscador {
 
                     // Armazena todos os comandos que contém essa palavra.
                     stringstream line(linhaInteira);
-                    doubly_linked_list<string> comandosQueContemPalavra;
+                    // doubly_linked_list<string> comandosQueContemPalavra;
+                    ListaEncadeada<string> comandosQueContemPalavra;
 
                     // Pega um comando por vêz e adiciona na lista encadeada "comandosQueContemPalavra".
                     while(line >> temp) {
-                        comandosQueContemPalavra.push_back(temp);
+                        comandosQueContemPalavra.adicionaNoInicio(temp);
                         temp.clear();
                     }
 
                     // Faz a intersecção entre duas listas encadeadas, de acordo com algoritmo do professor.
-                    if (resultados.size() > 0) {
-                        resultados.intersect(comandosQueContemPalavra);
+                    if (resultados.retornaTamanho() > 0) {
+                        resultados.interseccao(&comandosQueContemPalavra);
                     } else {
                         swap(resultados, comandosQueContemPalavra);
                     }
@@ -75,10 +80,10 @@ class Buscador {
         }
 
         // Printa os valores
-        if (resultados.size() > 0) {
+        if (resultados.retornaTamanho() > 0) {
             cout << "Essas são as páginas que contém os termos pesquisados:" << endl;
-            for (string comando : resultados) {
-                cout << comando << endl;
+            for(int i = 0; i < resultados.retornaTamanho(); i++) {
+                cout << resultados.retornaDado(i) << endl;  
             }
         } else {
             cout << "Os termos não foram encontrados, por favor, faça outra busca." << endl;

@@ -22,4 +22,4 @@ O programa já foi testado e você já pode validar totalmente o funcionamento d
 ## Sobre ##
 
 Indexador de manpages criado por Fernando Paladini e Emmanuel Podestá Junior.
-Licensiado sob os termos da MIT License. Copyleft 2014.
+Licenciado sob os termos da MIT License. Copyleft 2014.

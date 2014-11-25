@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "../estruturas/ListaEncadeada.hpp"
+
 using namespace std;
 class Palavra {
 private:
@@ -16,7 +18,8 @@ private:
 	std::string palavra;
 
 	// Lista duplamente encadeada que contém todos os comandos que estão associados à essa palavra.
-	std::vector<std::string> comandosQueContem;
+	// std::vector<std::string> comandosQueContem;
+	ListaEncadeada<string> comandosQueContem;
 
 public:
 
@@ -36,15 +39,19 @@ public:
 	*/
 	void adicionarComandosQueContem(std::string comando) {
 		// Se comando NÃO existe na lista.
-		if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
-			comandosQueContem.push_back(comando);
+		if (!comandosQueContem.contem(comando)) {
+			comandosQueContem.adicionaNoInicio(comando);
 		}
+		// if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
+		// 	comandosQueContem.push_back(comando);
+		// }
 	}
 
 	/** 
 	* Retorna a lista duplamente encadeada de comandos que estão associados à essa palavra.
 	*/
-	std::vector<std::string> retornarComandosQueContem() {
+	// std::vector<std::string> retornarComandosQueContem() {
+	ListaEncadeada<string> retornarComandosQueContem() {
 		return comandosQueContem;
 	}
 
@@ -60,6 +67,10 @@ public:
 	*/
 	bool operator<(const Palavra& rhs) const {
 		return palavra < rhs.palavra;
+	}
+
+	bool operator==(const Palavra& rhs) const {
+		return palavra == rhs.palavra;
 	}
 
 };

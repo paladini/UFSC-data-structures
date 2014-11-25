@@ -31,6 +31,13 @@ class Elemento {
 	void setProximo(Elemento<T>* next) {
 		_next = next;
 	}
+
+	// friend void swap(Elemento<T>& a, Elemento<T>& b) {
+	// 	using std::swap;
+
+	// 	swap(a.getProximo(), b.getProximo());
+	// 	swap(a.getInfo(), b.getInfo());
+	// }
 };
 
 #endif

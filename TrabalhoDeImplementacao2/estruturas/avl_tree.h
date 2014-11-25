@@ -293,6 +293,26 @@ public:
 		}
 		return items;
 	}
+
+	// ListaEncadeada<T> breadth_first() const {
+	// 	ListaEncadeada<Elemento<T>> nodes;
+	// 	ListaEncadeada<T> items;
+	// 	if (_root != nullptr) {
+	// 		nodes.push_back(_root);
+			
+	// 		for (auto node : nodes) {
+	// 			if (node->_left != nullptr) {
+	// 				nodes.push_back(node->_left);
+	// 			}
+	// 			if (node->_right != nullptr) {
+	// 				nodes.push_back(node->_right);
+	// 			}
+	// 			items.push_back(node->_item);
+	// 		}
+	// 	}
+	// 	return items;
+	// }
+
 	// Container<T> breadth_first() const {
 	// 	Container<node*> nodes;
 	// 	Container<T> items;

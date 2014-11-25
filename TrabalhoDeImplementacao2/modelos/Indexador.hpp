@@ -17,6 +17,7 @@
 #include "Palavra.hpp"
 #include "Leitor.hpp"
 #include "../estruturas/avl_tree.h"
+#include "../estruturas/ListaEncadeada.hpp"
 #include "../utils/funcoes_strings.hpp"
 
 using namespace std;
@@ -89,7 +90,7 @@ class Indexador {
 
             // Verifica palavra por palavra.
             string temp, comando = mr.retornarComando();
-            stringstream stream { mr.retornarConteudo() };
+            stringstream stream(mr.retornarConteudo());
             while(stream >> temp) {
 
                 // Coloca string em minúsculo
@@ -162,9 +163,9 @@ class Indexador {
                 chavesSecundarias << palavrasEmOrdem.at(i).retornarPalavra();
 
                 // Armazena todos os comandos que contem essa palavra
-                vector<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
-                for(int j = 0; j < comandos.size(); j++) {
-                    chavesSecundarias << ' ' << comandos.at(j);
+                ListaEncadeada<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
+                for(int j = 0; j < comandos.retornaTamanho(); j++) {
+                    chavesSecundarias << ' ' << comandos.retornaDado(j);
                 }
 
                 // Armazena um final de linha

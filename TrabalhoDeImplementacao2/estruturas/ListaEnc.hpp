@@ -10,11 +10,14 @@
 * uma "head", que é um ponteiro para um objeto do tipo Elemento; e um "size", que indica o tamanho
 * dessa lista encadeada.
 */
+#ifndef LISTAENC_HPP_
+#define LISTAENC_HPP_
 #include <cstdio>
 #include "Elemento.hpp"
 #include "excecoes/ExcecaoErroPosicao.hpp"
 #include "excecoes/ExcecaoListaCheia.hpp"
 #include "excecoes/ExcecaoListaVazia.hpp"
+#include <iostream>
 template<typename T>
 class ListaEnc {
  private:
@@ -37,13 +40,13 @@ class ListaEnc {
 * Caso seja, significa que a memória está cheia e que não há mais espaço para alocação de novos elementos / objetos.
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
-    bool verificaMemoriaCheia() {
-        // Elemento<T> *novo = new Elemento<T>(0, NULL);
-        // if (novo == NULL) {
-        //     throw ExcecaoListaCheia;
-        // }
+    void verificaMemoriaCheia() {
+        Elemento<T> *novo = new Elemento<T>(nullptr, nullptr);
+        if (novo == NULL) {
+            throw ExcecaoListaCheia;
+        }
         // delete novo;
-        return true;
+        // return true;
     }
 
  public:
@@ -52,7 +55,7 @@ class ListaEnc {
 */
     ListaEnc() {
         size = 0;
-        head = NULL;
+        head = 0;
     }
 /** Destrutor padrão da ListaEnc.
 * O destrutor padrão da ListaEnc destrói a lista encadeada atribuindo à "size" o valor 0 e deletando o ponteiro "head".
@@ -67,11 +70,16 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 */
     void adicionaNoInicio(const T& dado) {
-        verificaMemoriaCheia();
-        Elemento<T> *novo = new Elemento<T>(dado, head);
+        // verificaMemoriaCheia();
+        Elemento<T> *novo = new Elemento<T>(dado, 0);
+        if(novo == 0){
+            throw ExcecaoListaCheia;
+        }
+        novo->setProximo(head);
         head = novo;
         size++;
     }
+
 /** Retira um elemento no começo da Lista Encadeada.
 * Este método retira o primeiro elemento da Lista Encadeada, retornando o objeto retirado.
 * @see listaVazia()
@@ -113,7 +121,7 @@ class ListaEnc {
             adicionaNoInicio(dado);
             return;
         }
-            verificaMemoriaCheia();
+            // verificaMemoriaCheia();
             Elemento<T> *anterior = head;
             for (int i = 0; i < pos - 1; i++) {
                 anterior = anterior->getProximo();
@@ -242,7 +250,7 @@ class ListaEnc {
 * @exception ExcecaoListaCheia Exceção que indica que um novo dado não pode ser adicionado, pois não há mais espaço em memória.
 * @exception ExcecaoErroPosicao A posição dada excedeu o tamanho dessa estrutura, ou seja, foi maior do que "size + 1".
 */
-    void adicionaEmOrdem(const T& data) {
+     void adicionaEmOrdem(const T& data) {
         Elemento<T> *atual;
         int posicao;
         if (listaVazia()) {
@@ -250,7 +258,7 @@ class ListaEnc {
         } else {
             atual = head;
             posicao = 0;
-            while (atual->getProximo() != NULL &&
+            while (atual->getProximo() != 0 &&
                   maior(data, atual->getInfo())) {
                 atual = atual->getProximo();
                 posicao++;
@@ -283,7 +291,7 @@ class ListaEnc {
 * @param dado2 Dado a ser comparado que ficará à direita do operador de comparação.
 * @return um boolean que mostra se um dado é maior que outro.
 */
-    bool maior(T dado1, T dado2) const {
+    virtual bool maior(T dado1, T dado2) const {
         return dado1 > dado2;
     }
 /** Verifica se o dado1 do lado esquerdo do operador é menor do que o dado do lado direito do operador.
@@ -298,16 +306,18 @@ class ListaEnc {
 * Destrói a lista encadeada e desaloca todo o espaço de memória por ela ocupado.
 */
     void destroiLista() {
-        Elemento<T> *atual;
-        if (!listaVazia()) {
-            while (head != NULL) {
-                atual = head;
-                head = atual->getProximo();
-                delete atual;
-            }
-        } else {
-            delete head;
-        }
+        // Elemento<T> *atual;
+        // if (!listaVazia()) {
+        //     while (head != 0) {
+        //         atual = head;
+        //         head = atual->getProximo();
+        //         // delete atual;
+        //     }
+        // } 
+        head = 0;
+        // else {
+        //     delete head;
+        // }
         size = 0;
     }
     /** Retorna um dado de determinada posição sem removê-lo da lista encadeada.
@@ -315,7 +325,7 @@ class ListaEnc {
     * @return Retorna o dado da posição informada - se ele existir, caso contrário retorna uma exceção.
     */
     T retornaDado(int posicao) {
-        verificaPosicaoInvalida(posicao);
+        // verificaPosicaoInvalida(posicao);
         if (listaVazia()) {
             throw ExcecaoListaVazia;
         } else {
@@ -338,6 +348,10 @@ class ListaEnc {
         return this->size;
     }
 
+    Elemento<T>* retornaCabeca() {
+        return this->head;
+    }
+
     /** Método define tamanho.
     * É um método "setter" para o atributo "size" dessa classe.
     * @param tamanho O novo tamanho da estrutura de dados.
@@ -353,4 +367,6 @@ class ListaEnc {
     void defineCabeca(Elemento<T>* cabeca) {
         this->head = cabeca;
     }
+
 };
+#endif

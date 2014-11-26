@@ -94,6 +94,8 @@ class Buscador {
         } else {
             cout << "Os termos não foram encontrados, por favor, faça outra busca." << endl;
         }
+        delete &termos;
+        delete &resultados;
     }
 
     /**Método procurar_chave_primaria.

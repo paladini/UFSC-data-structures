@@ -86,7 +86,7 @@ class Indexador {
             Registro mr = read->ler_arquivo();
 
             // Adiciona na lista de índices primários
-            indicesPrimarios.insert(mr);
+            indicesPrimarios.insere(mr);
 
             // Verifica palavra por palavra.
             string temp, comando = mr.retornarComando();
@@ -104,11 +104,11 @@ class Indexador {
                     // o comando recém descoberto que possui essa palavra. Caso não exista no índice
                     // secundário, adiciona.
                     try{
-                        indicesSecundarios.find(limpa).adicionarComandosQueContem(comando);
+                        indicesSecundarios.busca(limpa).adicionarComandosQueContem(comando);
                     } catch (std::range_error& e) {
                         Palavra p(limpa);
                         p.adicionarComandosQueContem(comando);
-                        indicesSecundarios.insert(p);
+                        indicesSecundarios.insere(p);
                     }
                 }
 
@@ -138,6 +138,7 @@ class Indexador {
                 arquivoSaida << registrosEmOrdem.at(i).retornarConteudo();
                 arquivoSaida << "\3"; // termina a escrita com um caracter "end of text".
             }
+            vector<Registro>().swap(registrosEmOrdem);
             // Fecha o arquivo.
             arquivoSaida.close();
 
@@ -171,7 +172,7 @@ class Indexador {
                 // Armazena um final de linha
                 chavesSecundarias << endl;
             }
-
+            vector<Palavra>().swap(palavrasEmOrdem);
             // Fecha o arquivo.
             chavesSecundarias.close();
 

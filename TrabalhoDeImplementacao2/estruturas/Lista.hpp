@@ -17,7 +17,9 @@ class Lista {
 		*	Construtor padrão da classe IndiceSecundario.
 		*/
 		Lista() {}
-
+		~Lista() {
+			std::vector<T>().swap(l);
+		}
 		/** Método intersecção.
 		* Recebe uma Lista<T> como argumento e retorna todos os elementos em comum entre 
 		* essas duas listas (a lista fornecida e o "this"). Esse resultado servirá para

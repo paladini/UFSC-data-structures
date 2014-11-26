@@ -1,3 +1,6 @@
+/**
+*@author: Ranieri
+*/
 #ifndef AVL_TREE_H_
 #define AVL_TREE_H_
 #include <string>
@@ -6,207 +9,267 @@
 #include <stdexcept>
 #include <vector>
 #include "doubly_linked_list.h"
-
+/**Classe Avl_tree
+*Esta classe será responsável por criar uma árvore AVL balanceada. Respeitando suas
+*características de busca, inserção e deleção. 
+*/
 template<typename T, template<typename > class Container = doubly_linked_list>
 class avl_tree {
 	using size_type = std::size_t;
-
-private:
-	struct node {
-		node(const T& item) :
-				_height(1), _left(nullptr), _right(nullptr), _item(item) {
+ private:
+	/**Struct Nodo.
+	*Este struct será responsável por representar um nodo da Árvore AVL. Com altura, nodo
+	*esquerda, nodo direita e dado.
+	*/
+	struct no {
+		no(const T& dado) :
+				_altura(1), esquerda(nullptr), direita(nullptr), _dado(dado) {
 		}
 
-		size_type _height;
-		node* _left;
-		node* _right;
-		T _item;
+		size_type _altura;
+		no* esquerda;
+		no* direita;
+		T _dado;
 	};
-
-	T& find(node* root, const T& item) {
+	/**Método busca
+	*Este método irá buscar um dado em uma subárvore ou árvore. Retornando
+	*um dado, ou uma exceção, caso o dado não seja encontrado.
+	*@param root Subárvore enviada como parâmetro.
+	*@param dado Dado para ser encontrado.
+	*/
+	T& busca(no* root, const T& dado) {
 		if (root != nullptr) {
-			if (item < root->_item)
-				return find(root->_left, item);
-			if (root->_item < item)
-				return find(root->_right, item);
+			if (dado < root->_dado)
+				return busca(root->esquerda, dado);
+			if (root->_dado < dado)
+				return busca(root->direita, dado);
 			else {
-				return root->_item;
+				return root->_dado;
 			}
 		}
 		throw std::range_error("Item not found on the tree.");
 	}
-
-	int factor(node* root) const {
+	/**Método fator.
+	*Este método será o idenficador se uma subárvore está balanceada, ou
+	*desbalanceada.
+	@param root Subárvore enviada como parâmetro.
+	*/
+	int fator(no* root) const {
 		return (root == nullptr) ?
-				0 : height(root->_left) - height(root->_right);
+				0 : altura(root->esquerda) - altura(root->direita);
 	}
-
-	size_type height(node* root) const {
-		return (root == nullptr) ? 0 : root->_height;
+	/**Método altura
+	*Retornará a altura do nodo.
+	*@param root Subárvore enviada como parâmetro
+	*/
+	size_type altura(no* root) const {
+		return (root == nullptr) ? 0 : root->_altura;
 	}
-
-	node* insert(node* root, const T& item) {
-		// If we find a null root, we found the right spot.
+	/**Método insere.
+	*Este método irá inserir um elemento dado na subárvore root. Balanceando e reformando.
+	*a árvore conforme a inserção.
+	*@see struct no.
+	*@see fator(no* root).
+	*@see rotatedireita().
+	*@see rotateesquerda().
+	*@param root Subárvore onde o dado será inserido.
+	*@param dado Dado a ser inserido na subárvore.
+	*@return root Será retornado a subárvore.
+	*/
+	no* insere(no* root, const T& dado) {
+		// If we busca a null root, we found the right spot.
 		if (root == nullptr)
-			return root = new node(item);
+			return root = new no(dado);
 
-		// If root's value is greater than inserted value, try to insert to the left.
-		else if (item < root->_item) {
-			root->_left = insert(root->_left, item);
+		// If root's value is greater than insereed value, try to insere to the left.
+		else if (dado < root->_dado) {
+			root->esquerda = insere(root->esquerda, dado);
 
-			// If the factor of root unbalancing is 2, we have a left-left or left-right case.
-			if (factor(root) == 2) {
+			// If the fator of root unbalancing is 2, we have a left-left or left-right case.
+			if (fator(root) == 2) {
 
-				// If the factor of the left node is -1, we have a left-right case.
-				if (factor(root->_left) == -1)
-					root->_left = rotate_left(root->_left);
+				// If the fator of the left no is -1, we have a left-right case.
+				if (fator(root->esquerda) == -1)
+					root->esquerda = rotateesquerda(root->esquerda);
 
 				// The tree is now guaranteedly a left-left case.
-				root = rotate_right(root);
+				root = rotatedireita(root);
 			}
 		}
 
-		// If root's value is lesser than inserted value, try to insert to the right.
-		else if (root->_item < item) {
-			root->_right = insert(root->_right, item);
+		// If root's value is lesser than insereed value, try to insere to the right.
+		else if (root->_dado < dado) {
+			root->direita = insere(root->direita, dado);
 
-			// If the factor of root unbalancing is -2, we have a right-left or right-right case.
-			if (factor(root) == -2) {
+			// If the fator of root unbalancing is -2, we have a right-left or right-right case.
+			if (fator(root) == -2) {
 
-				// If the factor of the right node is 1, we have a right-left case.
-				if (factor(root->_right) == 1)
-					root->_right = rotate_right(root->_right);
+				// If the fator of the right no is 1, we have a right-left case.
+				if (fator(root->direita) == 1)
+					root->direita = rotatedireita(root->direita);
 
 				// The tree is now guaranteedly a right-right case.
-				root = rotate_left(root);
+				root = rotateesquerda(root);
 			}
 
-			// If root's value is equal to inserted value, we have an exception.
-			// TODO: find a better exception to throw.
+			// If root's value is equal to insereed value, we have an exception.
+			// TODO: busca a better exception to throw.
 		} else
 			throw std::exception();
 
-		// Recalculate the node height according to the insertion.
-		root->_height = std::max(height(root->_left), height(root->_right)) + 1;
+		// Recalculate the no altura according to the insereion.
+		root->_altura = std::max(altura(root->esquerda), altura(root->direita)) + 1;
 		return root;
 	}
-
-	node* rotate_left(node* root) {
-		node* aux;
-		aux = root->_right;
-		root->_right = aux->_left;
-		aux->_left = root;
-		root->_height = std::max(height(root->_left), height(root->_right)) + 1;
-		aux->_height = std::max(height(aux->_left), height(aux->_right)) + 1;
+	/**Método rotateesquerda.
+	*Este método fará a rotação à esquerda da subárvore, para mante-la balanceada.
+	*(Nomeclatura não baseada na pos-comp).
+	*@param root Subárvore que irá ser rotacionada.
+	*@return aux Será a nova raiz da subárvore após a rotação.
+	*/
+	no* rotateesquerda(no* root) {
+		no* aux;
+		aux = root->direita;
+		root->direita = aux->esquerda;
+		aux->esquerda = root;
+		root->_altura = std::max(altura(root->esquerda), altura(root->direita)) + 1;
+		aux->_altura = std::max(altura(aux->esquerda), altura(aux->direita)) + 1;
 		return aux;
 	}
-
-	node* rotate_right(node* root) {
-		node* aux;
-		aux = root->_left;
-		root->_left = aux->_right;
-		aux->_right = root;
-		root->_height = std::max(height(root->_left), height(root->_right)) + 1;
-		aux->_height = std::max(height(aux->_left), height(aux->_right)) + 1;
+	/**Método rotatedireita.
+	*Este método fará a rotação à direita da subárvore, para mante-la balanceada.
+	*(Nomeclatura não baseada na pos-comp).
+	*@param root Subárvore que irá ser rotacionada.
+	*@return aux Será a nova raiz da subárvore após a rotação.
+	*/
+	no* rotatedireita(no* root) {
+		no* aux;
+		aux = root->esquerda;
+		root->esquerda = aux->direita;
+		aux->direita = root;
+		root->_altura = std::max(altura(root->esquerda), altura(root->direita)) + 1;
+		aux->_altura = std::max(altura(aux->esquerda), altura(aux->direita)) + 1;
 		return aux;
 	}
-
-	node* remove(node* root, const T& item) {
-		// If we find a nullptr, the item does not exist in this tree.
+	/**Método remove.
+	*Este método irá remover um dado específico da subárvore root.
+	*@see fator(no* root);
+	*@see rotatedireita(no* root);
+	*@see rotateesquerda(no* root);
+	*@return root Será retornada a subárvore de onde o dado será removido.
+	*/
+	no* remove(no* root, const T& dado) {
+		// If we busca a nullptr, the dado does not exist in this tree.
 		if (root == nullptr)
 			throw std::exception();
 
-		// The same of insertion works here. Find where the item must be, rebalance if needed.
-		else if (item < root->_item) {
-			root->_left = remove(root->_left, item);
-			if (factor(root) == 2) {
-				if (factor(root->_left) == -1)
-					root = rotate_left(root->_left);
-				root = rotate_right(root);
+		// The same of insereion works here. Find where the dado must be, rebalance if needed.
+		else if (dado < root->_dado) {
+			root->esquerda = remove(root->esquerda, dado);
+			if (fator(root) == 2) {
+				if (fator(root->esquerda) == -1)
+					root = rotateesquerda(root->esquerda);
+				root = rotatedireita(root);
 			}
-		} else if (root->_item < item) {
-			root->_right = remove(root->_right, item);
+		} else if (root->_dado < dado) {
+			root->direita = remove(root->direita, dado);
 
-			if (factor(root) == -2) {
-				if (factor(root->_right) == 1)
-					root = rotate_right(root->_right);
-				root = rotate_left(root);
+			if (fator(root) == -2) {
+				if (fator(root->direita) == 1)
+					root = rotatedireita(root->direita);
+				root = rotateesquerda(root);
 			}
 		}
 
-		// If root's value is equal to removed value, we found the node to remove.
+		// If root's value is equal to removed value, we found the no to remove.
 		else {
 
-			// Leaf case: just delete the actual node.
-			if (root->_left == nullptr && root->_right == nullptr) {
+			// Leaf case: just delete the actual no.
+			if (root->esquerda == nullptr && root->direita == nullptr) {
 				delete root;
 				return nullptr;
 			}
 
-			// If there is only right child, replace the to-be-deleted node and delete it.
-			if (root->_left == nullptr) {
-				node* aux = root->_right;
+			// If there is only right child, replace the to-be-deleted no and delete it.
+			if (root->esquerda == nullptr) {
+				no* aux = root->direita;
 				delete root;
 				return aux;
 			}
 
-			// If there is only left child, replace the to-be-deleted node and delete it.
-			if (root->_right == nullptr) {
-				node* aux = root->_left;
+			// If there is only left child, replace the to-be-deleted no and delete it.
+			if (root->direita == nullptr) {
+				no* aux = root->esquerda;
 				delete root;
 				return aux;
 			}
 
-			// If there are both children, find the immediately next value, swap and retry to remove.
-			node* aux = root->_right;
-			while (aux->_left != nullptr)
-				aux = aux->_left;
-			std::swap(root->_item, aux->_item);
-			root->_right = remove(root->_right, item);
+			// If there are both children, busca the immediately next value, swap and retry to remove.
+			no* aux = root->direita;
+			while (aux->esquerda != nullptr)
+				aux = aux->esquerda;
+			std::swap(root->_dado, aux->_dado);
+			root->direita = remove(root->direita, dado);
 		}
 
-		// Recalculate the node height according to the removal.
-		root->_height = std::max(height(root->_left), height(root->_right)) + 1;
+		// Recalculate the no altura according to the removal.
+		root->_altura = std::max(altura(root->esquerda), altura(root->direita)) + 1;
 		return root;
 	}
-
-	void in_order(node* root, Container<T>& container) const {
+	/**Método emOrdem.
+	*Método que irá colocar em um "container" os elementos de uma árvore.
+	*Sendo eles postos em ordem(e,r,d).
+	*/
+	void emOrdem(no* root, Container<T>& container) const {
 		if (root != nullptr) {
-			in_order(root->_left, container);
-			container.push_back(root->_item);
-			in_order(root->_right, container);
+			emOrdem(root->esquerda, container);
+			container.push_back(root->_dado);
+			emOrdem(root->direita, container);
 		}
 	}
-
-	void pre_order(node* root, Container<T>& container) const {
+	/**Método preOrdem.
+	*Método que irá colocar em um "container" os elementos de uma árvore.
+	*Sendo eles postos em pre-ordem(r,e,d).
+	*/
+	void preOrdem(no* root, Container<T>& container) const {
 		if (root != nullptr) {
-			container.push_back(root->_item);
-			pre_order(root->_left, container);
-			pre_order(root->_right, container);
+			container.push_back(root->_dado);
+			preOrdem(root->esquerda, container);
+			preOrdem(root->direita, container);
 		}
 	}
-
-	void post_order(node* root, Container<T>& container) const {
+	/**Método posOrdem.
+	*Método que irá colocar em um "container" os elementos de uma árvore.
+	*Sendo eles posto em pós-ordem(e,d,r).
+	*/
+	void posOrdem(no* root, Container<T>& container) const {
 		if (root != nullptr) {
-			post_order(root->_left, container);
-			post_order(root->_right, container);
-			container.push_back(root->_item);
+			posOrdem(root->esquerda, container);
+			posOrdem(root->direita, container);
+			container.push_back(root->_dado);
 		}
 	}
-
-	node* recursive_copy(node* other_root) {
-		// To recursively copy, create a new node, recursively copy it's left and right child, then return it to be attached.
-		node* aux = new node(other_root->_item);
-		aux->_left = recursive_copy(other_root->_left);
-		aux->_right = recursive_copy(other_root->_right);
+	/**Método copiarArvore
+	*Este método irá copiar toda a árvore para um novo nodo aux.
+	*@param other_root Árvore a ser copida.
+	*@return aux Árvore copiada será retornada na variável aux.
+	*/
+	no* copiarArvore(no* other_root) {
+		// To recursively copy, create a new no, recursively copy it's left and right child, then return it to be attached.
+		no* aux = new no(other_root->_dado);
+		aux->esquerda = copiarArvore(other_root->esquerda);
+		aux->direita = copiarArvore(other_root->direita);
 		return aux;
 	}
-
-	void recursive_delete(node* root) {
+	/**Método deletarArvore.
+	*Este método irá deleter toda a Árvore recursivamente.
+	*@param root Será a Árvore a ser deletada.
+	*/
+	void deletarArvore(no* root) {
 		// To recursively delete, recursively delete both children if they exist, then delete.
 		if (root != nullptr) {
-			recursive_delete(root->_left);
-			recursive_delete(root->_right);
+			deletarArvore(root->esquerda);
+			deletarArvore(root->direita);
 			delete root;
 		}
 	}
@@ -214,161 +277,210 @@ private:
 	using self = avl_tree<T>;
 
 public:
+	/**Construtor padrão da avl_tree().
+	*Construirá uma árvore de tamanho zero e raiz nula.
+	*/
 	avl_tree() :
-			_size(0), _root(nullptr) {
+			tamanho(0), _root(nullptr) {
 	}
-
+	/**Construtor com argumento da avl_tree().
+	*Construirá uma árvore com um argumento, que será a raiz da árvore.
+	*Note que ela irá copiar a Árvore e a setará como root.
+	*@param other Será o nodo raiz.
+	*@see copiarArvore(no* other_root);
+	*/
 	avl_tree(const self& other) {
-		_root = recursive_copy(other._root);
+		_root = copiarArvore(other._root);
 	}
-
+	/**Destrutor da avl_tree
+	*Irá deletar toda a Árvore.
+	*@see deletarArvore(no* root)
+	*/
 	~avl_tree() {
-		recursive_delete(_root);
+		deletarArvore(_root);
 	}
-
-	T& find(const T& item) {
-		return find(_root, item);
+	/**Método busca
+	*Irá chamar o método privado busca.
+	*@see busca(no* root, const T& dado)
+	*/
+	T& busca(const T& dado) {
+		return busca(_root, dado);
 	}
-
-	bool has(const T& item) {
+	/**Método contem
+	*Irá buscar na Árvore um dado, sendo esse passado como parâmetro.
+	*@param dado Dado a ser pesquisado.
+	*@return bool Para identificar se o dado foi encontrado ou não.
+	*/
+	bool contem(const T& dado) {
 		try {
-			find(_root, item);
+			busca(_root, dado);
 			return true;
 		} catch (std::exception& e) {
 			return false;
 		}
 	}
-
-	size_type height() const {
-		return height(_root);
+	/**Método altura
+	*Irá retornar a altura da Raiz.
+	*@see altura(no* _root)
+	*@return altura(_root) Retornará a altura da Raiz.
+	*/
+	size_type altura() const {
+		return altura(_root);
 	}
-
+	/**Método size
+	*Retornará o tamanho total da Árvore.
+	*@return tamanho Retornará o tamanho total da Árovore.
+	*/
 	size_type size() const {
-		return _size;
+		return tamanho;
 	}
-
-	void insert(const T& item) {
-		_root = insert(_root, item);
-		++_size;
+	/**Método insere.
+	*Irá chamar o método insere da classe avl_tree e irá aumentar o tamanho total
+	*da Árvore.
+	*@see insere(no* root, const T& dado).
+	*/
+	void insere(const T& dado) {
+		_root = insere(_root, dado);
+		++tamanho;
 	}
-
-	void remove(const T& item) {
-		_root = remove(_root, item);
-		--_size;
+	/**Método remove
+	*Irá chamar o método remove da classe avl_tree e diminuirá o tamanho total
+	*da Árvore.
+	*@see remove(no* root, const T& dado).
+	*/
+	void remove(const T& dado) {
+		_root = remove(_root, dado);
+		--tamanho;
 	}
-
-	Container<T> in_order() const {
+	/**Método emOrdem.
+	*Irá chamar o método emOrdem privado na classe, e retornará o "conteiner" por ela
+	*retornado.
+	*@see emOrdem.
+	*/
+	Container<T> emOrdem() const {
 		Container<T> container;
-		in_order(_root, container);
+		emOrdem(_root, container);
 		return container;
 	}
-
-	Container<T> pre_order() const {
+	/**Método preOrdem.
+	*Retornará o container que foi criado pela chamada do método preOrdem.
+	*@see preOrdem(no* root, Container<T>& container).
+	*/
+	Container<T> preOrdem() const {
 		Container<T> container;
-		pre_order(_root, container);
+		preOrdem(_root, container);
 		return container;
 	}
-
-	Container<T> post_order() const {
+	/**Método posOrdem.
+	*Retornará o container criado pelo método posOrdem.
+	*@see posOrdem.
+	*@return container Retornará container feito pelo método chamado.
+	*/
+	Container<T> posOrdem() const {
 		Container<T> container;
-		post_order(_root, container);
+		posOrdem(_root, container);
 		return container;
 	}
-	
+	/**Método breadth_first.
+	*Este método será responsável por armazenar em um std::vector os nodos nível a nível
+	*de uma Árvore. 
+	*@return dados Retornará o vetor dados com os nodos dos níveis de uma árvore.
+	*/
 	std::vector<T> breadth_first() const {
-		Container<node*> nodes;
-		std::vector<T> items;
+		Container<no*> nos;
+		std::vector<T> dados;
 		if (_root != nullptr) {
-			nodes.push_back(_root);
+			nos.push_back(_root);
 			
-			for (auto node : nodes) {
-				if (node->_left != nullptr) {
-					nodes.push_back(node->_left);
+			for (auto no : nos) {
+				if (no->esquerda != nullptr) {
+					nos.push_back(no->esquerda);
 				}
-				if (node->_right != nullptr) {
-					nodes.push_back(node->_right);
+				if (no->direita != nullptr) {
+					nos.push_back(no->direita);
 				}
-				items.push_back(node->_item);
+				dados.push_back(no->_dado);
 			}
 		}
-		return items;
+		return dados;
 	}
 
 	// ListaEncadeada<T> breadth_first() const {
-	// 	ListaEncadeada<Elemento<T>> nodes;
-	// 	ListaEncadeada<T> items;
+	// 	ListaEncadeada<Elemento<T>> nos;
+	// 	ListaEncadeada<T> dados;
 	// 	if (_root != nullptr) {
-	// 		nodes.push_back(_root);
+	// 		nos.push_back(_root);
 			
-	// 		for (auto node : nodes) {
-	// 			if (node->_left != nullptr) {
-	// 				nodes.push_back(node->_left);
+	// 		for (auto no : nos) {
+	// 			if (no->esquerda != nullptr) {
+	// 				nos.push_back(no->esquerda);
 	// 			}
-	// 			if (node->_right != nullptr) {
-	// 				nodes.push_back(node->_right);
+	// 			if (no->direita != nullptr) {
+	// 				nos.push_back(no->direita);
 	// 			}
-	// 			items.push_back(node->_item);
+	// 			dados.push_back(no->_dado);
 	// 		}
 	// 	}
-	// 	return items;
+	// 	return dados;
 	// }
 
 	// Container<T> breadth_first() const {
-	// 	Container<node*> nodes;
-	// 	Container<T> items;
+	// 	Container<no*> nos;
+	// 	Container<T> dados;
 	// 	if (_root != nullptr) {
-	// 		nodes.push_back(_root);
+	// 		nos.push_back(_root);
 			
-	// 		for (auto node : nodes) {
-	// 			if (node->_left != nullptr) {
-	// 				nodes.push_back(node->_left);
+	// 		for (auto no : nos) {
+	// 			if (no->esquerda != nullptr) {
+	// 				nos.push_back(no->esquerda);
 	// 			}
-	// 			if (node->_right != nullptr) {
-	// 				nodes.push_back(node->_right);
+	// 			if (no->direita != nullptr) {
+	// 				nos.push_back(no->direita);
 	// 			}
-	// 			items.push_back(node->_item);
+	// 			dados.push_back(no->_dado);
 	// 		}
 	// 	}
-	// 	return items;
+	// 	return dados;
 	// }
 
 /*	T** to_array() const {
-		T** items = nullptr;
+		T** dados = nullptr;
 		if (_root != nullptr) {
-			size_type _length = 1 << (height(_root) - 1);
-			node** nodes = new node*[_length];
-			items = new T*[_length];
+			size_type _length = 1 << (altura(_root) - 1);
+			no** nos = new no*[_length];
+			dados = new T*[_length];
 
-			if (_size) {
-				nodes[0] = _root;
-				items[0] = new T(_root->_item);
+			if (tamanho) {
+				nos[0] = _root;
+				dados[0] = new T(_root->_dado);
 				for (size_type i = 0, pos = 0; i < _length >> 1; ++i) {
 					++pos;
-					if (nodes[i] != nullptr) {
-						nodes[pos] = nodes[i]->_left;
-						items[pos] = new T(nodes[i]->_item);
+					if (nos[i] != nullptr) {
+						nos[pos] = nos[i]->esquerda;
+						dados[pos] = new T(nos[i]->_dado);
 						++pos;
-						nodes[pos] = nodes[i]->_right;
-						items[pos] = new T(nodes[i]->_item);
+						nos[pos] = nos[i]->direita;
+						dados[pos] = new T(nos[i]->_dado);
 					} else {
-						nodes[pos] = nullptr;
-						items[pos] = nullptr;
+						nos[pos] = nullptr;
+						dados[pos] = nullptr;
 						++pos;
-						nodes[pos] = nullptr;
-						items[pos] = nullptr;
+						nos[pos] = nullptr;
+						dados[pos] = nullptr;
 
 					}
 				}
 			}
-			delete[] nodes;
+			delete[] nos;
 		}
-		return items;
+		return dados;
 	}
 	*/
 
-private:
-	size_type _size;
-	node* _root;
+	private:
+		size_type tamanho;
+		no* _root;
+
 };
 
 #endif /* AVL_TREE_H_ */

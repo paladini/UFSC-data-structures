@@ -2,7 +2,7 @@
 #define BUSCADOR_HPP_
 #include <strings.h>
 #include "../utils/funcoes_strings.hpp"
-#include "../estruturas/ListaEncadeada.hpp"
+#include "../estruturas/Lista.hpp"
 /**Classe Buscador
 *Esta classe será responsável por buscar uma chave primária ou secundária nos arquivos .dat.
 *Imprimindo o que foi encontrado na tela.
@@ -33,12 +33,12 @@ class Buscador {
     void procurar_chave_secundaria() {
 
         // doubly_linked_list<string> resultados;
-        ListaEncadeada<string> resultados;
+        Lista<string> resultados;
 
         funcoes_strings *func = new funcoes_strings();
 
-        vector<string> termos = func->separar_em_palavras(busca);
-        for(int i = 0; i < termos.size(); i++) {
+        Lista<string> termos = func->separar_em_palavras(busca);
+        for(int i = 0; i < termos.retornaTamanho(); i++) {
 
             ifstream chavesSecundarias("chavesSecundarias.dat");
             string temp;
@@ -50,7 +50,7 @@ class Buscador {
                 chavesSecundarias >> temp;
 
                 // Se a palavra for igual ao termo buscado pelo usuário
-                if (strcasecmp(temp.c_str(),termos.at(i).c_str()) == 0) {
+                if (strcasecmp(temp.c_str(),termos.retornaDado(i).c_str()) == 0) {
 
                     string linhaInteira;
                     
@@ -61,11 +61,11 @@ class Buscador {
                     // Armazena todos os comandos que contém essa palavra.
                     stringstream line(linhaInteira);
                     // doubly_linked_list<string> comandosQueContemPalavra;
-                    ListaEncadeada<string> comandosQueContemPalavra;
+                    Lista<string> comandosQueContemPalavra;
 
                     // Pega um comando por vêz e adiciona na lista encadeada "comandosQueContemPalavra".
                     while(line >> temp) {
-                        comandosQueContemPalavra.adicionaNoInicio(temp);
+                        comandosQueContemPalavra.adiciona(temp);
                         temp.clear();
                     }
 

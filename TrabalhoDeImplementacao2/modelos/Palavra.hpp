@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "../estruturas/ListaEncadeada.hpp"
+#include "../estruturas/Lista.hpp"
 
 using namespace std;
 class Palavra {
@@ -19,7 +19,7 @@ private:
 
 	// Lista duplamente encadeada que contém todos os comandos que estão associados à essa palavra.
 	// std::vector<std::string> comandosQueContem;
-	ListaEncadeada<string> comandosQueContem;
+	Lista<string> comandosQueContem;
 
 public:
 
@@ -40,7 +40,7 @@ public:
 	void adicionarComandosQueContem(std::string comando) {
 		// Se comando NÃO existe na lista.
 		if (!comandosQueContem.contem(comando)) {
-			comandosQueContem.adicionaNoInicio(comando);
+			comandosQueContem.adiciona(comando);
 		}
 		// if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
 		// 	comandosQueContem.push_back(comando);
@@ -51,7 +51,7 @@ public:
 	* Retorna a lista duplamente encadeada de comandos que estão associados à essa palavra.
 	*/
 	// std::vector<std::string> retornarComandosQueContem() {
-	ListaEncadeada<string> retornarComandosQueContem() {
+	Lista<string> retornarComandosQueContem() {
 		return comandosQueContem;
 	}
 

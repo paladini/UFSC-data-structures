@@ -17,7 +17,7 @@
 #include "Palavra.hpp"
 #include "Leitor.hpp"
 #include "../estruturas/avl_tree.h"
-#include "../estruturas/ListaEncadeada.hpp"
+#include "../estruturas/Lista.hpp"
 #include "../utils/funcoes_strings.hpp"
 
 using namespace std;
@@ -163,7 +163,7 @@ class Indexador {
                 chavesSecundarias << palavrasEmOrdem.at(i).retornarPalavra();
 
                 // Armazena todos os comandos que contem essa palavra
-                ListaEncadeada<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
+                Lista<string> comandos = palavrasEmOrdem.at(i).retornarComandosQueContem();
                 for(int j = 0; j < comandos.retornaTamanho(); j++) {
                     chavesSecundarias << ' ' << comandos.retornaDado(j);
                 }

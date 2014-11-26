@@ -3,9 +3,10 @@
 #include <iostream> //cout
 #include <fstream> //fstream
 #include <cstring> //strcpy
-#include <vector>
+// #include <vector>
 #include <algorithm>	
 #include <strings.h>
+#include "../estruturas/Lista.hpp"
 using namespace std;
 
 /** Classe funcao_strings.
@@ -17,188 +18,188 @@ class funcoes_strings {
  private:
 
  	// Armazena todos os conectivos proibidos especificados pelo enunciado do problema.
- 	vector<string>* conectivosProibidos;
+ 	Lista<string>* conectivosProibidos;
 
  	/**Método criarPronomes.
  	 * Adiciona pronomes em inglês à lista de conectivos proibidos.
  	 */
 	void criarPronomes() {
-		conectivosProibidos->push_back("I");
-		conectivosProibidos->push_back("me");
-		conectivosProibidos->push_back("we");
-		conectivosProibidos->push_back("us");
-		conectivosProibidos->push_back("you");
-		conectivosProibidos->push_back("she");
-		conectivosProibidos->push_back("her");
-		conectivosProibidos->push_back("he");
-		conectivosProibidos->push_back("him");
-		conectivosProibidos->push_back("it");
-		conectivosProibidos->push_back("they");
-		conectivosProibidos->push_back("them");
-		conectivosProibidos->push_back("what");
-		conectivosProibidos->push_back("which");
-		conectivosProibidos->push_back("who");
-		conectivosProibidos->push_back("whom");
-		conectivosProibidos->push_back("whose");
-		conectivosProibidos->push_back("whichever");
-		conectivosProibidos->push_back("whoever");
-		conectivosProibidos->push_back("whomever");
-		conectivosProibidos->push_back("this");
-		conectivosProibidos->push_back("these");
-		conectivosProibidos->push_back("that");
-		conectivosProibidos->push_back("those");
-		conectivosProibidos->push_back("anybody");
-		conectivosProibidos->push_back("anyone");
-		conectivosProibidos->push_back("anything");
-		conectivosProibidos->push_back("each");
-		conectivosProibidos->push_back("either");
-		conectivosProibidos->push_back("everybody");
-		conectivosProibidos->push_back("everyone");
-		conectivosProibidos->push_back("everything");
-		conectivosProibidos->push_back("neither");
-		conectivosProibidos->push_back("nobody");
-		conectivosProibidos->push_back("nothing");
-		conectivosProibidos->push_back("one");
-		conectivosProibidos->push_back("somebody");
-		conectivosProibidos->push_back("someone");
-		conectivosProibidos->push_back("something");
-		conectivosProibidos->push_back("both");
-		conectivosProibidos->push_back("few");
-		conectivosProibidos->push_back("many");
-		conectivosProibidos->push_back("several");
-		conectivosProibidos->push_back("all");
-		conectivosProibidos->push_back("any");
-		conectivosProibidos->push_back("most");
-		conectivosProibidos->push_back("none");
-		conectivosProibidos->push_back("some");
-		conectivosProibidos->push_back("myself");
-		conectivosProibidos->push_back("ourselves");
-		conectivosProibidos->push_back("yourself");
-		conectivosProibidos->push_back("yourselves");
-		conectivosProibidos->push_back("himself");
-		conectivosProibidos->push_back("herself");
-		conectivosProibidos->push_back("itself");
-		conectivosProibidos->push_back("themselves");
-		conectivosProibidos->push_back("my");
-		conectivosProibidos->push_back("your");
-		conectivosProibidos->push_back("his");
-		conectivosProibidos->push_back("its");
-		conectivosProibidos->push_back("is");
-		conectivosProibidos->push_back("our");
-		conectivosProibidos->push_back("your");
-		conectivosProibidos->push_back("their");
-		conectivosProibidos->push_back("mine");
-		conectivosProibidos->push_back("yours");
-		conectivosProibidos->push_back("his");
-		conectivosProibidos->push_back("hers");
-		conectivosProibidos->push_back("ours");
-		conectivosProibidos->push_back("yours");
-		conectivosProibidos->push_back("theirs");
+		conectivosProibidos->adiciona("I");
+		conectivosProibidos->adiciona("me");
+		conectivosProibidos->adiciona("we");
+		conectivosProibidos->adiciona("us");
+		conectivosProibidos->adiciona("you");
+		conectivosProibidos->adiciona("she");
+		conectivosProibidos->adiciona("her");
+		conectivosProibidos->adiciona("he");
+		conectivosProibidos->adiciona("him");
+		conectivosProibidos->adiciona("it");
+		conectivosProibidos->adiciona("they");
+		conectivosProibidos->adiciona("them");
+		conectivosProibidos->adiciona("what");
+		conectivosProibidos->adiciona("which");
+		conectivosProibidos->adiciona("who");
+		conectivosProibidos->adiciona("whom");
+		conectivosProibidos->adiciona("whose");
+		conectivosProibidos->adiciona("whichever");
+		conectivosProibidos->adiciona("whoever");
+		conectivosProibidos->adiciona("whomever");
+		conectivosProibidos->adiciona("this");
+		conectivosProibidos->adiciona("these");
+		conectivosProibidos->adiciona("that");
+		conectivosProibidos->adiciona("those");
+		conectivosProibidos->adiciona("anybody");
+		conectivosProibidos->adiciona("anyone");
+		conectivosProibidos->adiciona("anything");
+		conectivosProibidos->adiciona("each");
+		conectivosProibidos->adiciona("either");
+		conectivosProibidos->adiciona("everybody");
+		conectivosProibidos->adiciona("everyone");
+		conectivosProibidos->adiciona("everything");
+		conectivosProibidos->adiciona("neither");
+		conectivosProibidos->adiciona("nobody");
+		conectivosProibidos->adiciona("nothing");
+		conectivosProibidos->adiciona("one");
+		conectivosProibidos->adiciona("somebody");
+		conectivosProibidos->adiciona("someone");
+		conectivosProibidos->adiciona("something");
+		conectivosProibidos->adiciona("both");
+		conectivosProibidos->adiciona("few");
+		conectivosProibidos->adiciona("many");
+		conectivosProibidos->adiciona("several");
+		conectivosProibidos->adiciona("all");
+		conectivosProibidos->adiciona("any");
+		conectivosProibidos->adiciona("most");
+		conectivosProibidos->adiciona("none");
+		conectivosProibidos->adiciona("some");
+		conectivosProibidos->adiciona("myself");
+		conectivosProibidos->adiciona("ourselves");
+		conectivosProibidos->adiciona("yourself");
+		conectivosProibidos->adiciona("yourselves");
+		conectivosProibidos->adiciona("himself");
+		conectivosProibidos->adiciona("herself");
+		conectivosProibidos->adiciona("itself");
+		conectivosProibidos->adiciona("themselves");
+		conectivosProibidos->adiciona("my");
+		conectivosProibidos->adiciona("your");
+		conectivosProibidos->adiciona("his");
+		conectivosProibidos->adiciona("its");
+		conectivosProibidos->adiciona("is");
+		conectivosProibidos->adiciona("our");
+		conectivosProibidos->adiciona("your");
+		conectivosProibidos->adiciona("their");
+		conectivosProibidos->adiciona("mine");
+		conectivosProibidos->adiciona("yours");
+		conectivosProibidos->adiciona("his");
+		conectivosProibidos->adiciona("hers");
+		conectivosProibidos->adiciona("ours");
+		conectivosProibidos->adiciona("yours");
+		conectivosProibidos->adiciona("theirs");
 	}
 	/**Método criarPreposicoes.
  	 * Adiciona preposições em inglês à lista de conectivos proibidos.
  	 */
 	void criarPreposicoes() {
-		conectivosProibidos->push_back("aboard");
-		conectivosProibidos->push_back("about");
-		conectivosProibidos->push_back("above");
-		conectivosProibidos->push_back("across");
-		conectivosProibidos->push_back("after");
-		conectivosProibidos->push_back("against");
-		conectivosProibidos->push_back("ahead");
-		conectivosProibidos->push_back("along");
-		conectivosProibidos->push_back("amid");
-		conectivosProibidos->push_back("amidst");
-		conectivosProibidos->push_back("among");
-		conectivosProibidos->push_back("around");
-		conectivosProibidos->push_back("as");
-		conectivosProibidos->push_back("aside");
-		conectivosProibidos->push_back("at");
-		conectivosProibidos->push_back("athwart");
-		conectivosProibidos->push_back("atop");
-		conectivosProibidos->push_back("barring");
-		conectivosProibidos->push_back("because");
-		conectivosProibidos->push_back("before");
-		conectivosProibidos->push_back("behind");
-		conectivosProibidos->push_back("below");
-		conectivosProibidos->push_back("beneath");
-		conectivosProibidos->push_back("beside");
-		conectivosProibidos->push_back("besides");
-		conectivosProibidos->push_back("between");
-		conectivosProibidos->push_back("beyond");
-		conectivosProibidos->push_back("but");
-		conectivosProibidos->push_back("by");
-		conectivosProibidos->push_back("circa");
-		conectivosProibidos->push_back("concerning");
-		conectivosProibidos->push_back("despite");
-		conectivosProibidos->push_back("down");
-		conectivosProibidos->push_back("during");
-		conectivosProibidos->push_back("except");
-		conectivosProibidos->push_back("excluding");
-		conectivosProibidos->push_back("following");
-		conectivosProibidos->push_back("for");
-		conectivosProibidos->push_back("from");
-		conectivosProibidos->push_back("in");
-		conectivosProibidos->push_back("including");
-		conectivosProibidos->push_back("inside");
-		conectivosProibidos->push_back("instead");
-		conectivosProibidos->push_back("into");
-		conectivosProibidos->push_back("like");
-		conectivosProibidos->push_back("minus");
-		conectivosProibidos->push_back("near");
-		conectivosProibidos->push_back("of");
-		conectivosProibidos->push_back("off");
-		conectivosProibidos->push_back("on");
-		conectivosProibidos->push_back("onto");
-		conectivosProibidos->push_back("opposite");
-		conectivosProibidos->push_back("out");
-		conectivosProibidos->push_back("outside");
-		conectivosProibidos->push_back("over");
-		conectivosProibidos->push_back("past");
-		conectivosProibidos->push_back("plus");
-		conectivosProibidos->push_back("prior");
-		conectivosProibidos->push_back("regarding");
-		conectivosProibidos->push_back("regardless");
-		conectivosProibidos->push_back("save");
-		conectivosProibidos->push_back("since");
-		conectivosProibidos->push_back("tan");
-		conectivosProibidos->push_back("through");
-		conectivosProibidos->push_back("till");
-		conectivosProibidos->push_back("to");
-		conectivosProibidos->push_back("toward");
-		conectivosProibidos->push_back("towards");
-		conectivosProibidos->push_back("under");
-		conectivosProibidos->push_back("underneath");
-		conectivosProibidos->push_back("unlike");
-		conectivosProibidos->push_back("until");
-		conectivosProibidos->push_back("up");
-		conectivosProibidos->push_back("upon");
-		conectivosProibidos->push_back("versus");
-		conectivosProibidos->push_back("via");
-		conectivosProibidos->push_back("with");
-		conectivosProibidos->push_back("within");
-		conectivosProibidos->push_back("without");
+		conectivosProibidos->adiciona("aboard");
+		conectivosProibidos->adiciona("about");
+		conectivosProibidos->adiciona("above");
+		conectivosProibidos->adiciona("across");
+		conectivosProibidos->adiciona("after");
+		conectivosProibidos->adiciona("against");
+		conectivosProibidos->adiciona("ahead");
+		conectivosProibidos->adiciona("along");
+		conectivosProibidos->adiciona("amid");
+		conectivosProibidos->adiciona("amidst");
+		conectivosProibidos->adiciona("among");
+		conectivosProibidos->adiciona("around");
+		conectivosProibidos->adiciona("as");
+		conectivosProibidos->adiciona("aside");
+		conectivosProibidos->adiciona("at");
+		conectivosProibidos->adiciona("athwart");
+		conectivosProibidos->adiciona("atop");
+		conectivosProibidos->adiciona("barring");
+		conectivosProibidos->adiciona("because");
+		conectivosProibidos->adiciona("before");
+		conectivosProibidos->adiciona("behind");
+		conectivosProibidos->adiciona("below");
+		conectivosProibidos->adiciona("beneath");
+		conectivosProibidos->adiciona("beside");
+		conectivosProibidos->adiciona("besides");
+		conectivosProibidos->adiciona("between");
+		conectivosProibidos->adiciona("beyond");
+		conectivosProibidos->adiciona("but");
+		conectivosProibidos->adiciona("by");
+		conectivosProibidos->adiciona("circa");
+		conectivosProibidos->adiciona("concerning");
+		conectivosProibidos->adiciona("despite");
+		conectivosProibidos->adiciona("down");
+		conectivosProibidos->adiciona("during");
+		conectivosProibidos->adiciona("except");
+		conectivosProibidos->adiciona("excluding");
+		conectivosProibidos->adiciona("following");
+		conectivosProibidos->adiciona("for");
+		conectivosProibidos->adiciona("from");
+		conectivosProibidos->adiciona("in");
+		conectivosProibidos->adiciona("including");
+		conectivosProibidos->adiciona("inside");
+		conectivosProibidos->adiciona("instead");
+		conectivosProibidos->adiciona("into");
+		conectivosProibidos->adiciona("like");
+		conectivosProibidos->adiciona("minus");
+		conectivosProibidos->adiciona("near");
+		conectivosProibidos->adiciona("of");
+		conectivosProibidos->adiciona("off");
+		conectivosProibidos->adiciona("on");
+		conectivosProibidos->adiciona("onto");
+		conectivosProibidos->adiciona("opposite");
+		conectivosProibidos->adiciona("out");
+		conectivosProibidos->adiciona("outside");
+		conectivosProibidos->adiciona("over");
+		conectivosProibidos->adiciona("past");
+		conectivosProibidos->adiciona("plus");
+		conectivosProibidos->adiciona("prior");
+		conectivosProibidos->adiciona("regarding");
+		conectivosProibidos->adiciona("regardless");
+		conectivosProibidos->adiciona("save");
+		conectivosProibidos->adiciona("since");
+		conectivosProibidos->adiciona("tan");
+		conectivosProibidos->adiciona("through");
+		conectivosProibidos->adiciona("till");
+		conectivosProibidos->adiciona("to");
+		conectivosProibidos->adiciona("toward");
+		conectivosProibidos->adiciona("towards");
+		conectivosProibidos->adiciona("under");
+		conectivosProibidos->adiciona("underneath");
+		conectivosProibidos->adiciona("unlike");
+		conectivosProibidos->adiciona("until");
+		conectivosProibidos->adiciona("up");
+		conectivosProibidos->adiciona("upon");
+		conectivosProibidos->adiciona("versus");
+		conectivosProibidos->adiciona("via");
+		conectivosProibidos->adiciona("with");
+		conectivosProibidos->adiciona("within");
+		conectivosProibidos->adiciona("without");
 	}
 	/**Método criarConjuncoes.
  	 * Adiciona conjunções em inglês à lista de conectivos proibidos.
  	 */
 	void criarConjuncoes() {
-		conectivosProibidos->push_back("for");
-		conectivosProibidos->push_back("and");
-		conectivosProibidos->push_back("nor");
-		conectivosProibidos->push_back("but");
-		conectivosProibidos->push_back("or");
-		conectivosProibidos->push_back("yet");
-		conectivosProibidos->push_back("so");
+		conectivosProibidos->adiciona("for");
+		conectivosProibidos->adiciona("and");
+		conectivosProibidos->adiciona("nor");
+		conectivosProibidos->adiciona("but");
+		conectivosProibidos->adiciona("or");
+		conectivosProibidos->adiciona("yet");
+		conectivosProibidos->adiciona("so");
 	}
 	/**Método criarArtigos.
  	 * Adiciona artigos em inglês à lista de conectivos proibidos.
  	 */
 	void criarArtigos() {
-		conectivosProibidos->push_back("a");
-		conectivosProibidos->push_back("an");
-		conectivosProibidos->push_back("the");
-		conectivosProibidos->push_back("no");
+		conectivosProibidos->adiciona("a");
+		conectivosProibidos->adiciona("an");
+		conectivosProibidos->adiciona("the");
+		conectivosProibidos->adiciona("no");
 	}
 
  public:
@@ -208,7 +209,7 @@ class funcoes_strings {
 	*/
 	funcoes_strings() {
 		// Armazena todos os conectivos proibidos especificados pelo enunciado do problema
-		conectivosProibidos = new vector<string>();
+		conectivosProibidos = new Lista<string>();
 
 		// Adiciona artigos à lista de conectivos proibidos.
 		criarArtigos();
@@ -237,8 +238,8 @@ class funcoes_strings {
 
 		palavra = remover_caracteres_especiais(palavra);
 		if (palavra.size() >= 3) {
-			for(int i = 0; i < conectivosProibidos->size(); i++) {
-				if(conectivosProibidos->at(i) == palavra) {
+			for(int i = 0; i < conectivosProibidos->retornaTamanho(); i++) {
+				if(conectivosProibidos->retornaDado(i) == palavra) {
 					return "";
 				}
 			}
@@ -269,16 +270,16 @@ class funcoes_strings {
 	* @param string o argumento com todos os termos de busca separados por espaços em branco.
 	* @return vector<string> Um vetor contendo todas os termos conjuntivos de busca.
 	*/
-	vector<string> separar_em_palavras(string busca) {
+	Lista<string> separar_em_palavras(string busca) {
 
 		// Atributo para armazenar todos as palavras da busca.
-		vector<string> termos;
+		Lista<string> termos;
 
 		// Forma mais fácil de buscar palavra por palavra de um texto.
 		string temp;
 		stringstream stream(busca);
 		while(stream >> temp) {
-			termos.push_back(temp);
+			termos.adiciona(temp);
 		}
 		
 		return termos;

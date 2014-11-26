@@ -9,7 +9,8 @@
 */
 class Buscador {
  private:
- 	string busca;
+ 	// Variável que armazena os termos de busca inseridos pelo usuário.
+    string busca;
 
  public:
     /**Construtor do Buscador
@@ -32,14 +33,19 @@ class Buscador {
     */
     void procurar_chave_secundaria() {
 
-        // doubly_linked_list<string> resultados;
+        // Uma lista com todos os comandos encontrados para os termos fornecidos.
         Lista<string> resultados;
 
+        // Cria objeto que ajudará com métodos úteis para manipulação de strings
         funcoes_strings *func = new funcoes_strings();
 
+        // Separa a string de busca fornecida pelo usuário em uma lista de termos.
         Lista<string> termos = func->separar_em_palavras(busca);
+
+        // Pesquisa por cada termo independentemente.
         for(int i = 0; i < termos.retornaTamanho(); i++) {
 
+            // Lê o arquivo de chaves secundárias
             ifstream chavesSecundarias("chavesSecundarias.dat");
             string temp;
 

@@ -1,7 +1,5 @@
 #ifndef LISTA_ENCADEDADA_HPP_
 #define LISTA_ENCADEDADA_HPP_
-
-// #include <vector>
 #include <algorithm>
 #include <strings.h>
 #include <vector>
@@ -12,7 +10,7 @@ class Lista : public std::vector<T> {
 		/**
 		*	Construtor padrão da classe IndiceSecundario.
 		*/
-		Lista() : std::vector<T>()
+		Lista() : std::vector<T>() {}
 
 		Lista<T>* interseccao(Lista<T> *outra){
 			Lista<T> *interseccao = new Lista<T>();

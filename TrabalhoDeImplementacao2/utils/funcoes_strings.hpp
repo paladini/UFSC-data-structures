@@ -1,9 +1,5 @@
 #ifndef FUNCOES_STRINGS_HPP_
 #define FUNCOES_STRINGS_HPP_
-#include <iostream> //cout
-#include <fstream> //fstream
-#include <cstring> //strcpy
-// #include <vector>
 #include <algorithm>	
 #include <strings.h>
 #include "../estruturas/Lista.hpp"

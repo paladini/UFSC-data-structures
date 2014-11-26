@@ -105,6 +105,7 @@ class Buscador {
     */
     void procurar_chave_primaria() {
 
+        // Variável para armazenar se o comando pesquisado foi encontrado ou não.
         bool encontrouComando = false;
 
         // Carrega o arquivo de chaves primárias

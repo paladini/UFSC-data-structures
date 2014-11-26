@@ -6,7 +6,6 @@
 #include <limits>
 #include "modelos/Indexador.hpp"
 #include "modelos/Buscador.hpp"
-//#include "leitor.hpp"
 
 using std::string;
 using namespace std;
@@ -123,8 +122,9 @@ int main(int argc, char **argv) {
 
 	while(executar) {
 
-		// Pede ao usuário
+		// Pede ao usuário o que ele deseja fazer.
 		int opcaoDoUsuario = menuPrincipal();
+
 		// Detecta o que o usuário fez.
 		switch(opcaoDoUsuario) {
 
@@ -171,6 +171,8 @@ int main(int argc, char **argv) {
 				}
 				break;
 			}
+
+			// Sai do programa
 			default: {
 				limparTela();
 				cout << "Saindo..." << endl;

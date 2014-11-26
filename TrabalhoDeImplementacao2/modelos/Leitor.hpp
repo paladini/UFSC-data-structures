@@ -1,7 +1,14 @@
 #ifndef LEITOR_HPP_
 #define LEITOR_HPP_
+/** Classe Leitor.
+* Essa clase serve para ler arquivos do disco e transformar seu conteúdo em Registros, ou seja,
+ em objetos do tipo Registro que mais tarde serão utilizados tanto na indexação secundária como
+ na indexação primária.
+*/
 class Leitor {
  private:
+
+    // Variável que armazena o diretório do arquivo que será lido.
  	string arquivo;
  public:
     /**Construtor Leitor

@@ -1,15 +1,13 @@
 #ifndef PALAVRA_HPP_
 #define PALAVRA_HPP_
+#include <string>
+#include <algorithm>
+#include "../estruturas/Lista.hpp"
 /** Classe Palavra.
 * Essa clase servirá para armazenar as palavras que fazem a indexação por chaves secundárias 
 * do problema proposto. Serão armazenadas todas as palavras-chave do conteúdo das manpages e
 * também todos os comandos associados à essas palavras-chave.
 */
-#include <string>
-#include <vector>
-#include <algorithm>
-#include "../estruturas/Lista.hpp"
-
 using namespace std;
 class Palavra {
 private:
@@ -17,8 +15,7 @@ private:
 	// Atributo palavra.
 	std::string palavra;
 
-	// Lista duplamente encadeada que contém todos os comandos que estão associados à essa palavra.
-	// std::vector<std::string> comandosQueContem;
+	// Lista que contém todos os comandos que estão associados à essa palavra.
 	Lista<string> comandosQueContem;
 
 public:
@@ -42,15 +39,11 @@ public:
 		if (!comandosQueContem.contem(comando)) {
 			comandosQueContem.adiciona(comando);
 		}
-		// if (std::find(comandosQueContem.begin(), comandosQueContem.end(), comando) == comandosQueContem.end()) {
-		// 	comandosQueContem.push_back(comando);
-		// }
 	}
 
 	/** 
 	* Retorna a lista duplamente encadeada de comandos que estão associados à essa palavra.
 	*/
-	// std::vector<std::string> retornarComandosQueContem() {
 	Lista<string> retornarComandosQueContem() {
 		return comandosQueContem;
 	}
@@ -69,6 +62,9 @@ public:
 		return palavra < rhs.palavra;
 	}
 
+	/**
+	* Sobrescrita do operador "==", que agora funciona de acordo com a igualdade das strings.
+	*/
 	bool operator==(const Palavra& rhs) const {
 		return palavra == rhs.palavra;
 	}

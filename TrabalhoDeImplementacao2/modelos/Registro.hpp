@@ -1,11 +1,18 @@
+#ifndef REGISTRO_HPP_
+#define REGISTRO_HPP_
 /** Classe Registro.
 * Essa classe armazenará os dados das manpages para realizar a indexação por chave primária.
 * 
 */
 class Registro {
  public:
-	char conteudo[100000];
+
+ 	// Armazena o conteudo da manpage.
+	char conteudo[150000];
+
+	// Armazena o comando da manpage.
 	char comando[80];
+
 	/**Construtor padrão.
 	*Este é o contrutor padrão da classe Registro.
 	*/
@@ -13,7 +20,7 @@ class Registro {
 	/**Cnstrutor da classe Registro.
 	*Construirá um registro com um campo de comando e um de conteúdo.
 	*/
-	Registro(char _comando[80], char _conteudo[100000]){
+	Registro(char _comando[80], char _conteudo[150000]){
 		strcpy(comando, _comando);
 		strcpy(conteudo, _conteudo);
 	}
@@ -51,3 +58,4 @@ class Registro {
 		return comando < rhs.comando;
 	}
 };
+#endif

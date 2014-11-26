@@ -4,10 +4,11 @@
 // #include <vector>
 #include <algorithm>
 #include <strings.h>
+#include <vector>
 #include "../modelos/Palavra.hpp"
 #include "ListaEnc.hpp"
 template <typename T>
-class ListaEncadeada : public ListaEnc<T> {
+class Lista : public std::vector<T>() {
 	public:
 
 		/**
